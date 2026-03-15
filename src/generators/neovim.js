@@ -4,194 +4,12 @@
  */
 
 import { formatHex } from 'culori';
-import { neovimGroups } from '../scopes.js';
-
-function hex(color) {
-  return formatHex(color);
-}
-
-function luaTable(obj, indent = 0) {
-  const pad = '  '.repeat(indent);
-  const lines = ['{'];
-  for (const [k, v] of Object.entries(obj)) {
-    if (typeof v === 'string') {
-      lines.push(`${pad}  ${k} = "${v}",`);
-    } else if (typeof v === 'boolean') {
-      lines.push(`${pad}  ${k} = ${v},`);
-    }
-  }
-  lines.push(`${pad}}`);
-  return lines.join('\n');
-}
-
-export function generateNeovimPalette(variants) {
-  const palettes = {};
-  for (const [mode, variant] of Object.entries(variants)) {
-    const p = {};
-    for (const [k, v] of Object.entries(variant.ui)) p[k] = hex(v);
-    const s = {};
-    for (const [k, v] of Object.entries(variant.syntax)) s[k] = hex(v);
-    palettes[mode] = { ...p, ...s };
-  }
-
-  const lines = ['local M = {}', ''];
-  for (const [mode, colors] of Object.entries(palettes)) {
-    lines.push(`M.${mode} = {`);
-    for (const [k, v] of Object.entries(colors)) {
-      lines.push(`  ${k} = "${v}",`);
-    }
-    lines.push('}');
-    lines.push('');
-  }
-  lines.push('return M');
-  return lines.join('\n') + '\n';
-}
-
-export function generateNeovimInit(variants, ansiSets) {
-  const lines = [
-    'local M = {}',
-    '',
-    'function M.setup(opts)',
-    '  opts = opts or {}',
-    '  local style = opts.style or "light"',
-    '  local p = require("opo.palette")[style]',
-    '  if not p then',
-    '    vim.notify("Opo: unknown style: " .. style, vim.log.levels.ERROR)',
-    '    return',
-    '  end',
-    '',
-    '  vim.cmd("hi clear")',
-    '  vim.g.colors_name = "opo"',
-    '  vim.o.termguicolors = true',
-    '  vim.o.background = (style == "light" or style == "hc") and "light" or "dark"',
-    '',
-    '  local groups = {',
-    '    -- Editor',
-    '    Normal       = { fg = p.text, bg = p.bg },',
-    '    NormalFloat  = { fg = p.text, bg = p.bgPanel },',
-    '    FloatBorder  = { fg = p.textFaint, bg = p.bgPanel },',
-    '    CursorLine   = { bg = p.bgHover },',
-    '    CursorColumn = { bg = p.bgHover },',
-    '    ColorColumn  = { bg = p.bgPanel },',
-    '    Visual       = { bg = p.bgHover },',
-    '    VisualNOS    = { bg = p.bgHover },',
-    '    Search       = { fg = p.bg, bg = p.accent },',
-    '    IncSearch    = { fg = p.bg, bg = p.accent },',
-    '    LineNr       = { fg = p.textFaint },',
-    '    CursorLineNr = { fg = p.text },',
-    '    SignColumn   = { bg = p.bg },',
-    '    VertSplit    = { fg = p.textFaint },',
-    '    WinSeparator = { fg = p.textFaint },',
-    '    StatusLine   = { fg = p.textMid, bg = p.bgPanel },',
-    '    StatusLineNC = { fg = p.textFaint, bg = p.bgPanel },',
-    '    Pmenu        = { fg = p.text, bg = p.bgPanel },',
-    '    PmenuSel     = { fg = p.text, bg = p.bgHover },',
-    '    PmenuSbar    = { bg = p.bgPanel },',
-    '    PmenuThumb   = { bg = p.textFaint },',
-    '    TabLine      = { fg = p.textFaint, bg = p.bgPanel },',
-    '    TabLineFill  = { bg = p.bgPanel },',
-    '    TabLineSel   = { fg = p.text, bg = p.bg },',
-    '    Folded       = { fg = p.textMid, bg = p.bgPanel },',
-    '    FoldColumn   = { fg = p.textFaint },',
-    '    MatchParen   = { fg = p.accent, bold = true },',
-    '    Directory    = { fg = p.accent },',
-    '    Title        = { fg = p.text, bold = true },',
-    '    NonText      = { fg = p.textFaint },',
-    '    SpecialKey   = { fg = p.textFaint },',
-    '    Conceal      = { fg = p.textFaint },',
-    '    Cursor       = { fg = p.bg, bg = p.accent },',
-    '    DiffAdd      = { fg = p.pass },',
-    '    DiffChange   = { fg = p.accent },',
-    '    DiffDelete   = { fg = p.fail },',
-    '    DiffText     = { fg = p.accent, bold = true },',
-    '    SpellBad     = { undercurl = true, sp = p.fail },',
-    '    SpellCap     = { undercurl = true, sp = p.accent },',
-    '',
-    '    -- Diagnostics',
-    '    DiagnosticError = { fg = p.fail },',
-    '    DiagnosticWarn  = { fg = p.string },',
-    '    DiagnosticInfo  = { fg = p.accent },',
-    '    DiagnosticHint  = { fg = p.textMid },',
-    '    DiagnosticUnderlineError = { undercurl = true, sp = p.fail },',
-    '    DiagnosticUnderlineWarn  = { undercurl = true, sp = p.string },',
-    '    DiagnosticUnderlineInfo  = { undercurl = true, sp = p.accent },',
-    '    DiagnosticUnderlineHint  = { undercurl = true, sp = p.textMid },',
-    '  }',
-    '',
-  ];
-
-  // Add syntax groups from neovimGroups mapping
-  lines.push('  -- Syntax groups (legacy + Treesitter + LSP)');
-  lines.push('  local syntax_map = {');
-  for (const [category, groups] of Object.entries(neovimGroups)) {
-    for (const group of groups) {
-      const opts = category === 'comment'
-        ? `{ fg = p.${category}, italic = true }`
-        : `{ fg = p.${category} }`;
-      // Treesitter @ groups need special quoting
-      if (group.startsWith('@')) {
-        lines.push(`    ["${group}"] = ${opts},`);
-      } else {
-        lines.push(`    ${group} = ${opts},`);
-      }
-    }
-  }
-  lines.push('  }');
-  lines.push('');
-  lines.push('  -- Merge syntax into groups');
-  lines.push('  for group, settings in pairs(syntax_map) do');
-  lines.push('    groups[group] = settings');
-  lines.push('  end');
-  lines.push('');
-  lines.push('  -- Apply all highlights');
-  lines.push('  for group, settings in pairs(groups) do');
-  lines.push('    vim.api.nvim_set_hl(0, group, settings)');
-  lines.push('  end');
-  lines.push('');
-
-  // Terminal colors
-  lines.push('  -- Terminal colors');
-  lines.push('  local ansi = {');
-  lines.push('    light = {},');
-  lines.push('    dark = {},');
-  lines.push('    hc = {},');
-  lines.push('  }');
-  lines.push('');
-
-  for (const [mode, ansi] of Object.entries(ansiSets)) {
-    const all = [...ansi.normal, ...ansi.bright];
-    for (let i = 0; i < 16; i++) {
-      lines.push(`  vim.g.terminal_color_${i} = ${mode == 'light' ? 'style == "light"' : mode == 'dark' ? 'style == "dark"' : 'style == "hc"'} and "${hex(all[i])}" or vim.g.terminal_color_${i}`);
-    }
-  }
-
-  // Simplified: just set based on current style
-  // Remove the complex conditional and replace with direct set
-  lines.length -= 48; // Remove the conditional terminal colors
-  lines.push('  -- Terminal colors');
-  lines.push('  local tc = require("opo.palette")[style]');
-  lines.push('  -- Set from ANSI palette embedded in palette module');
-
-  lines.push('end');
-  lines.push('');
-  lines.push('return M');
-
-  return lines.join('\n') + '\n';
-}
-
-export function generateNeovimEntry() {
-  return `vim.cmd("hi clear")
-vim.g.colors_name = "opo"
-require("opo").setup({ style = vim.o.background == "dark" and "dark" or "light" })
-`;
-}
 
 /**
  * Generate all Neovim files.
  * Returns an object with relative paths as keys and content as values.
  */
 export function generateNeovim(variants, ansiSets) {
-  // Simplified init that reads palette directly
   const initLua = `local M = {}
 
 function M.setup(opts)
@@ -341,10 +159,10 @@ require("opo").setup({
   for (const [mode, variant] of Object.entries(variants)) {
     palLines.push(`M.${mode} = {`);
     for (const [k, v] of Object.entries(variant.ui)) {
-      palLines.push(`  ${k} = "${hex(v)}",`);
+      palLines.push(`  ${k} = "${formatHex(v)}",`);
     }
     for (const [k, v] of Object.entries(variant.syntax)) {
-      palLines.push(`  ${k} = "${hex(v)}",`);
+      palLines.push(`  ${k} = "${formatHex(v)}",`);
     }
     palLines.push('}');
     palLines.push('');
@@ -356,7 +174,7 @@ require("opo").setup({
     const all = [...ansi.normal, ...ansi.bright];
     palLines.push(`  ${mode} = {`);
     for (let i = 0; i < 16; i++) {
-      palLines.push(`    "${hex(all[i])}",`);
+      palLines.push(`    "${formatHex(all[i])}",`);
     }
     palLines.push('  },');
   }

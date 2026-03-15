@@ -5,10 +5,6 @@
 
 import { formatHex } from 'culori';
 
-function hex(color) {
-  return formatHex(color);
-}
-
 function cssVariant(variant, mode) {
   const label = mode === 'hc' ? 'High Contrast' : mode.charAt(0).toUpperCase() + mode.slice(1);
   const lines = [
@@ -21,20 +17,20 @@ function cssVariant(variant, mode) {
   // UI colors
   for (const [key, color] of Object.entries(variant.ui)) {
     const name = key.replace(/([A-Z])/g, '-$1').toLowerCase();
-    lines.push(`  --opo-${name}: ${hex(color)};`);
+    lines.push(`  --opo-${name}: ${formatHex(color)};`);
   }
 
   lines.push('');
   lines.push('  /* Syntax */');
   for (const [key, color] of Object.entries(variant.syntax)) {
-    lines.push(`  --opo-syntax-${key}: ${hex(color)};`);
+    lines.push(`  --opo-syntax-${key}: ${formatHex(color)};`);
   }
 
   // Alpha variants
-  const accent = hex(variant.ui.accent);
-  const neutral = hex(variant.ui.neutral);
-  const pass = hex(variant.ui.pass);
-  const fail = hex(variant.ui.fail);
+  const accent = formatHex(variant.ui.accent);
+  const neutral = formatHex(variant.ui.neutral);
+  const pass = formatHex(variant.ui.pass);
+  const fail = formatHex(variant.ui.fail);
 
   lines.push('');
   lines.push('  /* Alpha variants */');
@@ -71,17 +67,17 @@ export function generateCssCombined(lightVariant, darkVariant) {
   darkLines.push('  :root {');
   for (const [key, color] of Object.entries(darkVariant.ui)) {
     const name = key.replace(/([A-Z])/g, '-$1').toLowerCase();
-    darkLines.push(`    --opo-${name}: ${hex(color)};`);
+    darkLines.push(`    --opo-${name}: ${formatHex(color)};`);
   }
   darkLines.push('');
   for (const [key, color] of Object.entries(darkVariant.syntax)) {
-    darkLines.push(`    --opo-syntax-${key}: ${hex(color)};`);
+    darkLines.push(`    --opo-syntax-${key}: ${formatHex(color)};`);
   }
 
-  const accent = hex(darkVariant.ui.accent);
-  const neutral = hex(darkVariant.ui.neutral);
-  const pass = hex(darkVariant.ui.pass);
-  const fail = hex(darkVariant.ui.fail);
+  const accent = formatHex(darkVariant.ui.accent);
+  const neutral = formatHex(darkVariant.ui.neutral);
+  const pass = formatHex(darkVariant.ui.pass);
+  const fail = formatHex(darkVariant.ui.fail);
 
   darkLines.push('');
   darkLines.push(`    --opo-accent-selection: color-mix(in srgb, ${accent} 35%, transparent);`);

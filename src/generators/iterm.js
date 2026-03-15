@@ -5,6 +5,12 @@
 
 import { formatHex, parse } from 'culori';
 
+function xmlEscape(s) {
+  return s.replace(/[&<>"']/g, c =>
+    ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&apos;' })[c]
+  );
+}
+
 function hexToComponents(hexColor) {
   const c = parse(hexColor);
   return {
@@ -16,7 +22,7 @@ function hexToComponents(hexColor) {
 
 function colorEntry(name, hexColor) {
   const { r, g, b } = hexToComponents(hexColor);
-  return `\t<key>${name}</key>
+  return `\t<key>${xmlEscape(name)}</key>
 \t<dict>
 \t\t<key>Color Space</key>
 \t\t<string>sRGB</string>

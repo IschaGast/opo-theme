@@ -81,19 +81,7 @@ export const scopeMap = {
 };
 
 /**
- * JetBrains attribute name mapping.
- * JetBrains uses different names than TextMate.
- */
-export const jetbrainsMap = {
-  keyword:  'DEFAULT_KEYWORD',
-  string:   'DEFAULT_STRING',
-  comment:  'DEFAULT_LINE_COMMENT',
-  type:     'DEFAULT_CLASS_NAME',
-  function: 'DEFAULT_FUNCTION_DECLARATION',
-};
-
-/**
- * Additional JetBrains attributes for broader coverage.
+ * JetBrains attribute names (different from TextMate scopes).
  */
 export const jetbrainsExtended = {
   keyword: [
@@ -166,14 +154,3 @@ export const neovimGroups = {
   ],
 };
 
-/**
- * Zed syntax scope mapping.
- * Zed uses its own scope names.
- */
-export const zedScopes = {
-  keyword:  'keyword',
-  string:   'string',
-  comment:  'comment',
-  type:     'type',
-  function: 'function',
-};

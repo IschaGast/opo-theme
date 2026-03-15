@@ -36,5 +36,3 @@ export const bright = [
   { mode: 'oklch', l: 1.0000, c: 0.0000, h: 0 },        // 15 bright white   — white
 ];
 
-// Combined for easy iteration
-export const ansi = [...normal, ...bright];

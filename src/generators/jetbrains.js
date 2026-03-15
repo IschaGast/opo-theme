@@ -6,16 +6,22 @@
 import { formatHex } from 'culori';
 import { jetbrainsExtended } from '../scopes.js';
 
+function xmlEscape(s) {
+  return s.replace(/[&<>"']/g, c =>
+    ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&apos;' })[c]
+  );
+}
+
 function hexNoHash(color) {
   return formatHex(color).slice(1);
 }
 
 function option(name, value) {
-  return `    <option name="${name}" value="${value}" />`;
+  return `    <option name="${xmlEscape(name)}" value="${xmlEscape(value)}" />`;
 }
 
 function attribute(name, fg, fontType = null) {
-  const parts = [`    <option name="${name}">`];
+  const parts = [`    <option name="${xmlEscape(name)}">`];
   parts.push('      <value>');
   parts.push(`        <option name="FOREGROUND" value="${fg}" />`);
   if (fontType !== null) {

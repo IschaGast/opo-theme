@@ -8,17 +8,6 @@
 import { formatHex } from 'culori';
 import { scopeMap } from '../scopes.js';
 
-function hex(color) {
-  return formatHex(color);
-}
-
-function alpha(hexColor, a) {
-  const r = parseInt(hexColor.slice(1, 3), 16);
-  const g = parseInt(hexColor.slice(3, 5), 16);
-  const b = parseInt(hexColor.slice(5, 7), 16);
-  return `rgba(${r},${g},${b},${a})`;
-}
-
 function hexAlpha(hexColor, a) {
   const aa = Math.round(a * 255).toString(16).padStart(2, '0');
   return hexColor + aa;
@@ -29,9 +18,9 @@ function hexAlpha(hexColor, a) {
  */
 export function generateTheme(variant, ansi, mode) {
   const p = {};
-  for (const [k, v] of Object.entries(variant.ui)) p[k] = hex(v);
+  for (const [k, v] of Object.entries(variant.ui)) p[k] = formatHex(v);
   const s = {};
-  for (const [k, v] of Object.entries(variant.syntax)) s[k] = hex(v);
+  for (const [k, v] of Object.entries(variant.syntax)) s[k] = formatHex(v);
   const a = {
     normal: ansi.normal.map(hex),
     bright: ansi.bright.map(hex),

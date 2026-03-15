@@ -39,18 +39,6 @@ export const light = {
   neutral:   { mode: 'oklch', l: 0.4849, c: 0.0196, h: 251.02 },  // #57606a
 };
 
-// Derived semi-transparent colors (from light palette)
-export const lightAlpha = {
-  accentSelection: 'rgba(0,92,204,0.35)',
-  accentBg:        'rgba(0,92,204,0.08)',
-  accentBorder:    'rgba(0,92,204,0.5)',
-  passBg:          'rgba(0,53,142,0.08)',
-  failBg:          'rgba(164,77,0,0.08)',
-  neutralBg:       'rgba(87,96,106,0.08)',
-  borderLight:     'rgba(87,96,106,0.35)',
-  codeBg:          'rgba(0,0,0,0.04)',
-};
-
 // Syntax highlighting — 5 categories at unique lightness levels
 // Lightness staircase: L=0.36, 0.42, 0.47, 0.50, 0.52
 // CVD users can distinguish tokens by brightness alone

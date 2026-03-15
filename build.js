@@ -71,9 +71,8 @@ let fileCount = 0;
 console.log('\n  VS Code:');
 const vscodeDir = dir('vscode', 'themes');
 for (const mode of MODES) {
-  const label = mode === 'hc' ? 'hc' : mode;
-  const theme = generateTheme(variants[mode], ansiSets[mode], mode);
-  write(join(vscodeDir, `opo-${label}-color-theme.json`), JSON.stringify(theme, null, 2));
+    const theme = generateTheme(variants[mode], ansiSets[mode], mode);
+  write(join(vscodeDir, `opo-${mode}-color-theme.json`), JSON.stringify(theme, null, 2));
   fileCount++;
 }
 write(join(dir('vscode'), 'package.json'), JSON.stringify(generatePackageJson(), null, 2));
@@ -83,8 +82,7 @@ fileCount++;
 console.log('\n  Ghostty:');
 const ghosttyDir = dir('ghostty');
 for (const mode of MODES) {
-  const label = mode === 'hc' ? 'hc' : mode;
-  write(join(ghosttyDir, `opo-${label}`), generateGhostty(variants[mode], ansiSets[mode], mode));
+    write(join(ghosttyDir, `opo-${mode}`), generateGhostty(variants[mode], ansiSets[mode], mode));
   fileCount++;
 }
 
@@ -92,8 +90,7 @@ for (const mode of MODES) {
 console.log('\n  Alacritty:');
 const alacrittyDir = dir('alacritty');
 for (const mode of MODES) {
-  const label = mode === 'hc' ? 'hc' : mode;
-  write(join(alacrittyDir, `opo-${label}.toml`), generateAlacritty(variants[mode], ansiSets[mode], mode));
+    write(join(alacrittyDir, `opo-${mode}.toml`), generateAlacritty(variants[mode], ansiSets[mode], mode));
   fileCount++;
 }
 
@@ -116,8 +113,7 @@ fileCount++;
 console.log('\n  Warp:');
 const warpDir = dir('warp');
 for (const mode of MODES) {
-  const label = mode === 'hc' ? 'hc' : mode;
-  write(join(warpDir, `opo-${label}.yaml`), generateWarp(variants[mode], ansiSets[mode], mode));
+    write(join(warpDir, `opo-${mode}.yaml`), generateWarp(variants[mode], ansiSets[mode], mode));
   fileCount++;
 }
 
@@ -150,8 +146,7 @@ for (const [relPath, content] of Object.entries(nvimFiles)) {
 console.log('\n  CSS:');
 const cssDir = dir('css');
 for (const mode of MODES) {
-  const label = mode === 'hc' ? 'hc' : mode;
-  write(join(cssDir, `opo-${label}.css`), generateCssVariant(variants[mode], mode));
+    write(join(cssDir, `opo-${mode}.css`), generateCssVariant(variants[mode], mode));
   fileCount++;
 }
 write(join(cssDir, 'opo.css'), generateCssCombined(variants.light, variants.dark));

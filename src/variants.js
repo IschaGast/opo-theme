@@ -37,9 +37,10 @@ function darkRemap(color, role) {
     // Light textFaint ≈ 0.53 → Dark textFaint ≈ 0.65
     l = 0.30 + (1.0 - color.l) * 0.80;
   } else {
-    // Semantic/syntax colors: boost lightness for dark bg readability
-    // Ensure L >= 0.62 for minimum AA on dark bg
-    l = Math.max(0.62, 0.35 + (1.0 - color.l) * 0.55);
+    // Semantic/syntax colors: preserve lightness staircase for CVD safety
+    // Map light L range [0.36-0.52] → dark L range [0.65-0.80]
+    // The 0.35 multiplier spreads 16-point input to ~6 points output
+    l = 0.65 + (1.0 - color.l) * 0.35;
   }
 
   const remapped = {
@@ -106,6 +107,8 @@ export function deriveVariant(lightPalette, lightSyntax, mode) {
     for (const [key, color] of Object.entries(lightSyntax)) {
       syntax[key] = highContrast(color, 'fg');
     }
+  } else {
+    throw new Error(`Unknown variant mode: "${mode}". Use "light", "dark", or "hc".`);
   }
 
   return { ui, syntax };
@@ -142,7 +145,6 @@ export function deriveAnsi(normalAnsi, brightAnsi, mode) {
     return {
       normal: normalAnsi.map(c => highContrast(c, 'fg')),
       bright: brightAnsi.map(c => {
-        // Bright HC: boost lightness further
         const boosted = {
           mode: 'oklch',
           l: Math.min(1, c.l + 0.10),
@@ -153,4 +155,6 @@ export function deriveAnsi(normalAnsi, brightAnsi, mode) {
       }),
     };
   }
+
+  throw new Error(`Unknown variant mode: "${mode}". Use "light", "dark", or "hc".`);
 }
