@@ -1,33 +1,33 @@
 # Opo Hc — Colorblind-safe accessible theme
 
 [colors.primary]
-background = "#ffffff"
+background = "#fdfaf3"
 foreground = "#13191f"
 
 [colors.cursor]
-text = "#ffffff"
-cursor = "#004394"
+text = "#fdfaf3"
+cursor = "#003c88"
 
 [colors.selection]
 text = "#13191f"
-background = "#eef2f7"
+background = "#f4efe5"
 
 [colors.normal]
 black   = "#13191f"
-red   = "#723600"
-green   = "#003377"
-yellow   = "#634500"
-blue   = "#004394"
-magenta   = "#611761"
-cyan   = "#004340"
-white   = "#9ea2a6"
+red   = "#663000"
+green   = "#003c29"
+yellow   = "#5b3f00"
+blue   = "#003c88"
+magenta   = "#5c125c"
+cyan   = "#003e3c"
+white   = "#a39f96"
 
 [colors.bright]
 black   = "#727d89"
-red   = "#ffa569"
-green   = "#68a5ff"
+red   = "#ffa568"
+green   = "#53bb93"
 yellow   = "#ffc251"
-blue   = "#78afff"
+blue   = "#79afff"
 magenta   = "#d384d0"
 cyan   = "#2dbbb4"
 white   = "#ffffff"

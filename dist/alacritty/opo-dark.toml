@@ -1,31 +1,31 @@
 # Opo Dark — Colorblind-safe accessible theme
 
 [colors.primary]
-background = "#121212"
+background = "#161410"
 foreground = "#d1d7df"
 
 [colors.cursor]
-text = "#121212"
-cursor = "#2f83f5"
+text = "#161410"
+cursor = "#3384f7"
 
 [colors.selection]
 text = "#d1d7df"
-background = "#16191c"
+background = "#1c1a14"
 
 [colors.normal]
 black   = "#57606a"
-red   = "#e18341"
-green   = "#4985df"
+red   = "#e08440"
+green   = "#419977"
 yellow   = "#dca331"
-blue   = "#458ef4"
+blue   = "#478df5"
 magenta   = "#ad6aab"
 cyan   = "#209993"
 white   = "#ffffff"
 
 [colors.bright]
 black   = "#79838d"
-red   = "#ffaf7b"
-green   = "#74acff"
+red   = "#ffaf7a"
+green   = "#68bf9b"
 yellow   = "#ffcb70"
 blue   = "#84b6ff"
 magenta   = "#d48fd1"

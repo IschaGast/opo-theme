@@ -2,30 +2,30 @@
 /* https://github.com/IschaGast/opo-theme */
 
 :root {
-  --opo-bg: #ffffff;
-  --opo-bg-panel: #f8fafc;
-  --opo-bg-hover: #eef2f7;
+  --opo-bg: #fdfaf3;
+  --opo-bg-panel: #f9f5ed;
+  --opo-bg-hover: #f4efe5;
   --opo-text: #13191f;
   --opo-text-mid: #353f4a;
-  --opo-text-faint: #3f4751;
-  --opo-accent: #004394;
-  --opo-pass: #003377;
-  --opo-fail: #723600;
+  --opo-text-faint: #3a424b;
+  --opo-accent: #003c88;
+  --opo-pass: #003c29;
+  --opo-fail: #663000;
   --opo-neutral: #353f4a;
 
   /* Syntax */
-  --opo-syntax-keyword: #003377;
-  --opo-syntax-string: #723600;
-  --opo-syntax-comment: #41464b;
-  --opo-syntax-type: #611761;
-  --opo-syntax-function: #004340;
+  --opo-syntax-keyword: #003c29;
+  --opo-syntax-string: #663000;
+  --opo-syntax-comment: #3d4247;
+  --opo-syntax-type: #5c125c;
+  --opo-syntax-function: #003e3c;
 
   /* Alpha variants */
-  --opo-accent-selection: color-mix(in srgb, #004394 35%, transparent);
-  --opo-accent-bg: color-mix(in srgb, #004394 8%, transparent);
-  --opo-accent-border: color-mix(in srgb, #004394 50%, transparent);
-  --opo-pass-bg: color-mix(in srgb, #003377 8%, transparent);
-  --opo-fail-bg: color-mix(in srgb, #723600 8%, transparent);
+  --opo-accent-selection: color-mix(in srgb, #003c88 35%, transparent);
+  --opo-accent-bg: color-mix(in srgb, #003c88 8%, transparent);
+  --opo-accent-border: color-mix(in srgb, #003c88 50%, transparent);
+  --opo-pass-bg: color-mix(in srgb, #003c29 8%, transparent);
+  --opo-fail-bg: color-mix(in srgb, #663000 8%, transparent);
   --opo-neutral-bg: color-mix(in srgb, #353f4a 8%, transparent);
   --opo-border-light: color-mix(in srgb, #353f4a 35%, transparent);
 }

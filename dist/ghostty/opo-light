@@ -1,25 +1,25 @@
 # Opo Light — Colorblind-safe accessible theme
 # https://github.com/IschaGast/opo-theme
 
-background = #ffffff
+background = #fbf8f2
 foreground = #24292f
-cursor-color = #0867d7
-cursor-text = #ffffff
-selection-background = #eaeef2
+cursor-color = #005ccc
+cursor-text = #fbf8f2
+selection-background = #eeeae2
 selection-foreground = #24292f
 palette = 0=#24292f
-palette = 1=#ab5200
-palette = 2=#0550ae
-palette = 3=#9b6500
-palette = 4=#0867d7
-palette = 5=#81427f
-palette = 6=#006964
-palette = 7=#eaeef2
+palette = 1=#9e4600
+palette = 2=#005d3f
+palette = 3=#925c00
+palette = 4=#005ccc
+palette = 5=#7b3c79
+palette = 6=#00635f
+palette = 7=#eeeae2
 palette = 8=#57606a
-palette = 9=#e18341
-palette = 10=#4985df
+palette = 9=#e08440
+palette = 10=#419977
 palette = 11=#dca331
-palette = 12=#458ef4
+palette = 12=#478df5
 palette = 13=#ad6aab
 palette = 14=#209993
 palette = 15=#ffffff

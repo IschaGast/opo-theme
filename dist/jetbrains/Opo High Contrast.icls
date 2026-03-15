@@ -7,95 +7,95 @@
     <property name="originalScheme">Opo High Contrast</property>
   </metaInfo>
   <colors>
-    <option name="CARET_COLOR" value="004394" />
-    <option name="CARET_ROW_COLOR" value="eef2f7" />
-    <option name="CONSOLE_BACKGROUND_KEY" value="ffffff" />
-    <option name="GUTTER_BACKGROUND" value="f8fafc" />
-    <option name="LINE_NUMBERS_COLOR" value="3f4751" />
+    <option name="CARET_COLOR" value="003c88" />
+    <option name="CARET_ROW_COLOR" value="f4efe5" />
+    <option name="CONSOLE_BACKGROUND_KEY" value="fdfaf3" />
+    <option name="GUTTER_BACKGROUND" value="f9f5ed" />
+    <option name="LINE_NUMBERS_COLOR" value="3a424b" />
     <option name="LINE_NUMBER_ON_CARET_ROW_COLOR" value="13191f" />
-    <option name="SELECTION_BACKGROUND" value="eef2f7" />
+    <option name="SELECTION_BACKGROUND" value="f4efe5" />
     <option name="SELECTION_FOREGROUND" value="13191f" />
-    <option name="INDENT_GUIDE" value="3f4751" />
-    <option name="RIGHT_MARGIN_COLOR" value="eef2f7" />
-    <option name="TEARLINE_COLOR" value="3f4751" />
+    <option name="INDENT_GUIDE" value="3a424b" />
+    <option name="RIGHT_MARGIN_COLOR" value="f4efe5" />
+    <option name="TEARLINE_COLOR" value="3a424b" />
   </colors>
   <attributes>
     <option name="DEFAULT_KEYWORD">
       <value>
-        <option name="FOREGROUND" value="003377" />
+        <option name="FOREGROUND" value="003c29" />
       </value>
     </option>
     <option name="KOTLIN_KEYWORD">
       <value>
-        <option name="FOREGROUND" value="003377" />
+        <option name="FOREGROUND" value="003c29" />
       </value>
     </option>
     <option name="JAVA_KEYWORD">
       <value>
-        <option name="FOREGROUND" value="003377" />
+        <option name="FOREGROUND" value="003c29" />
       </value>
     </option>
     <option name="DEFAULT_STRING">
       <value>
-        <option name="FOREGROUND" value="723600" />
+        <option name="FOREGROUND" value="663000" />
       </value>
     </option>
     <option name="DEFAULT_VALID_STRING_ESCAPE">
       <value>
-        <option name="FOREGROUND" value="723600" />
+        <option name="FOREGROUND" value="663000" />
       </value>
     </option>
     <option name="DEFAULT_NUMBER">
       <value>
-        <option name="FOREGROUND" value="723600" />
+        <option name="FOREGROUND" value="663000" />
       </value>
     </option>
     <option name="DEFAULT_LINE_COMMENT">
       <value>
-        <option name="FOREGROUND" value="41464b" />
+        <option name="FOREGROUND" value="3d4247" />
         <option name="FONT_TYPE" value="2" />
       </value>
     </option>
     <option name="DEFAULT_BLOCK_COMMENT">
       <value>
-        <option name="FOREGROUND" value="41464b" />
+        <option name="FOREGROUND" value="3d4247" />
         <option name="FONT_TYPE" value="2" />
       </value>
     </option>
     <option name="DEFAULT_DOC_COMMENT">
       <value>
-        <option name="FOREGROUND" value="41464b" />
+        <option name="FOREGROUND" value="3d4247" />
         <option name="FONT_TYPE" value="2" />
       </value>
     </option>
     <option name="DEFAULT_CLASS_NAME">
       <value>
-        <option name="FOREGROUND" value="611761" />
+        <option name="FOREGROUND" value="5c125c" />
       </value>
     </option>
     <option name="DEFAULT_INTERFACE_NAME">
       <value>
-        <option name="FOREGROUND" value="611761" />
+        <option name="FOREGROUND" value="5c125c" />
       </value>
     </option>
     <option name="DEFAULT_CLASS_REFERENCE">
       <value>
-        <option name="FOREGROUND" value="611761" />
+        <option name="FOREGROUND" value="5c125c" />
       </value>
     </option>
     <option name="DEFAULT_FUNCTION_DECLARATION">
       <value>
-        <option name="FOREGROUND" value="004340" />
+        <option name="FOREGROUND" value="003e3c" />
       </value>
     </option>
     <option name="DEFAULT_FUNCTION_CALL">
       <value>
-        <option name="FOREGROUND" value="004340" />
+        <option name="FOREGROUND" value="003e3c" />
       </value>
     </option>
     <option name="DEFAULT_STATIC_METHOD">
       <value>
-        <option name="FOREGROUND" value="004340" />
+        <option name="FOREGROUND" value="003e3c" />
       </value>
     </option>
     <option name="DEFAULT_IDENTIFIER">
@@ -120,7 +120,7 @@
     </option>
     <option name="DEFAULT_CONSTANT">
       <value>
-        <option name="FOREGROUND" value="723600" />
+        <option name="FOREGROUND" value="663000" />
       </value>
     </option>
     <option name="TEXT">
