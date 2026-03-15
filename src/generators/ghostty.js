@@ -14,7 +14,7 @@ export function generateGhostty(variant, ansi, mode) {
 
   const lines = [
     `# Opo ${mode.charAt(0).toUpperCase() + mode.slice(1)} — Colorblind-safe accessible theme`,
-    `# https://github.com/USER/opo-theme`,
+    `# https://github.com/IschaGast/opo-theme`,
     '',
     `background = ${bg}`,
     `foreground = ${fg}`,

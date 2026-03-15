@@ -13,7 +13,7 @@ function cssVariant(variant, mode) {
   const label = mode === 'hc' ? 'High Contrast' : mode.charAt(0).toUpperCase() + mode.slice(1);
   const lines = [
     `/* Opo ${label} — Colorblind-safe accessible theme */`,
-    `/* https://github.com/USER/opo-theme */`,
+    `/* https://github.com/IschaGast/opo-theme */`,
     '',
     ':root {',
   ];

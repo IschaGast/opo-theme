@@ -319,7 +319,7 @@ export function generatePackageJson() {
         { label: 'Opo High Contrast', uiTheme: 'hc-light', path: './themes/opo-hc-color-theme.json' },
       ],
     },
-    repository: { type: 'git', url: 'https://github.com/USER/opo-theme' },
+    repository: { type: 'git', url: 'https://github.com/IschaGast/opo-theme' },
     license: 'MIT',
   };
 }
