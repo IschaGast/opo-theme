@@ -22,80 +22,80 @@
   <attributes>
     <option name="DEFAULT_KEYWORD">
       <value>
-        <option name="FOREGROUND" value="005d3f" />
+        <option name="FOREGROUND" value="00358e" />
       </value>
     </option>
     <option name="KOTLIN_KEYWORD">
       <value>
-        <option name="FOREGROUND" value="005d3f" />
+        <option name="FOREGROUND" value="00358e" />
       </value>
     </option>
     <option name="JAVA_KEYWORD">
       <value>
-        <option name="FOREGROUND" value="005d3f" />
+        <option name="FOREGROUND" value="00358e" />
       </value>
     </option>
     <option name="DEFAULT_STRING">
       <value>
-        <option name="FOREGROUND" value="9e4600" />
+        <option name="FOREGROUND" value="a44d00" />
       </value>
     </option>
     <option name="DEFAULT_VALID_STRING_ESCAPE">
       <value>
-        <option name="FOREGROUND" value="9e4600" />
+        <option name="FOREGROUND" value="a44d00" />
       </value>
     </option>
     <option name="DEFAULT_NUMBER">
       <value>
-        <option name="FOREGROUND" value="9e4600" />
+        <option name="FOREGROUND" value="a44d00" />
       </value>
     </option>
     <option name="DEFAULT_LINE_COMMENT">
       <value>
-        <option name="FOREGROUND" value="5f6469" />
+        <option name="FOREGROUND" value="58554f" />
         <option name="FONT_TYPE" value="2" />
       </value>
     </option>
     <option name="DEFAULT_BLOCK_COMMENT">
       <value>
-        <option name="FOREGROUND" value="5f6469" />
+        <option name="FOREGROUND" value="58554f" />
         <option name="FONT_TYPE" value="2" />
       </value>
     </option>
     <option name="DEFAULT_DOC_COMMENT">
       <value>
-        <option name="FOREGROUND" value="5f6469" />
+        <option name="FOREGROUND" value="58554f" />
         <option name="FONT_TYPE" value="2" />
       </value>
     </option>
     <option name="DEFAULT_CLASS_NAME">
       <value>
-        <option name="FOREGROUND" value="7b3c79" />
+        <option name="FOREGROUND" value="6b2e6b" />
       </value>
     </option>
     <option name="DEFAULT_INTERFACE_NAME">
       <value>
-        <option name="FOREGROUND" value="7b3c79" />
+        <option name="FOREGROUND" value="6b2e6b" />
       </value>
     </option>
     <option name="DEFAULT_CLASS_REFERENCE">
       <value>
-        <option name="FOREGROUND" value="7b3c79" />
+        <option name="FOREGROUND" value="6b2e6b" />
       </value>
     </option>
     <option name="DEFAULT_FUNCTION_DECLARATION">
       <value>
-        <option name="FOREGROUND" value="00635f" />
+        <option name="FOREGROUND" value="00756b" />
       </value>
     </option>
     <option name="DEFAULT_FUNCTION_CALL">
       <value>
-        <option name="FOREGROUND" value="00635f" />
+        <option name="FOREGROUND" value="00756b" />
       </value>
     </option>
     <option name="DEFAULT_STATIC_METHOD">
       <value>
-        <option name="FOREGROUND" value="00635f" />
+        <option name="FOREGROUND" value="00756b" />
       </value>
     </option>
     <option name="DEFAULT_IDENTIFIER">
@@ -120,7 +120,7 @@
     </option>
     <option name="DEFAULT_CONSTANT">
       <value>
-        <option name="FOREGROUND" value="9e4600" />
+        <option name="FOREGROUND" value="a44d00" />
       </value>
     </option>
     <option name="TEXT">

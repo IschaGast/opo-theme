@@ -9,23 +9,23 @@
   --opo-text-mid: #57606a;
   --opo-text-faint: #5c646d;
   --opo-accent: #005ccc;
-  --opo-pass: #005d3f;
-  --opo-fail: #9e4600;
+  --opo-pass: #00358e;
+  --opo-fail: #a44d00;
   --opo-neutral: #57606a;
 
   /* Syntax */
-  --opo-syntax-keyword: #005d3f;
-  --opo-syntax-string: #9e4600;
-  --opo-syntax-comment: #5f6469;
-  --opo-syntax-type: #7b3c79;
-  --opo-syntax-function: #00635f;
+  --opo-syntax-keyword: #00358e;
+  --opo-syntax-type: #6b2e6b;
+  --opo-syntax-comment: #58554f;
+  --opo-syntax-function: #00756b;
+  --opo-syntax-string: #a44d00;
 
   /* Alpha variants */
   --opo-accent-selection: color-mix(in srgb, #005ccc 35%, transparent);
   --opo-accent-bg: color-mix(in srgb, #005ccc 8%, transparent);
   --opo-accent-border: color-mix(in srgb, #005ccc 50%, transparent);
-  --opo-pass-bg: color-mix(in srgb, #005d3f 8%, transparent);
-  --opo-fail-bg: color-mix(in srgb, #9e4600 8%, transparent);
+  --opo-pass-bg: color-mix(in srgb, #00358e 8%, transparent);
+  --opo-fail-bg: color-mix(in srgb, #a44d00 8%, transparent);
   --opo-neutral-bg: color-mix(in srgb, #57606a 8%, transparent);
   --opo-border-light: color-mix(in srgb, #57606a 35%, transparent);
 }
