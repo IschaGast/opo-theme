@@ -1,0 +1,31 @@
+/* Opo Dark — Colorblind-safe accessible theme */
+/* https://github.com/USER/opo-theme */
+
+:root {
+  --opo-bg: #121212;
+  --opo-bg-panel: #131516;
+  --opo-bg-hover: #16191c;
+  --opo-text: #d1d7df;
+  --opo-text-mid: #99a3ae;
+  --opo-text-faint: #9099a2;
+  --opo-accent: #2f83f5;
+  --opo-pass: #4b8ef2;
+  --opo-fail: #c66a22;
+  --opo-neutral: #99a3ae;
+
+  /* Syntax */
+  --opo-syntax-keyword: #4b8ef2;
+  --opo-syntax-string: #c66a22;
+  --opo-syntax-comment: #82878c;
+  --opo-syntax-type: #b26fb0;
+  --opo-syntax-function: #2ea29c;
+
+  /* Alpha variants */
+  --opo-accent-selection: color-mix(in srgb, #2f83f5 35%, transparent);
+  --opo-accent-bg: color-mix(in srgb, #2f83f5 8%, transparent);
+  --opo-accent-border: color-mix(in srgb, #2f83f5 50%, transparent);
+  --opo-pass-bg: color-mix(in srgb, #4b8ef2 8%, transparent);
+  --opo-fail-bg: color-mix(in srgb, #c66a22 8%, transparent);
+  --opo-neutral-bg: color-mix(in srgb, #99a3ae 8%, transparent);
+  --opo-border-light: color-mix(in srgb, #99a3ae 35%, transparent);
+}

@@ -1,0 +1,25 @@
+name: "Opo High Contrast"
+accent: "#004394"
+cursor: "#004394"
+background: "#ffffff"
+foreground: "#13191f"
+details: lighter
+terminal_colors:
+  normal:
+    black: "#13191f"
+    red: "#723600"
+    green: "#003377"
+    yellow: "#634500"
+    blue: "#004394"
+    magenta: "#611761"
+    cyan: "#004340"
+    white: "#9ea2a6"
+  bright:
+    black: "#727d89"
+    red: "#ffa569"
+    green: "#68a5ff"
+    yellow: "#ffc251"
+    blue: "#78afff"
+    magenta: "#d384d0"
+    cyan: "#2dbbb4"
+    white: "#ffffff"

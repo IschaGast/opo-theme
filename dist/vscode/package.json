@@ -1,0 +1,49 @@
+{
+  "name": "opo-theme",
+  "displayName": "Opo",
+  "description": "Colorblind-safe, OKLCH-based accessible color theme",
+  "version": "1.0.0",
+  "publisher": "opo-theme",
+  "engines": {
+    "vscode": "^1.80.0"
+  },
+  "categories": [
+    "Themes"
+  ],
+  "keywords": [
+    "theme",
+    "color-theme",
+    "colorblind",
+    "accessible",
+    "light",
+    "dark",
+    "high-contrast",
+    "oklch",
+    "a11y"
+  ],
+  "icon": "icon.png",
+  "contributes": {
+    "themes": [
+      {
+        "label": "Opo Light",
+        "uiTheme": "vs",
+        "path": "./themes/opo-light-color-theme.json"
+      },
+      {
+        "label": "Opo Dark",
+        "uiTheme": "vs-dark",
+        "path": "./themes/opo-dark-color-theme.json"
+      },
+      {
+        "label": "Opo High Contrast",
+        "uiTheme": "hc-light",
+        "path": "./themes/opo-hc-color-theme.json"
+      }
+    ]
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/USER/opo-theme"
+  },
+  "license": "MIT"
+}

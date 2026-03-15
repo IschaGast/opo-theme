@@ -1,0 +1,23 @@
+{
+  "name": "opo-theme",
+  "version": "1.0.0",
+  "description": "Colorblind-safe, OKLCH-based accessible color theme for editors, terminals, and web",
+  "type": "module",
+  "scripts": {
+    "build": "node build.js"
+  },
+  "keywords": [
+    "theme",
+    "colorblind",
+    "accessible",
+    "oklch",
+    "vscode",
+    "terminal",
+    "sranantongo"
+  ],
+  "author": "",
+  "license": "MIT",
+  "dependencies": {
+    "culori": "^4.0.0"
+  }
+}

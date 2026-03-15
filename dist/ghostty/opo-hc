@@ -1,0 +1,25 @@
+# Opo Hc — Colorblind-safe accessible theme
+# https://github.com/USER/opo-theme
+
+background = #ffffff
+foreground = #13191f
+cursor-color = #004394
+cursor-text = #ffffff
+selection-background = #eef2f7
+selection-foreground = #13191f
+palette = 0=#13191f
+palette = 1=#723600
+palette = 2=#003377
+palette = 3=#634500
+palette = 4=#004394
+palette = 5=#611761
+palette = 6=#004340
+palette = 7=#9ea2a6
+palette = 8=#727d89
+palette = 9=#ffa569
+palette = 10=#68a5ff
+palette = 11=#ffc251
+palette = 12=#78afff
+palette = 13=#d384d0
+palette = 14=#2dbbb4
+palette = 15=#ffffff

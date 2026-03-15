@@ -1,0 +1,31 @@
+/* Opo High Contrast — Colorblind-safe accessible theme */
+/* https://github.com/USER/opo-theme */
+
+:root {
+  --opo-bg: #ffffff;
+  --opo-bg-panel: #f8fafc;
+  --opo-bg-hover: #eef2f7;
+  --opo-text: #13191f;
+  --opo-text-mid: #353f4a;
+  --opo-text-faint: #3f4751;
+  --opo-accent: #004394;
+  --opo-pass: #003377;
+  --opo-fail: #723600;
+  --opo-neutral: #353f4a;
+
+  /* Syntax */
+  --opo-syntax-keyword: #003377;
+  --opo-syntax-string: #723600;
+  --opo-syntax-comment: #41464b;
+  --opo-syntax-type: #611761;
+  --opo-syntax-function: #004340;
+
+  /* Alpha variants */
+  --opo-accent-selection: color-mix(in srgb, #004394 35%, transparent);
+  --opo-accent-bg: color-mix(in srgb, #004394 8%, transparent);
+  --opo-accent-border: color-mix(in srgb, #004394 50%, transparent);
+  --opo-pass-bg: color-mix(in srgb, #003377 8%, transparent);
+  --opo-fail-bg: color-mix(in srgb, #723600 8%, transparent);
+  --opo-neutral-bg: color-mix(in srgb, #353f4a 8%, transparent);
+  --opo-border-light: color-mix(in srgb, #353f4a 35%, transparent);
+}

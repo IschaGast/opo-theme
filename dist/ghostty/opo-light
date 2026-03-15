@@ -1,0 +1,25 @@
+# Opo Light — Colorblind-safe accessible theme
+# https://github.com/USER/opo-theme
+
+background = #ffffff
+foreground = #24292f
+cursor-color = #0867d7
+cursor-text = #ffffff
+selection-background = #eaeef2
+selection-foreground = #24292f
+palette = 0=#24292f
+palette = 1=#ab5200
+palette = 2=#0550ae
+palette = 3=#9b6500
+palette = 4=#0867d7
+palette = 5=#81427f
+palette = 6=#006964
+palette = 7=#eaeef2
+palette = 8=#57606a
+palette = 9=#e18341
+palette = 10=#4985df
+palette = 11=#dca331
+palette = 12=#458ef4
+palette = 13=#ad6aab
+palette = 14=#209993
+palette = 15=#ffffff
