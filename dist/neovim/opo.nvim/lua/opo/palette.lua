@@ -25,15 +25,15 @@ M.dark = {
   text = "#d1d7df",
   textMid = "#99a3ae",
   textFaint = "#979fa9",
-  accent = "#3384f7",
-  pass = "#5d9fff",
-  fail = "#c56b23",
+  accent = "#a2c8ff",
+  pass = "#bdd7ff",
+  fail = "#ffae78",
   neutral = "#99a3ae",
-  keyword = "#5d9fff",
-  type = "#be7bbc",
-  comment = "#938f89",
-  function = "#289b8f",
-  string = "#c56b23",
+  keyword = "#bdd7ff",
+  type = "#fbb4f8",
+  comment = "#cfcbc4",
+  function = "#72dbce",
+  string = "#ffae78",
 }
 
 M.hc = {

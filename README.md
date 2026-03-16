@@ -119,6 +119,10 @@ Copy a theme file to `~/.warp/themes/`:
 cp dist/warp/opo-light.yaml ~/.warp/themes/
 ```
 
+### Slack
+
+Open a theme file from `dist/slack/` and copy the comma-separated color string. Then go to Slack > Preferences > Themes > Custom Theme and paste it.
+
 ### CSS
 
 Include a CSS file in your web project:

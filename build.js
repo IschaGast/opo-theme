@@ -27,6 +27,7 @@ import { generateZed } from './src/generators/zed.js';
 import { generateJetBrains } from './src/generators/jetbrains.js';
 import { generateNeovim } from './src/generators/neovim.js';
 import { generateCssVariant, generateCssCombined } from './src/generators/css.js';
+import { generateSlack } from './src/generators/slack.js';
 
 const DIST = 'dist';
 const MODES = ['light', 'dark', 'hc'];
@@ -142,6 +143,14 @@ for (const [relPath, content] of Object.entries(nvimFiles)) {
   fileCount++;
 }
 
+// Slack
+console.log('\n  Slack:');
+const slackDir = dir('slack');
+for (const mode of MODES) {
+    write(join(slackDir, `opo-${mode}.txt`), generateSlack(variants[mode], mode));
+  fileCount++;
+}
+
 // CSS
 console.log('\n  CSS:');
 const cssDir = dir('css');
@@ -156,4 +165,4 @@ fileCount++;
 console.log(`\n✨ Build complete! ${fileCount} files generated in dist/`);
 console.log('   Variants: Opo Light, Opo Dark, Opo High Contrast');
 console.log('   Formats: VS Code, Ghostty, Alacritty, iTerm2, Windows Terminal,');
-console.log('            Warp, Zed, JetBrains, Neovim, CSS\n');
+console.log('            Warp, Zed, JetBrains, Neovim, Slack, CSS\n');

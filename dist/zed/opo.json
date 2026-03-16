@@ -105,24 +105,24 @@
         "editor.wrap_guide": "#99a3ae26",
         "border": "#99a3ae59",
         "border.variant": "#99a3ae33",
-        "border.focused": "#3384f7ff",
-        "border.selected": "#3384f7ff",
+        "border.focused": "#a2c8ffff",
+        "border.selected": "#a2c8ffff",
         "elevated_surface.background": "#191612ff",
         "surface.background": "#191612ff",
         "element.background": "#1c1a14ff",
         "element.hover": "#1c1a14ff",
-        "element.selected": "#3384f71f",
+        "element.selected": "#a2c8ff1f",
         "text": "#d1d7dfff",
         "text.muted": "#99a3aeff",
         "text.placeholder": "#979fa9ff",
-        "text.accent": "#3384f7ff",
+        "text.accent": "#a2c8ffff",
         "status_bar.background": "#191612ff",
         "title_bar.background": "#191612ff",
         "toolbar.background": "#161410ff",
         "tab_bar.background": "#191612ff",
         "tab.active_background": "#161410ff",
         "tab.inactive_background": "#191612ff",
-        "search.match_background": "#3384f740",
+        "search.match_background": "#a2c8ff40",
         "panel.background": "#191612ff",
         "scrollbar.thumb.background": "#99a3ae33",
         "terminal.background": "#161410ff",
@@ -145,23 +145,23 @@
         "terminal.ansi.bright_white": "#ffffffff",
         "syntax": {
           "comment": {
-            "color": "#938f89ff",
+            "color": "#cfcbc4ff",
             "font_style": "italic"
           },
           "string": {
-            "color": "#c56b23ff"
+            "color": "#ffae78ff"
           },
           "keyword": {
-            "color": "#5d9fffff"
+            "color": "#bdd7ffff"
           },
           "function": {
-            "color": "#289b8fff"
+            "color": "#72dbceff"
           },
           "type": {
-            "color": "#be7bbcff"
+            "color": "#fbb4f8ff"
           },
           "number": {
-            "color": "#c56b23ff"
+            "color": "#ffae78ff"
           },
           "variable": {
             "color": "#d1d7dfff"

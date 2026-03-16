@@ -22,8 +22,8 @@ export function generateTheme(variant, ansi, mode) {
   const s = {};
   for (const [k, v] of Object.entries(variant.syntax)) s[k] = formatHex(v);
   const a = {
-    normal: ansi.normal.map(hex),
-    bright: ansi.bright.map(hex),
+    normal: ansi.normal.map(formatHex),
+    bright: ansi.bright.map(formatHex),
   };
 
   const isDark = mode === 'dark';

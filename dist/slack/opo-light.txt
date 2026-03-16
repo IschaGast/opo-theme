@@ -1,0 +1,6 @@
+Opo Light — Slack Sidebar Theme
+https://github.com/IschaGast/opo-theme
+
+Paste into Slack > Preferences > Themes > Custom Theme:
+
+#fbf8f2,#eeeae2,#005ccc,#ffffff,#f5f2eb,#57606a,#00358e,#a44d00
