@@ -157,13 +157,9 @@ The build script:
 2. Validates all contrast ratios (fails if any pairing is below target)
 3. Generates all 28 theme files in `dist/`
 
-## Scientific Basis
+## Design Rationale
 
-- **Okabe & Ito (2008)** — Color Universal Design, University of Tokyo
-- **Wong, B. (2011)** — "Color blindness," Nature Methods 8(6)
-- **Bjorn Ottosson (2020)** — OKLCH color space
-- **Stripe** — Designing Accessible Color Systems (CIELAB)
-- **Ethan Schoonover** — Solarized (CIELAB-based theme)
+See [docs/design-rationale.md](docs/design-rationale.md) for the full research basis behind every design decision — including color space choice, colorblind safety strategy, lightness staircase, warm backgrounds, and font recommendations.
 
 ## License
 
