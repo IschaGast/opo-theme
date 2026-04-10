@@ -38,9 +38,10 @@ function darkRemap(color, role) {
     l = 0.30 + (1.0 - color.l) * 0.80;
   } else {
     // Semantic/syntax colors: preserve lightness staircase for CVD safety
-    // Map light L range [0.36-0.52] → dark L range [0.65-0.80]
-    // The 0.35 multiplier spreads 16-point input to ~6 points output
-    l = 0.65 + (1.0 - color.l) * 0.35;
+    // Map light L range [0.36-0.52] → dark L range [0.74-0.85]
+    // Wider spread (0.70x) preserves brightness-based token discrimination
+    // for CVD users while keeping colors visibly chromatic
+    l = 0.40 + (1.0 - color.l) * 0.70;
   }
 
   const remapped = {
@@ -122,7 +123,17 @@ export function deriveVariant(lightPalette, lightSyntax, mode) {
  */
 export function deriveAnsi(normalAnsi, brightAnsi, mode) {
   if (mode === 'light') {
-    return { normal: [...normalAnsi], bright: [...brightAnsi] };
+    // Bright colors on light bg must be *darker* (more vivid), not lighter.
+    // Reduce lightness and boost chroma so "bright" means "bolder".
+    return {
+      normal: [...normalAnsi],
+      bright: normalAnsi.map(c => clampChroma({
+        mode: 'oklch',
+        l: Math.max(0, c.l - 0.08),
+        c: c.c * 1.15,
+        h: c.h || 0,
+      }, 'oklch')),
+    };
   }
 
   if (mode === 'dark') {
@@ -142,16 +153,17 @@ export function deriveAnsi(normalAnsi, brightAnsi, mode) {
   }
 
   if (mode === 'hc') {
+    // HC bright: darken normal colors further for maximum contrast on light bg
     return {
       normal: normalAnsi.map(c => highContrast(c, 'fg')),
-      bright: brightAnsi.map(c => {
-        const boosted = {
+      bright: normalAnsi.map(c => {
+        const darkened = {
           mode: 'oklch',
-          l: Math.min(1, c.l + 0.10),
-          c: c.c * 1.15,
+          l: Math.max(0, c.l * 0.75 - 0.10),
+          c: c.c * 1.20,
           h: c.h || 0,
         };
-        return clampChroma(boosted, 'oklch');
+        return clampChroma(darkened, 'oklch');
       }),
     };
   }

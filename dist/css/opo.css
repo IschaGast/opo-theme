@@ -9,23 +9,23 @@
   --opo-text-mid: #57606a;
   --opo-text-faint: #5c646d;
   --opo-accent: #005ccc;
-  --opo-pass: #00358e;
-  --opo-fail: #a44d00;
+  --opo-pass: #002c85;
+  --opo-fail: #a75000;
   --opo-neutral: #57606a;
 
   /* Syntax */
-  --opo-syntax-keyword: #00358e;
-  --opo-syntax-type: #6b2e6b;
-  --opo-syntax-comment: #58554f;
+  --opo-syntax-keyword: #002c85;
+  --opo-syntax-type: #682b68;
+  --opo-syntax-comment: #5e5a55;
   --opo-syntax-function: #00756b;
-  --opo-syntax-string: #a44d00;
+  --opo-syntax-string: #a75000;
 
   /* Alpha variants */
   --opo-accent-selection: color-mix(in srgb, #005ccc 35%, transparent);
   --opo-accent-bg: color-mix(in srgb, #005ccc 8%, transparent);
   --opo-accent-border: color-mix(in srgb, #005ccc 50%, transparent);
-  --opo-pass-bg: color-mix(in srgb, #00358e 8%, transparent);
-  --opo-fail-bg: color-mix(in srgb, #a44d00 8%, transparent);
+  --opo-pass-bg: color-mix(in srgb, #002c85 8%, transparent);
+  --opo-fail-bg: color-mix(in srgb, #a75000 8%, transparent);
   --opo-neutral-bg: color-mix(in srgb, #57606a 8%, transparent);
   --opo-border-light: color-mix(in srgb, #57606a 35%, transparent);
 }
@@ -38,22 +38,22 @@
     --opo-text: #d1d7df;
     --opo-text-mid: #99a3ae;
     --opo-text-faint: #979fa9;
-    --opo-accent: #a2c8ff;
-    --opo-pass: #bdd7ff;
-    --opo-fail: #ffae78;
+    --opo-accent: #79afff;
+    --opo-pass: #bad6ff;
+    --opo-fail: #ea8d4a;
     --opo-neutral: #99a3ae;
 
-    --opo-syntax-keyword: #bdd7ff;
-    --opo-syntax-type: #fbb4f8;
-    --opo-syntax-comment: #cfcbc4;
-    --opo-syntax-function: #72dbce;
-    --opo-syntax-string: #ffae78;
+    --opo-syntax-keyword: #bad6ff;
+    --opo-syntax-type: #eea8ec;
+    --opo-syntax-comment: #b8b4ae;
+    --opo-syntax-function: #58c3b6;
+    --opo-syntax-string: #ea8d4a;
 
-    --opo-accent-selection: color-mix(in srgb, #a2c8ff 35%, transparent);
-    --opo-accent-bg: color-mix(in srgb, #a2c8ff 8%, transparent);
-    --opo-accent-border: color-mix(in srgb, #a2c8ff 50%, transparent);
-    --opo-pass-bg: color-mix(in srgb, #bdd7ff 8%, transparent);
-    --opo-fail-bg: color-mix(in srgb, #ffae78 8%, transparent);
+    --opo-accent-selection: color-mix(in srgb, #79afff 35%, transparent);
+    --opo-accent-bg: color-mix(in srgb, #79afff 8%, transparent);
+    --opo-accent-border: color-mix(in srgb, #79afff 50%, transparent);
+    --opo-pass-bg: color-mix(in srgb, #bad6ff 8%, transparent);
+    --opo-fail-bg: color-mix(in srgb, #ea8d4a 8%, transparent);
     --opo-neutral-bg: color-mix(in srgb, #99a3ae 8%, transparent);
     --opo-border-light: color-mix(in srgb, #99a3ae 35%, transparent);
   }

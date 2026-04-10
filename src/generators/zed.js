@@ -82,7 +82,7 @@ function generateZedVariant(variant, ansi, mode) {
       syntax: {
         comment:  { color: hex8(s.comment), font_style: 'italic' },
         string:   { color: hex8(s.string) },
-        keyword:  { color: hex8(s.keyword) },
+        keyword:  { color: hex8(s.keyword), font_weight: 700 },
         function: { color: hex8(s.function) },
         type:     { color: hex8(s.type) },
         number:   { color: hex8(s.string) },

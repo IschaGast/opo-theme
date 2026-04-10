@@ -8,24 +8,24 @@
   --opo-text: #d1d7df;
   --opo-text-mid: #99a3ae;
   --opo-text-faint: #979fa9;
-  --opo-accent: #a2c8ff;
-  --opo-pass: #bdd7ff;
-  --opo-fail: #ffae78;
+  --opo-accent: #79afff;
+  --opo-pass: #bad6ff;
+  --opo-fail: #ea8d4a;
   --opo-neutral: #99a3ae;
 
   /* Syntax */
-  --opo-syntax-keyword: #bdd7ff;
-  --opo-syntax-type: #fbb4f8;
-  --opo-syntax-comment: #cfcbc4;
-  --opo-syntax-function: #72dbce;
-  --opo-syntax-string: #ffae78;
+  --opo-syntax-keyword: #bad6ff;
+  --opo-syntax-type: #eea8ec;
+  --opo-syntax-comment: #b8b4ae;
+  --opo-syntax-function: #58c3b6;
+  --opo-syntax-string: #ea8d4a;
 
   /* Alpha variants */
-  --opo-accent-selection: color-mix(in srgb, #a2c8ff 35%, transparent);
-  --opo-accent-bg: color-mix(in srgb, #a2c8ff 8%, transparent);
-  --opo-accent-border: color-mix(in srgb, #a2c8ff 50%, transparent);
-  --opo-pass-bg: color-mix(in srgb, #bdd7ff 8%, transparent);
-  --opo-fail-bg: color-mix(in srgb, #ffae78 8%, transparent);
+  --opo-accent-selection: color-mix(in srgb, #79afff 35%, transparent);
+  --opo-accent-bg: color-mix(in srgb, #79afff 8%, transparent);
+  --opo-accent-border: color-mix(in srgb, #79afff 50%, transparent);
+  --opo-pass-bg: color-mix(in srgb, #bad6ff 8%, transparent);
+  --opo-fail-bg: color-mix(in srgb, #ea8d4a 8%, transparent);
   --opo-neutral-bg: color-mix(in srgb, #99a3ae 8%, transparent);
   --opo-border-light: color-mix(in srgb, #99a3ae 35%, transparent);
 }

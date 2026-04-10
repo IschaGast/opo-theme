@@ -15,28 +15,30 @@ Named after the Sranantongo word **opo** (to rise, to open), from the Surinamese
 - All colors defined in [OKLCH](https://oklch.com/) for perceptual consistency
 - **Blue + orange** instead of green + red for colorblind safety ([Okabe-Ito, 2008](https://jfly.uni-koeln.de/color/))
 - Every foreground/background pairing validated against WCAG contrast targets
-- 5 syntax token colors: keywords, strings, comments, types, functions
+- 108 contrast checks enforced at build time (36 per variant)
+- CVD-verified under simulated deuteranopia, protanopia, and tritanopia
+- 5 syntax token colors with lightness staircase + font style differentiators
 
 ### Palette (Light)
 
-| Role | Hex | Contrast vs white |
-|------|-----|-------------------|
-| Text | `#24292f` | 14.65:1 |
-| Text mid | `#57606a` | 6.39:1 |
-| Text faint | `#646c75` | 5.32:1 |
-| Accent | `#0867d7` | 5.34:1 |
-| Pass/success | `#0550ae` | 7.59:1 |
-| Fail/error | `#ab5200` | 5.33:1 |
+| Role | Hex | Contrast vs bg |
+|------|-----|----------------|
+| Text | `#24292f` | 13.82:1 |
+| Text mid | `#57606a` | 6.03:1 |
+| Text faint | `#5c646d` | 5.66:1 |
+| Accent | `#005ccc` | 5.82:1 |
+| Pass/success | `#002c85` | 11.66:1 |
+| Fail/error | `#a75000` | 5.23:1 |
 
 ### Syntax (Light)
 
-| Token | Hex | Color |
-|-------|-----|-------|
-| Keyword | `#0550ae` | Blue |
-| String | `#ab5200` | Orange |
-| Comment | `#65696f` | Gray (italic) |
-| Type | `#81427f` | Purple |
-| Function | `#006964` | Teal |
+| Token | Hex | L | Style | Color |
+|-------|-----|---|-------|-------|
+| Keyword | `#002c85` | 0.33 | bold | Blue |
+| Type | `#682b68` | 0.40 | | Purple |
+| Comment | `#5e5a55` | 0.47 | italic | Gray |
+| Function | `#00756b` | 0.50 | | Teal |
+| String | `#a75000` | 0.53 | | Orange |
 
 ## Installation
 
@@ -154,8 +156,8 @@ npm run build
 
 The build script:
 1. Derives Dark and HC variants from the Light OKLCH palette
-2. Validates all contrast ratios (fails if any pairing is below target)
-3. Generates all 28 theme files in `dist/`
+2. Validates all 108 contrast ratios (fails if any pairing is below target)
+3. Generates all 31 theme files in `dist/`
 
 ## Design Rationale
 

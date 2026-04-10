@@ -11,7 +11,7 @@
  *   - All text validated at WCAG AA (4.5:1) against all three backgrounds
  *   - Each syntax color at a unique OKLCH lightness level so that
  *     CVD users can distinguish tokens by brightness alone
- *   - Comment uses italic as additional non-color differentiator (WCAG 1.4.1)
+ *   - Keyword uses bold, comment uses italic as non-color differentiators (WCAG 1.4.1)
  *   - All 10 syntax pairs verified distinguishable under deuteranopia,
  *     protanopia, and tritanopia using culori CVD simulation
  */
@@ -34,19 +34,20 @@ export const light = {
   // Semantic colors — Okabe-Ito colorblind-safe
   // Blue/orange: most universally distinguishable pair (Okabe-Ito, 2008)
   accent:    { mode: 'oklch', l: 0.5000, c: 0.1890, h: 258.00 },  // #005ccc
-  pass:      { mode: 'oklch', l: 0.3600, c: 0.1600, h: 258.00 },  // #00358e — blue
-  fail:      { mode: 'oklch', l: 0.5200, c: 0.1400, h: 54.00 },   // #a44d00 — orange
+  pass:      { mode: 'oklch', l: 0.3300, c: 0.1600, h: 258.00 },  // #003172 — blue
+  fail:      { mode: 'oklch', l: 0.5300, c: 0.1400, h: 54.00 },   // #a55200 — orange
   neutral:   { mode: 'oklch', l: 0.4849, c: 0.0196, h: 251.02 },  // #57606a
 };
 
 // Syntax highlighting — 5 categories at unique lightness levels
-// Lightness staircase: L=0.36, 0.42, 0.47, 0.50, 0.52
-// CVD users can distinguish tokens by brightness alone
+// Lightness staircase: L=0.33, 0.40, 0.47, 0.50, 0.53
+// Gaps of 0.07/0.07/0.03/0.03 — widened for CVD distinguishability
+// CVD users can distinguish tokens by brightness + font style (bold/italic)
 // Hues from maximally spread Okabe-Ito axes: blue, purple, gray, teal, orange
 export const syntax = {
-  keyword:  { mode: 'oklch', l: 0.3600, c: 0.1600, h: 258.00 },  // #00358e — blue (= pass)
-  type:     { mode: 'oklch', l: 0.4100, c: 0.1200, h: 328.00 },  // #6b2e6b — purple
-  comment:  { mode: 'oklch', l: 0.4500, c: 0.0100, h: 80.00 },   // #58554f — warm gray (+ italic)
-  function: { mode: 'oklch', l: 0.5000, c: 0.1000, h: 185.00 },  // #00756b — teal
-  string:   { mode: 'oklch', l: 0.5200, c: 0.1400, h: 54.00 },   // #a44d00 — orange (= fail)
+  keyword:  { mode: 'oklch', l: 0.3300, c: 0.1600, h: 258.00 },  // #003172 — blue (= pass, + bold)
+  type:     { mode: 'oklch', l: 0.4000, c: 0.1200, h: 328.00 },  // #682b68 — purple
+  comment:  { mode: 'oklch', l: 0.4700, c: 0.0100, h: 80.00 },   // #5e5a55 — warm gray (+ italic)
+  function: { mode: 'oklch', l: 0.5000, c: 0.1000, h: 185.00 },  // #00736a — teal
+  string:   { mode: 'oklch', l: 0.5300, c: 0.1400, h: 54.00 },   // #a55200 — orange (= fail)
 };

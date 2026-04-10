@@ -48,27 +48,37 @@ Traditional ANSI terminal colors (red, green, yellow, magenta) are remapped to c
 
 ## Syntax Highlighting: Lightness Staircase
 
-Opo's 5 syntax token colors are placed at unique OKLCH lightness levels:
+Opo's 5 syntax token colors are placed at unique OKLCH lightness levels with widened gaps for CVD safety:
 
-| Token    | L     | Hex       | Color  |
-|----------|-------|-----------|--------|
-| Keyword  | 0.36  | `#00358e` | Blue   |
-| Type     | 0.41  | `#6b2e6b` | Purple |
-| Comment  | 0.45  | `#58554f` | Gray   |
-| Function | 0.50  | `#00756b` | Teal   |
-| String   | 0.52  | `#a44d00` | Orange |
+| Token    | L     | Hex       | Color  | Style  |
+|----------|-------|-----------|--------|--------|
+| Keyword  | 0.33  | `#002c85` | Blue   | bold   |
+| Type     | 0.40  | `#682b68` | Purple |        |
+| Comment  | 0.47  | `#5e5a55` | Gray   | italic |
+| Function | 0.50  | `#00756b` | Teal   |        |
+| String   | 0.53  | `#a75000` | Orange |        |
+
+Lightness gaps: 0.07, 0.07, 0.03, 0.03.
 
 **Why:**
 
 - **CVD users can distinguish tokens by brightness alone** — even if two colors look identical due to a color vision deficiency, they remain distinguishable because they have different lightness
-- **All 10 syntax pairs verified** under simulated deuteranopia, protanopia, and tritanopia using [culori](https://culorijs.org/) CVD simulation
+- **86/90 syntax pairs verified distinguishable** (96%) under simulated deuteranopia, protanopia, and tritanopia using [culori](https://culorijs.org/) CVD simulation (Brettel-Vienot-Mollon model at severity 1.0)
+- **10 of 14 close pairs mitigated** by font style differentiators (bold keywords, italic comments) per WCAG 1.4.1
+- **4 remaining pairs** (string vs function, type vs function) are distinguishable by syntactic context — literal values never appear in the same position as callable names
 - **Hue selection** uses maximally spread axes from the Okabe-Ito palette to maximize chromatic distance even for partial CVD
 
-### Comment: Italic as Non-Color Differentiator
+### Font Style Differentiators (WCAG 1.4.1)
 
-Comments use italic styling in addition to their color (warm gray).
+Keywords use **bold** and comments use **italic** as non-color differentiators.
 
-**Why:** WCAG 1.4.1 (Use of Color) states that color must not be the only visual means of conveying information. Italic provides a second, non-chromatic signal that text is a comment — useful for CVD users and in low-contrast viewing conditions.
+**Why:** WCAG 1.4.1 (Use of Color) states that color must not be the only visual means of conveying information. Bold and italic provide a second, non-chromatic signal — useful for CVD users and in low-contrast viewing conditions.
+
+These font styles were chosen deliberately:
+
+- **Bold for keywords** — natural visual weight for language constructs (`if`, `return`, `const`), widely used in themes, does not interfere with readability
+- **Italic for comments** — conventional, immediately signals "not code", low visual noise
+- **No underline for functions** — considered and rejected; functions are too frequent in code, and underline interferes with descenders (g, j, p, q, y) and creates false link affordance, harming readability for all users
 
 ## Contrast Validation
 
@@ -85,6 +95,11 @@ The build fails if any pairing is below its target. This is enforced for:
 - 5 syntax colors against 3 background levels (15 pairings)
 - **Total: 36 contrast checks per variant, 108 total**
 
+Additionally, the following are validated outside the build pipeline:
+- **UI element contrast** — button/badge foregrounds adapt automatically to their background (dark text on light accent, white text on dark accent) using WCAG contrast comparison
+- **ANSI bright colors** — bright set is derived differently per variant: darker/bolder on light backgrounds, lighter on dark backgrounds, ensuring all pass 3:1 for UI elements
+- **CVD simulation** — 90 syntax pairs (10 pairs x 3 variants x 3 CVD types) tested at full severity using culori's Brettel-Vienot-Mollon model
+
 ## Dark Variant: Lightness Remapping
 
 The dark variant is derived from the light palette by remapping OKLCH lightness, not by picking new colors.
@@ -92,8 +107,9 @@ The dark variant is derived from the light palette by remapping OKLCH lightness,
 **Why:**
 
 - **Consistency** — the same hues and relative chroma ensure both variants feel like the same theme
-- **CVD safety preserved** — the lightness staircase is maintained in the dark range (L=0.65-0.80), preserving brightness-based token discrimination
+- **CVD safety preserved** — the lightness staircase is maintained in the dark range (L=0.74-0.85) using a widened 0.70x multiplier, preserving brightness-based token discrimination
 - **Non-linear curve** — backgrounds map to L=0.18-0.24 (dark but not true black, reducing halation and eye strain on OLED screens)
+- **Adaptive UI foregrounds** — buttons, badges, and status bar text automatically select dark or white foreground based on which has better WCAG contrast against the background color
 
 ## High Contrast Variant: WCAG AAA
 
@@ -103,6 +119,20 @@ The high-contrast variant pushes all lightness deltas by 25% and chroma by 15%.
 
 - **WCAG AAA (7:1)** is the enhanced contrast standard, required by some accessibility policies and preferred by users with low vision
 - The same derivation approach (lightness remapping + chroma boost) preserves color relationships while increasing readability
+
+## ANSI Bright Colors: Variant-Aware Derivation
+
+Traditional ANSI bright colors (8-15) are high-lightness variants designed for dark backgrounds. On a light background terminal, applications may still emit bright ANSI codes, causing unreadable text.
+
+Opo derives the bright set differently per variant:
+
+| Variant | Bright strategy | Result |
+|---------|----------------|--------|
+| Light | Darken normal colors (L-0.08, chroma +15%) | "Bright" means bolder/more vivid, all pass AA |
+| Dark | Lighten bright source (L+0.12) | Standard bright-on-dark, all pass AA |
+| HC | Darken normal colors further (L*0.75-0.10, chroma +20%) | All pass AAA |
+
+This ensures bright terminal output is readable regardless of which variant is active.
 
 ## Recommended Fonts
 

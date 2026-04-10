@@ -59,7 +59,7 @@ export function generateJetBrains(variant, ansi, mode) {
   const attributes = [];
 
   // Font types: 0=normal, 1=bold, 2=italic, 3=bold+italic
-  const fontTypes = { keyword: null, string: null, comment: 2, type: null, function: null };
+  const fontTypes = { keyword: 1, string: null, comment: 2, type: null, function: null };
 
   for (const [category, attrNames] of Object.entries(jetbrainsExtended)) {
     for (const attrName of attrNames) {

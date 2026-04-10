@@ -5,7 +5,7 @@
  * Output: dist/vscode/
  */
 
-import { formatHex } from 'culori';
+import { formatHex, wcagContrast } from 'culori';
 import { scopeMap } from '../scopes.js';
 
 function hexAlpha(hexColor, a) {
@@ -28,6 +28,10 @@ export function generateTheme(variant, ansi, mode) {
 
   const isDark = mode === 'dark';
   const isHc = mode === 'hc';
+
+  // Pick foreground that has best contrast against a given background
+  const contrastFg = (bg) =>
+    wcagContrast('#ffffff', bg) >= wcagContrast(p.bg, bg) ? '#ffffff' : p.bg;
 
   // Derive alpha colors
   const accentBg = hexAlpha(p.accent, 0.08);
@@ -88,14 +92,14 @@ export function generateTheme(variant, ansi, mode) {
       'activityBar.inactiveForeground': p.textFaint,
       'activityBar.border': borderLight,
       'activityBarBadge.background': p.accent,
-      'activityBarBadge.foreground': '#ffffff',
+      'activityBarBadge.foreground': contrastFg(p.accent),
 
       // Status bar
       'statusBar.background': p.bgPanel,
       'statusBar.foreground': p.textMid,
       'statusBar.border': borderLight,
       'statusBar.debuggingBackground': p.fail,
-      'statusBar.debuggingForeground': '#ffffff',
+      'statusBar.debuggingForeground': contrastFg(p.fail),
       'statusBar.noFolderBackground': p.bgPanel,
 
       // Title bar
@@ -136,12 +140,12 @@ export function generateTheme(variant, ansi, mode) {
 
       // Button
       'button.background': p.accent,
-      'button.foreground': '#ffffff',
+      'button.foreground': contrastFg(p.accent),
       'button.hoverBackground': hexAlpha(p.accent, 0.85),
 
       // Badge
       'badge.background': p.accent,
-      'badge.foreground': '#ffffff',
+      'badge.foreground': contrastFg(p.accent),
 
       // Scrollbar
       'scrollbar.shadow': shadow,
@@ -225,6 +229,7 @@ export function generateTheme(variant, ansi, mode) {
         scope: scopes,
         settings: {
           foreground: s[category],
+          ...(category === 'keyword' ? { fontStyle: 'bold' } : {}),
           ...(category === 'comment' ? { fontStyle: 'italic' } : {}),
         },
       })),
