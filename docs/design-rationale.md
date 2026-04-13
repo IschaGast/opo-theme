@@ -140,6 +140,7 @@ Opo defines colors only — font choice is left to the application. These fonts 
 
 ### Code (Monospace)
 
+- **[Atkinson Hyperlegible Mono](https://www.brailleinstitute.org/freefont/)** — designed by the Braille Institute for maximum character legibility, exaggerated letter differentiation (I/l/1, O/0), ideal for accessibility-first setups. Use the [Nerd Font variant](https://github.com/ryanoasis/nerd-fonts) (`font-atkynson-mono-nerd-font`) for terminal tools that rely on Unicode symbols.
 - **[JetBrains Mono](https://www.jetbrains.com/lp/mono/)** — increased x-height and letter spacing for readability, programming ligatures, open source
 - **[Monaspace](https://monaspace.githubnext.com/)** — texture healing for more even typographic color, multiple widths
 - **[Fira Code](https://github.com/tonsky/FiraCode)** — wide language support, programming ligatures

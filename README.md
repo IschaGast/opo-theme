@@ -147,6 +147,42 @@ a {
 }
 ```
 
+## Recommended Font
+
+Opo pairs best with **[Atkinson Hyperlegible Mono](https://www.brailleinstitute.org/freefont/)** — designed by the Braille Institute for maximum character legibility, with exaggerated letter differentiation (distinct I/l/1, O/0) for low vision and dyslexia.
+
+For terminals and CLI tools (Claude Code, starship, etc.) that use Unicode symbols, install the **Nerd Font** variant which adds 3000+ icons:
+
+```bash
+brew install --cask font-atkynson-mono-nerd-font
+```
+
+### VS Code settings
+
+Add to your `settings.json` for the full Opo experience:
+
+```json
+{
+  "editor.fontFamily": "AtkynsonMono Nerd Font Mono, monospace",
+  "editor.fontSize": 15,
+  "terminal.integrated.fontFamily": "AtkynsonMono Nerd Font Mono",
+  "editor.fontLigatures": false,
+  "editor.bracketPairColorization.enabled": false
+}
+```
+
+### Ghostty
+
+Set your terminal font in `~/.config/ghostty/config`:
+
+```
+font-family = AtkynsonMono Nerd Font Mono
+```
+
+### Slack
+
+Set **Atkinson Hyperlegible Next** via Preferences > Themes > Font.
+
 ## Building from Source
 
 ```bash
