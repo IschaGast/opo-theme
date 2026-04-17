@@ -37,6 +37,12 @@ export const light = {
   pass:      { mode: 'oklch', l: 0.3300, c: 0.1600, h: 258.00 },  // #003172 — blue
   fail:      { mode: 'oklch', l: 0.5300, c: 0.1400, h: 54.00 },   // #a55200 — orange
   neutral:   { mode: 'oklch', l: 0.4849, c: 0.0196, h: 251.02 },  // #57606a
+
+  // Presence indicator — mid-lightness blue that stays legible on both
+  // light crème and dark sidebar backgrounds. Slack ships one theme string
+  // across desktop/mobile, and mobile forces a dark sidebar in dark mode
+  // regardless of theme, so this color must clear ≥3:1 on both extremes.
+  presence:  { mode: 'oklch', l: 0.6200, c: 0.1600, h: 258.00 },
 };
 
 // Syntax highlighting — 5 categories at unique lightness levels

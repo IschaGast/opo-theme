@@ -92,6 +92,12 @@ export function deriveVariant(lightPalette, lightSyntax, mode) {
     const textKeys = ['text', 'textMid', 'textFaint', 'neutral'];
 
     for (const [key, color] of Object.entries(lightPalette)) {
+      // presence must stay identical across variants: it's consumed by
+      // single-string theme formats (Slack) that can't switch per-mode.
+      if (key === 'presence') {
+        ui[key] = { ...color };
+        continue;
+      }
       const role = BG_KEYS.includes(key) ? 'bg'
         : textKeys.includes(key) ? 'text'
         : 'color';
@@ -102,6 +108,10 @@ export function deriveVariant(lightPalette, lightSyntax, mode) {
     }
   } else if (mode === 'hc') {
     for (const [key, color] of Object.entries(lightPalette)) {
+      if (key === 'presence') {
+        ui[key] = { ...color };
+        continue;
+      }
       const role = BG_KEYS.includes(key) ? 'bg' : 'fg';
       ui[key] = highContrast(color, role);
     }

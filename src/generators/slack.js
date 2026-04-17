@@ -17,7 +17,7 @@ export function generateSlack(variant, mode) {
   const activeText   = mode === 'dark' ? formatHex(variant.ui.bg) : '#ffffff';
   const hoverItem    = formatHex(variant.ui.bgPanel);
   const textColor    = formatHex(variant.ui.textMid);
-  const presence     = formatHex(variant.ui.pass);
+  const presence     = formatHex(variant.ui.presence);
   const mentionBadge = formatHex(variant.ui.fail);
 
   const theme = [

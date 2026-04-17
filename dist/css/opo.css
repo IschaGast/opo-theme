@@ -12,6 +12,7 @@
   --opo-pass: #002c85;
   --opo-fail: #a75000;
   --opo-neutral: #57606a;
+  --opo-presence: #4385e4;
 
   /* Syntax */
   --opo-syntax-keyword: #002c85;
@@ -42,6 +43,7 @@
     --opo-pass: #bad6ff;
     --opo-fail: #ea8d4a;
     --opo-neutral: #99a3ae;
+    --opo-presence: #4385e4;
 
     --opo-syntax-keyword: #bad6ff;
     --opo-syntax-type: #eea8ec;

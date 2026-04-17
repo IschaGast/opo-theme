@@ -3,4 +3,4 @@ https://github.com/IschaGast/opo-theme
 
 Paste into Slack > Preferences > Themes > Custom Theme:
 
-#fdfaf3,#f4efe5,#003c88,#ffffff,#f9f5ed,#353f4a,#001e4b,#6f3500
+#fdfaf3,#f4efe5,#003c88,#ffffff,#f9f5ed,#353f4a,#4385e4,#6f3500
