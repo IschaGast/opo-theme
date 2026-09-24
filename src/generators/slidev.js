@@ -194,6 +194,102 @@ export function generateSlidevIaLayer() {
   padding-left: 2.5rem;
 }
 
+/* Big number: one figure in view, for example revealed with v-click.
+   Usage: <div v-click class="big-number">159</div> */
+.slidev-layout .big-number {
+  font-size: 9rem;
+  font-weight: 700;
+  line-height: 1;
+  margin-top: 1.5rem;
+  color: var(--opo-text);
+}
+
+/* Code panel: a half-slide block in the code background color with the
+   code vertically centered and left aligned, as the counterpart of an image in a split layout.
+   Usage: <div class="code-panel absolute top-0 right-0 w-1/2 h-full">
+   followed by a fenced code block. */
+.code-panel {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 1rem;
+  padding: 2.5rem;
+  background: var(--slidev-code-background);
+  --slidev-code-font-size: 16px;
+  --slidev-code-line-height: 26px;
+  /* the panel already has padding; keep code aligned with text below it */
+  --slidev-code-padding: 0;
+}
+
+.code-panel .slidev-code,
+.code-panel pre {
+  background: transparent !important;
+  margin: 0;
+}
+
+/* Screen reader output: what a screen reader announces, shown below code.
+   Usage inside a code-panel:
+   <p class="sr-output"><strong>VoiceOver:</strong> "link, ..."</p> */
+.sr-output {
+  margin: 0;
+  font-size: 1rem;
+  line-height: 1.4;
+  color: var(--opo-text);
+
+  strong {
+    display: block;
+    color: var(--opo-text-mid);
+    font-size: 0.85rem;
+    font-weight: 600;
+  }
+}
+
+/* Image with code: image on top, code panel below, filling the right half.
+   Usage:
+   <div class="image-code">
+     <img src="/beeld.png" alt="...">
+     <div class="code-panel"> fenced code block </div>
+   </div> */
+.image-code {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 50%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  background: var(--slidev-code-background);
+
+  > img {
+    flex: 1;
+    min-height: 0;
+    width: 100%;
+    object-fit: contain;
+    padding: 1.5rem 0;
+  }
+}
+
+/* Image panel: the right half in the code background color with the image
+   contained inside, so image, image-code and code-panel steps share one
+   surface. Usage: <div class="image-panel"><img src="/beeld.png" alt="..."></div> */
+.image-panel {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 50%;
+  height: 100%;
+  display: flex;
+  padding: 2.5rem;
+  background: var(--slidev-code-background);
+
+  > img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+}
+
 /* full: the whole slide, no margins */
 .slidev-layout.full {
   padding: 0;
@@ -380,6 +476,14 @@ layout: fact
 \`fact\`: één getal of feit met toelichting.
 
 ---
+
+# big-number
+
+Een vraag, en na een klik het antwoord groot in beeld.
+
+<div v-click class="big-number">159</div>
+
+---
 layout: quote
 ---
 
@@ -424,7 +528,7 @@ image: /voorbeeld.svg
 
 # image-right
 
-Tekst links, afbeelding rechts. Zet \`image:\` in de frontmatter. Met \`backgroundSize: contain\` wordt de afbeelding niet bijgesneden.
+Tekst links, afbeelding rechts. Zet \`image:\` in de frontmatter. Ideale maat: 960 × 1080 px (8:9), dan vult hij de helft precies. 4K: 1920 × 2160.
 
 ---
 layout: image-left
@@ -434,6 +538,51 @@ image: /voorbeeld.svg
 # image-left
 
 Afbeelding links, tekst rechts.
+
+---
+
+# code-panel
+
+Tekst links, code rechts op de hele halve slide. Werkt ook met \`v-click\`.
+
+<div class="code-panel absolute top-0 right-0 w-1/2 h-full">
+
+\`\`\`html
+<figure>
+  <img src="example.webp" alt="">
+</figure>
+\`\`\`
+
+</div>
+
+---
+
+# image-panel
+
+Tekst links, afbeelding rechts op dezelfde achtergrond als \`code-panel\`. Handig als je bij klikken wisselt tussen afbeelding en code.
+
+<div class="image-panel">
+  <img src="/voorbeeld.svg" alt="Voorbeeldafbeelding">
+</div>
+
+---
+
+# image-code
+
+Afbeelding boven, code eronder, met wat de schermlezer voorleest.
+
+<div class="image-code">
+  <img src="/voorbeeld.svg" alt="Voorbeeldafbeelding">
+  <div class="code-panel">
+
+\`\`\`html
+<img alt="customname-15380" …>
+\`\`\`
+
+<p class="sr-output"><strong>VoiceOver:</strong> "customname-15380, afbeelding"</p>
+
+  </div>
+</div>
 
 ---
 layout: image
@@ -503,11 +652,15 @@ Dit zie je alleen op /presenter.
 export function generateSlidevPlaceholder(variant) {
   const hex = (c) => formatHex(c);
   const ui = variant.ui;
-  return `<svg xmlns="http://www.w3.org/2000/svg" width="1600" height="1000" viewBox="0 0 1600 1000">
-  <rect width="1600" height="1000" fill="${hex(ui.bgHover)}"/>
-  <circle cx="1180" cy="330" r="150" fill="${hex(ui.accent)}" opacity="0.25"/>
-  <path d="M0 1000 L520 480 L900 820 L1150 600 L1600 1000 Z" fill="${hex(ui.accent)}" opacity="0.35"/>
-  <path d="M0 1000 L420 700 L760 1000 Z" fill="${hex(ui.fail)}" opacity="0.3"/>
+  // 960 x 1080 (8:9) is exactly half of a 16:9 slide at full HD, the ideal
+  // size for image-left/right and other half-slide images.
+  return `<svg xmlns="http://www.w3.org/2000/svg" width="960" height="1080" viewBox="0 0 960 1080">
+  <rect width="960" height="1080" fill="${hex(ui.bgHover)}"/>
+  <circle cx="700" cy="300" r="120" fill="${hex(ui.accent)}" opacity="0.25"/>
+  <path d="M0 1080 L320 700 L560 920 L720 780 L960 1080 Z" fill="${hex(ui.accent)}" opacity="0.35"/>
+  <text x="480" y="520" font-family="sans-serif" font-size="72" font-weight="700" fill="${hex(ui.text)}" text-anchor="middle">960 × 1080 px</text>
+  <text x="480" y="590" font-family="sans-serif" font-size="40" fill="${hex(ui.textMid)}" text-anchor="middle">8:9, halve slide</text>
 </svg>
 `;
 }
+

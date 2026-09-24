@@ -61,6 +61,14 @@ layout: fact
 `fact`: één getal of feit met toelichting.
 
 ---
+
+# big-number
+
+Een vraag, en na een klik het antwoord groot in beeld.
+
+<div v-click class="big-number">159</div>
+
+---
 layout: quote
 ---
 
@@ -105,7 +113,7 @@ image: /voorbeeld.svg
 
 # image-right
 
-Tekst links, afbeelding rechts. Zet `image:` in de frontmatter. Met `backgroundSize: contain` wordt de afbeelding niet bijgesneden.
+Tekst links, afbeelding rechts. Zet `image:` in de frontmatter. Ideale maat: 960 × 1080 px (8:9), dan vult hij de helft precies. 4K: 1920 × 2160.
 
 ---
 layout: image-left
@@ -115,6 +123,51 @@ image: /voorbeeld.svg
 # image-left
 
 Afbeelding links, tekst rechts.
+
+---
+
+# code-panel
+
+Tekst links, code rechts op de hele halve slide. Werkt ook met `v-click`.
+
+<div class="code-panel absolute top-0 right-0 w-1/2 h-full">
+
+```html
+<figure>
+  <img src="example.webp" alt="">
+</figure>
+```
+
+</div>
+
+---
+
+# image-panel
+
+Tekst links, afbeelding rechts op dezelfde achtergrond als `code-panel`. Handig als je bij klikken wisselt tussen afbeelding en code.
+
+<div class="image-panel">
+  <img src="/voorbeeld.svg" alt="Voorbeeldafbeelding">
+</div>
+
+---
+
+# image-code
+
+Afbeelding boven, code eronder, met wat de schermlezer voorleest.
+
+<div class="image-code">
+  <img src="/voorbeeld.svg" alt="Voorbeeldafbeelding">
+  <div class="code-panel">
+
+```html
+<img alt="customname-15380" …>
+```
+
+<p class="sr-output"><strong>VoiceOver:</strong> "customname-15380, afbeelding"</p>
+
+  </div>
+</div>
 
 ---
 layout: image

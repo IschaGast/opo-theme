@@ -65,6 +65,102 @@
   padding-left: 2.5rem;
 }
 
+/* Big number: one figure in view, for example revealed with v-click.
+   Usage: <div v-click class="big-number">159</div> */
+.slidev-layout .big-number {
+  font-size: 9rem;
+  font-weight: 700;
+  line-height: 1;
+  margin-top: 1.5rem;
+  color: var(--opo-text);
+}
+
+/* Code panel: a half-slide block in the code background color with the
+   code vertically centered and left aligned, as the counterpart of an image in a split layout.
+   Usage: <div class="code-panel absolute top-0 right-0 w-1/2 h-full">
+   followed by a fenced code block. */
+.code-panel {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: flex-start;
+  gap: 1rem;
+  padding: 2.5rem;
+  background: var(--slidev-code-background);
+  --slidev-code-font-size: 16px;
+  --slidev-code-line-height: 26px;
+  /* the panel already has padding; keep code aligned with text below it */
+  --slidev-code-padding: 0;
+}
+
+.code-panel .slidev-code,
+.code-panel pre {
+  background: transparent !important;
+  margin: 0;
+}
+
+/* Screen reader output: what a screen reader announces, shown below code.
+   Usage inside a code-panel:
+   <p class="sr-output"><strong>VoiceOver:</strong> "link, ..."</p> */
+.sr-output {
+  margin: 0;
+  font-size: 1rem;
+  line-height: 1.4;
+  color: var(--opo-text);
+
+  strong {
+    display: block;
+    color: var(--opo-text-mid);
+    font-size: 0.85rem;
+    font-weight: 600;
+  }
+}
+
+/* Image with code: image on top, code panel below, filling the right half.
+   Usage:
+   <div class="image-code">
+     <img src="/beeld.png" alt="...">
+     <div class="code-panel"> fenced code block </div>
+   </div> */
+.image-code {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 50%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  background: var(--slidev-code-background);
+
+  > img {
+    flex: 1;
+    min-height: 0;
+    width: 100%;
+    object-fit: contain;
+    padding: 1.5rem 0;
+  }
+}
+
+/* Image panel: the right half in the code background color with the image
+   contained inside, so image, image-code and code-panel steps share one
+   surface. Usage: <div class="image-panel"><img src="/beeld.png" alt="..."></div> */
+.image-panel {
+  position: absolute;
+  top: 0;
+  right: 0;
+  width: 50%;
+  height: 100%;
+  display: flex;
+  padding: 2.5rem;
+  background: var(--slidev-code-background);
+
+  > img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+  }
+}
+
 /* full: the whole slide, no margins */
 .slidev-layout.full {
   padding: 0;
