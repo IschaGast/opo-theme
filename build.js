@@ -7,7 +7,7 @@
  * Usage: node build.js
  */
 
-import { mkdirSync, writeFileSync } from 'node:fs';
+import { cpSync, mkdirSync, rmSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 
 // Source data
@@ -32,7 +32,7 @@ import {
   generateSlidevPackageJson,
   generateSlidevStylesIndex,
   generateSlidevColors,
-  generateSlidevLayouts,
+  generateSlidevIaLayer,
   generateSlidevShikiSetup,
   generateSlidevExample,
   generateSlidevPlaceholder,
@@ -172,13 +172,14 @@ fileCount++;
 
 // Slidev
 console.log('\n  Slidev:');
+rmSync(join(DIST, 'slidev'), { recursive: true, force: true });
 const slidevDir = dir('slidev');
 const slidevStyles = dir('slidev', 'styles');
 const slidevSetup = dir('slidev', 'setup');
 write(join(slidevDir, 'package.json'), generateSlidevPackageJson());
 write(join(slidevStyles, 'index.ts'), generateSlidevStylesIndex());
 write(join(slidevStyles, 'opo.css'), generateSlidevColors(variants));
-write(join(slidevStyles, 'layouts.css'), generateSlidevLayouts());
+write(join(slidevStyles, 'ia.css'), generateSlidevIaLayer());
 write(join(slidevSetup, 'shiki.ts'), generateSlidevShikiSetup());
 for (const mode of ['light', 'dark']) {
   const theme = generateTheme(variants[mode], ansiSets[mode], mode);
@@ -186,6 +187,9 @@ for (const mode of ['light', 'dark']) {
 }
 write(join(slidevDir, 'example.md'), generateSlidevExample());
 write(join(dir('slidev', 'public'), 'voorbeeld.svg'), generateSlidevPlaceholder(variants.light));
+// Slidev default theme layouts and styles, vendored unchanged
+cpSync('src/slidev-default', slidevDir, { recursive: true });
+console.log(`  ${slidevDir}/ (default theme layouts and styles)`);
 fileCount += 9;
 
 // ── Summary ──

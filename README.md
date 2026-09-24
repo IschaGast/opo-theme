@@ -149,7 +149,9 @@ a {
 
 ### Slidev
 
-`dist/slidev/` is a local [Slidev](https://sli.dev) theme: Opo colors (light and dark), Atkinson Hyperlegible Next, and iA Presenter-like spacing on top of Slidev's base layouts. Code blocks use the VS Code theme for highlighting.
+`dist/slidev/` is a local [Slidev](https://sli.dev) theme: Slidev's default theme with Opo colors (light and dark), Atkinson Hyperlegible Next, and an iA Presenter-style layer on top. Every layout is top left, so text does not jump between slides; only `layout: center` centers vertically. Heading sizes, weights and line heights follow iA Presenter, with balanced line wrapping. Code blocks use the VS Code theme for highlighting.
+
+The default theme's layouts and styles are vendored unchanged in `src/slidev-default/` (MIT), because a theme outside the project cannot import `@slidev/theme-default`.
 
 Point to it from the frontmatter of your `slides.md`:
 

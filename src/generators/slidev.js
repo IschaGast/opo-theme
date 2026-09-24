@@ -8,6 +8,10 @@
  * `html.dark` class, so light and dark variables are scoped to that
  * class instead of prefers-color-scheme.
  *
+ * Layouts and styles are Slidev's default theme, vendored unchanged in
+ * src/slidev-default/ and copied by build.js (a theme outside the project
+ * cannot import @slidev/theme-default). Opo only adds colors and fonts.
+ *
  * Shiki accepts VS Code themes, so the code highlighting reuses the
  * VS Code generator output for the same variants.
  *
@@ -45,8 +49,9 @@ export function generateSlidevPackageJson() {
 }
 
 export function generateSlidevStylesIndex() {
-  // Themes must import the base layout styles themselves (padding, h-full).
-  return `import '@slidev/client/styles/layouts-base.css'\nimport './opo.css'\nimport './layouts.css'\n`;
+  // Same order as @slidev/theme-default/styles/index.ts, plus Opo colors
+  // and the iA Presenter-style layer on top.
+  return `import '@slidev/client/styles/layouts-base.css'\nimport './default-layouts.css'\nimport './opo.css'\nimport './ia.css'\n`;
 }
 
 function varBlock(variant, indent) {
@@ -96,13 +101,6 @@ ${varBlock(variants.light, 2)}
 html.dark {
 ${varBlock(variants.dark, 2)}
 }
-`;
-}
-
-// Only colors, font and iA Presenter-like spacing on top of Slidev's base
-// layout styles; everything else stays Slidev default.
-export function generateSlidevLayouts() {
-  return `/* Opo — Slidev layout styles (generated) */
 
 .slidev-slide-content,
 .slidev-page {
@@ -110,49 +108,192 @@ export function generateSlidevLayouts() {
   color: var(--opo-text);
 }
 
+/* The default theme dims subtitles and h6 with opacity, which drops text
+   below WCAG AA on Opo backgrounds (about 3:1 for h1 + p). Use validated
+   palette colors instead. */
+.slidev-layout h1 + p {
+  opacity: 1;
+  color: var(--opo-text);
+}
+
+.slidev-layout h6:not(.opacity-100) {
+  opacity: 1;
+  color: var(--opo-text-mid);
+}
+`;
+}
+
+// iA Presenter-style layer on top of the default theme: one left-aligned
+// style everywhere, heavy tight titles, bold subtitles, generous margins.
+// Everything is top left; only the center layout centers vertically.
+export function generateSlidevIaLayer() {
+  return `/* Opo — iA Presenter-style layout layer (generated) */
+
 .slidev-layout {
-  padding: 3.5rem 4.5rem;
-  font-size: 1.35rem;
-  line-height: 1.45;
+  padding: 2.5rem 4rem;
+  font-size: 1.4rem;
+  line-height: 1.3;
+  text-align: left;
+
+  h1,
+  h2,
+  h3 {
+    text-wrap: balance;
+  }
 
   h1 {
-    font-size: 2.6rem;
-    font-weight: 600;
-    line-height: 1.15;
-    margin-bottom: 1.25rem;
+    font-size: 2.35rem;
+    font-weight: 700;
+    line-height: 1.1;
+    margin: 0 0 0.75rem;
   }
 
   h1 + p {
-    color: var(--opo-text-mid);
-    font-size: 1.4rem;
-    margin-top: -0.5rem;
+    font-size: 1.6rem;
+    font-weight: 600;
+    line-height: 1.2;
+    margin: 0 0 1.5rem;
+  }
+
+  h2 {
+    font-size: 1.9rem;
+    font-weight: 700;
+    line-height: 1.2;
+  }
+
+  h3 {
+    font-size: 1.5rem;
+    font-weight: 700;
+    line-height: 1.3;
   }
 
   p,
   li {
-    line-height: 1.45;
-  }
-
-  a {
-    color: var(--opo-accent);
-    text-decoration: underline;
-    text-underline-offset: 0.15em;
-    border-bottom: none;
+    line-height: 1.3;
   }
 }
 
-/* Cover and section: vertically centered, left aligned */
+/* Split layouts (image-left/right, iframe-left/right): the text column is
+   half the slide, so like iA use a smaller title and a tighter margin on
+   the side of the image. */
+.grid-cols-2 > .slidev-layout.default {
+  h1 {
+    font-size: 2rem;
+  }
+
+  h1 + p {
+    font-size: 1.35rem;
+  }
+}
+
+.grid-cols-2 > .slidev-layout.default:first-child {
+  padding-right: 2.5rem;
+}
+
+.grid-cols-2 > .slidev-layout.default:last-child {
+  padding-left: 2.5rem;
+}
+
+/* full: the whole slide, no margins */
+.slidev-layout.full {
+  padding: 0;
+}
+
+/* Every layout is top left, so text does not jump between slides.
+   The default theme and core layouts center vertically (grid, my-auto)
+   or horizontally (text-center); undo that here. Only \`center\` keeps
+   vertical centering, still left aligned. */
 .slidev-layout.cover,
 .slidev-layout.intro,
-.slidev-layout.section {
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
+.slidev-layout.section,
+.slidev-layout.statement,
+.slidev-layout.fact,
+.slidev-layout.quote {
+  display: block;
+  place-content: normal;
+  text-align: left;
 
-  h1 {
-    font-size: 3.2rem;
-    line-height: 1.1;
+  > div {
+    margin: 0;
+    text-align: left;
   }
+}
+
+.slidev-layout.center {
+  place-content: center start;
+  text-align: left;
+}
+
+/* Like iA Presenter, headings use text-wrap: balance so wrapped lines are
+   even. Large titles are also capped at 70% of the slide so they do not
+   run across the whole width. */
+.slidev-layout.cover h1,
+.slidev-layout.intro h1,
+.slidev-layout.section h1,
+.slidev-layout.center h1,
+.slidev-layout.statement h1,
+.slidev-layout.quote h1,
+.slidev-page .slidev-layout.end.end h1 {
+  max-width: 70%;
+}
+
+/* Sizes: title slides and statements are larger than a normal slide */
+.slidev-layout.cover h1,
+.slidev-layout.intro h1 {
+  font-size: 4rem;
+  line-height: 1.1;
+}
+
+.slidev-layout.cover h1 + p,
+.slidev-layout.intro h1 + p {
+  font-size: 1.9rem;
+}
+
+.slidev-layout.section h1,
+.slidev-layout.center h1 {
+  font-size: 3.5rem;
+  font-weight: 700;
+  line-height: 1.1;
+}
+
+.slidev-layout.statement h1 {
+  font-size: 4rem;
+  font-weight: 700;
+  line-height: 1.1;
+}
+
+.slidev-layout.fact h1 {
+  font-size: 7rem;
+  font-weight: 700;
+  line-height: 1;
+}
+
+.slidev-layout.fact h1 + p {
+  font-size: 1.9rem;
+}
+
+.slidev-layout.quote h1 {
+  font-size: 3rem;
+  font-weight: 700;
+  line-height: 1.2;
+}
+
+/* End: Slidev's core layout is white on black and centered via scoped
+   CSS; use Opo colors and top left like the rest. */
+.slidev-page .slidev-layout.end.end {
+  /* align-content also applies to block containers in current browsers */
+  display: block;
+  place-content: normal;
+  background: var(--opo-bg);
+  color: var(--opo-text);
+  text-align: left;
+  font-size: 1.4rem;
+  letter-spacing: normal;
+}
+
+.slidev-page .slidev-layout.end.end h1 {
+  font-size: 3.5rem;
+  font-weight: 700;
 }
 `;
 }
@@ -220,7 +361,7 @@ layout: center
 
 # center
 
-Alles in het midden van de slide.
+Verticaal in het midden, links uitgelijnd. De enige layout die niet bovenaan begint.
 
 ---
 layout: statement
@@ -228,7 +369,7 @@ layout: statement
 
 # statement
 
-Eén uitspraak, groot en gecentreerd.
+Eén uitspraak, groot.
 
 ---
 layout: fact
@@ -298,6 +439,37 @@ Afbeelding links, tekst rechts.
 layout: image
 image: /voorbeeld.svg
 ---
+
+---
+layout: iframe-right
+url: /voorbeeld.svg
+---
+
+# iframe-right
+
+Tekst links, een webpagina rechts. Zet \`url:\` in de frontmatter. Werkt alleen als de site insluiten toestaat.
+
+---
+layout: iframe-left
+url: /voorbeeld.svg
+---
+
+# iframe-left
+
+Webpagina links, tekst rechts.
+
+---
+layout: iframe
+url: /voorbeeld.svg
+---
+
+---
+layout: none
+---
+
+# none
+
+Helemaal geen styling, ook geen padding. Voor als je alles zelf wilt bepalen.
 
 ---
 layout: full

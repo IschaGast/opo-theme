@@ -42,7 +42,7 @@ layout: center
 
 # center
 
-Alles in het midden van de slide.
+Verticaal in het midden, links uitgelijnd. De enige layout die niet bovenaan begint.
 
 ---
 layout: statement
@@ -50,7 +50,7 @@ layout: statement
 
 # statement
 
-Eén uitspraak, groot en gecentreerd.
+Eén uitspraak, groot.
 
 ---
 layout: fact
@@ -120,6 +120,37 @@ Afbeelding links, tekst rechts.
 layout: image
 image: /voorbeeld.svg
 ---
+
+---
+layout: iframe-right
+url: /voorbeeld.svg
+---
+
+# iframe-right
+
+Tekst links, een webpagina rechts. Zet `url:` in de frontmatter. Werkt alleen als de site insluiten toestaat.
+
+---
+layout: iframe-left
+url: /voorbeeld.svg
+---
+
+# iframe-left
+
+Webpagina links, tekst rechts.
+
+---
+layout: iframe
+url: /voorbeeld.svg
+---
+
+---
+layout: none
+---
+
+# none
+
+Helemaal geen styling, ook geen padding. Voor als je alles zelf wilt bepalen.
 
 ---
 layout: full

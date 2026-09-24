@@ -68,3 +68,22 @@ html.dark {
   --opo-syntax-function: #58c3b6;
   --opo-syntax-string: #ea8d4a;
 }
+
+.slidev-slide-content,
+.slidev-page {
+  background: var(--opo-bg);
+  color: var(--opo-text);
+}
+
+/* The default theme dims subtitles and h6 with opacity, which drops text
+   below WCAG AA on Opo backgrounds (about 3:1 for h1 + p). Use validated
+   palette colors instead. */
+.slidev-layout h1 + p {
+  opacity: 1;
+  color: var(--opo-text);
+}
+
+.slidev-layout h6:not(.opacity-100) {
+  opacity: 1;
+  color: var(--opo-text-mid);
+}
