@@ -1,0 +1,44 @@
+{
+  "Presets": [
+    {
+      "Name": "Opo",
+      "TitleFont": "Atkinson Hyperlegible Next",
+      "BodyFont": "Atkinson Hyperlegible Next",
+      "Appearance": "light",
+      "LightBackgroundColor": "#fbf8f2",
+      "DarkBackgroundColor": "#161410",
+      "LightBodyTextColor": "#d1d7df",
+      "DarkBodyTextColor": "#24292f",
+      "LightTitleTextColor": "#d1d7df",
+      "DarkTitleTextColor": "#24292f",
+      "LightAccent1": "#79afff",
+      "DarkAccent1": "#005ccc",
+      "Accent1": "#005ccc",
+      "Accent2": "#002c85",
+      "Accent3": "#a75000",
+      "Accent4": "#00756b",
+      "Accent5": "#682b68",
+      "Accent6": "#57606a"
+    },
+    {
+      "Name": "Opo Dark",
+      "TitleFont": "Atkinson Hyperlegible Next",
+      "BodyFont": "Atkinson Hyperlegible Next",
+      "Appearance": "dark",
+      "LightBackgroundColor": "#fbf8f2",
+      "DarkBackgroundColor": "#161410",
+      "LightBodyTextColor": "#d1d7df",
+      "DarkBodyTextColor": "#24292f",
+      "LightTitleTextColor": "#d1d7df",
+      "DarkTitleTextColor": "#24292f",
+      "LightAccent1": "#79afff",
+      "DarkAccent1": "#005ccc",
+      "Accent1": "#005ccc",
+      "Accent2": "#002c85",
+      "Accent3": "#a75000",
+      "Accent4": "#00756b",
+      "Accent5": "#682b68",
+      "Accent6": "#57606a"
+    }
+  ]
+}

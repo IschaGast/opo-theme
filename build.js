@@ -28,6 +28,9 @@ import { generateJetBrains } from './src/generators/jetbrains.js';
 import { generateNeovim } from './src/generators/neovim.js';
 import { generateCssVariant, generateCssCombined } from './src/generators/css.js';
 import { generateSlack } from './src/generators/slack.js';
+import { generateBear } from './src/generators/bear.js';
+import { generateTypora } from './src/generators/typora.js';
+import { generateTemplateJson, generatePresetsJson } from './src/generators/ia-presenter.js';
 import {
   generateSlidevPackageJson,
   generateSlidevStylesIndex,
@@ -170,6 +173,31 @@ for (const mode of MODES) {
 write(join(cssDir, 'opo.css'), generateCssCombined(variants.light, variants.dark));
 fileCount++;
 
+// Bear
+console.log('\n  Bear:');
+const bearDir = dir('bear');
+const bearNames = { light: 'Opo Light', dark: 'Opo Dark', hc: 'Opo High Contrast' };
+for (const mode of MODES) {
+  write(join(bearDir, `${bearNames[mode]}.theme`), generateBear(variants[mode], mode));
+  fileCount++;
+}
+
+// Typora
+console.log('\n  Typora:');
+const typoraDir = dir('typora');
+for (const mode of MODES) {
+    write(join(typoraDir, `opo-${mode}.css`), generateTypora(variants[mode], mode));
+  fileCount++;
+}
+
+// iA Presenter
+console.log('\n  iA Presenter:');
+const iaDir = dir('ia-presenter');
+write(join(iaDir, 'template.json'), generateTemplateJson());
+fileCount++;
+write(join(iaDir, 'presets.json'), generatePresetsJson(variants));
+fileCount++;
+
 // Slidev
 console.log('\n  Slidev:');
 rmSync(join(DIST, 'slidev'), { recursive: true, force: true });
@@ -196,4 +224,5 @@ fileCount += 9;
 console.log(`\n✨ Build complete! ${fileCount} files generated in dist/`);
 console.log('   Variants: Opo Light, Opo Dark, Opo High Contrast');
 console.log('   Formats: VS Code, Ghostty, Alacritty, iTerm2, Windows Terminal,');
-console.log('            Warp, Zed, JetBrains, Neovim, Slack, CSS, Slidev\n');
+console.log('            Warp, Zed, JetBrains, Neovim, Slack, CSS, Bear, Typora,');
+console.log('            iA Presenter, Slidev\n');

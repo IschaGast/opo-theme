@@ -1,0 +1,9 @@
+{
+  "Name": "OPO-theme",
+  "Version": 1,
+  "Author": "Ischa Gast",
+  "Description": "Colorblind-safe, OKLCH-based accessible theme. Blue/orange instead of green/red (Okabe-Ito), warm off-white background, WCAG AA+ contrast throughout. https://github.com/IschaGast/opo-theme",
+  "Css": "opo-theme.css",
+  "TitleFont": "Atkinson Hyperlegible Next",
+  "BodyFont": "Atkinson Hyperlegible Next"
+}
