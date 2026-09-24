@@ -1,0 +1,70 @@
+/* Opo — Colorblind-safe accessible theme for Slidev (generated) */
+/* https://github.com/IschaGast/opo-theme */
+
+html:not(.dark) {
+  --opo-bg: #fbf8f2;
+  --opo-bg-panel: #f5f2eb;
+  --opo-bg-hover: #eeeae2;
+  --opo-text: #24292f;
+  --opo-text-mid: #57606a;
+  --opo-text-faint: #5c646d;
+  --opo-accent: #005ccc;
+  --opo-pass: #002c85;
+  --opo-fail: #a75000;
+  --opo-neutral: #57606a;
+  --opo-accent-bg: color-mix(in srgb, #005ccc 10%, transparent);
+  --opo-border-light: color-mix(in srgb, #57606a 35%, transparent);
+
+  --slidev-theme-primary: #005ccc;
+  --slidev-code-background: #f5f2eb;
+  --slidev-code-foreground: #24292f;
+  --slidev-code-tab-divider: #eeeae2;
+  --slidev-code-tab-text-color: #57606a;
+  --slidev-code-tab-active-text-color: #24292f;
+  --slidev-slide-container-background: #fbf8f2;
+  --slidev-controls-foreground: #24292f;
+  --slidev-code-radius: 6px;
+  --slidev-code-padding: 12px 16px;
+  --slidev-code-font-size: 14px;
+  --slidev-code-line-height: 22px;
+
+  --opo-syntax-keyword: #002c85;
+  --opo-syntax-type: #682b68;
+  --opo-syntax-comment: #5e5a55;
+  --opo-syntax-function: #00756b;
+  --opo-syntax-string: #a75000;
+}
+
+html.dark {
+  --opo-bg: #161410;
+  --opo-bg-panel: #191612;
+  --opo-bg-hover: #1c1a14;
+  --opo-text: #d1d7df;
+  --opo-text-mid: #99a3ae;
+  --opo-text-faint: #979fa9;
+  --opo-accent: #79afff;
+  --opo-pass: #bad6ff;
+  --opo-fail: #ea8d4a;
+  --opo-neutral: #99a3ae;
+  --opo-accent-bg: color-mix(in srgb, #79afff 10%, transparent);
+  --opo-border-light: color-mix(in srgb, #99a3ae 35%, transparent);
+
+  --slidev-theme-primary: #79afff;
+  --slidev-code-background: #191612;
+  --slidev-code-foreground: #d1d7df;
+  --slidev-code-tab-divider: #1c1a14;
+  --slidev-code-tab-text-color: #99a3ae;
+  --slidev-code-tab-active-text-color: #d1d7df;
+  --slidev-slide-container-background: #161410;
+  --slidev-controls-foreground: #d1d7df;
+  --slidev-code-radius: 6px;
+  --slidev-code-padding: 12px 16px;
+  --slidev-code-font-size: 14px;
+  --slidev-code-line-height: 22px;
+
+  --opo-syntax-keyword: #bad6ff;
+  --opo-syntax-type: #eea8ec;
+  --opo-syntax-comment: #b8b4ae;
+  --opo-syntax-function: #58c3b6;
+  --opo-syntax-string: #ea8d4a;
+}

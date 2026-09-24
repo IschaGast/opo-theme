@@ -28,6 +28,15 @@ import { generateJetBrains } from './src/generators/jetbrains.js';
 import { generateNeovim } from './src/generators/neovim.js';
 import { generateCssVariant, generateCssCombined } from './src/generators/css.js';
 import { generateSlack } from './src/generators/slack.js';
+import {
+  generateSlidevPackageJson,
+  generateSlidevStylesIndex,
+  generateSlidevColors,
+  generateSlidevLayouts,
+  generateSlidevShikiSetup,
+  generateSlidevExample,
+  generateSlidevPlaceholder,
+} from './src/generators/slidev.js';
 
 const DIST = 'dist';
 const MODES = ['light', 'dark', 'hc'];
@@ -161,8 +170,26 @@ for (const mode of MODES) {
 write(join(cssDir, 'opo.css'), generateCssCombined(variants.light, variants.dark));
 fileCount++;
 
+// Slidev
+console.log('\n  Slidev:');
+const slidevDir = dir('slidev');
+const slidevStyles = dir('slidev', 'styles');
+const slidevSetup = dir('slidev', 'setup');
+write(join(slidevDir, 'package.json'), generateSlidevPackageJson());
+write(join(slidevStyles, 'index.ts'), generateSlidevStylesIndex());
+write(join(slidevStyles, 'opo.css'), generateSlidevColors(variants));
+write(join(slidevStyles, 'layouts.css'), generateSlidevLayouts());
+write(join(slidevSetup, 'shiki.ts'), generateSlidevShikiSetup());
+for (const mode of ['light', 'dark']) {
+  const theme = generateTheme(variants[mode], ansiSets[mode], mode);
+  write(join(slidevSetup, `opo-${mode}.json`), JSON.stringify(theme, null, 2));
+}
+write(join(slidevDir, 'example.md'), generateSlidevExample());
+write(join(dir('slidev', 'public'), 'voorbeeld.svg'), generateSlidevPlaceholder(variants.light));
+fileCount += 9;
+
 // ── Summary ──
 console.log(`\n✨ Build complete! ${fileCount} files generated in dist/`);
 console.log('   Variants: Opo Light, Opo Dark, Opo High Contrast');
 console.log('   Formats: VS Code, Ghostty, Alacritty, iTerm2, Windows Terminal,');
-console.log('            Warp, Zed, JetBrains, Neovim, Slack, CSS\n');
+console.log('            Warp, Zed, JetBrains, Neovim, Slack, CSS, Slidev\n');

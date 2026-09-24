@@ -147,6 +147,24 @@ a {
 }
 ```
 
+### Slidev
+
+`dist/slidev/` is a local [Slidev](https://sli.dev) theme: Opo colors (light and dark), Atkinson Hyperlegible Next, and iA Presenter-like spacing on top of Slidev's base layouts. Code blocks use the VS Code theme for highlighting.
+
+Point to it from the frontmatter of your `slides.md`:
+
+```yaml
+---
+theme: ../opo-theme/dist/slidev
+---
+```
+
+`dist/slidev/example.md` has one slide per built-in layout. Run it from a Slidev project:
+
+```bash
+npx slidev ../opo-theme/dist/slidev/example.md
+```
+
 ## Recommended Font
 
 Opo pairs best with **[Atkinson Hyperlegible Mono](https://www.brailleinstitute.org/freefont/)** — designed by the Braille Institute for maximum character legibility, with exaggerated letter differentiation (distinct I/l/1, O/0) for low vision and dyslexia.

@@ -1,0 +1,25 @@
+{
+  "name": "slidev-theme-opo",
+  "version": "1.0.0",
+  "description": "Colorblind-safe, OKLCH-based accessible Slidev theme",
+  "author": "Ischa Gast",
+  "license": "MIT",
+  "keywords": [
+    "slidev-theme",
+    "slidev"
+  ],
+  "engines": {
+    "slidev": ">=0.48.0"
+  },
+  "slidev": {
+    "colorSchema": "both",
+    "defaults": {
+      "fonts": {
+        "sans": "Atkinson Hyperlegible Next",
+        "mono": "Atkinson Hyperlegible Mono",
+        "weights": "400,600,700",
+        "italic": true
+      }
+    }
+  }
+}
