@@ -42,8 +42,8 @@ Traditional ANSI terminal colors (red, green, yellow, magenta) are remapped to c
 |-----------|-------------|------------|-------------------------------------|
 | 1 (red)   | Red         | Orange     | Universally distinct from blue      |
 | 2 (green) | Green       | Teal       | Distinguishable from orange for all CVD types |
-| 3 (yellow)| Yellow      | Amber      | Distinct from both orange and blue  |
-| 5 (magenta)| Magenta    | Purple     | From Okabe-Ito palette              |
+| 3 (yellow)| Yellow      | Amber      | Darker than orange, so the two stay apart under deuteranopia |
+| 5 (magenta)| Magenta    | Raspberry  | Purple collapses into blue under deuteranopia |
 | 6 (cyan)  | Cyan        | Blue-teal  | Distinct from teal and blue         |
 
 ## Syntax Highlighting: Lightness Staircase
@@ -53,9 +53,9 @@ Opo's 5 syntax token colors are placed at unique OKLCH lightness levels with wid
 | Token    | L     | Hex       | Color  | Style  |
 |----------|-------|-----------|--------|--------|
 | Keyword  | 0.33  | `#002c85` | Blue   | bold   |
-| Type     | 0.40  | `#682b68` | Purple |        |
+| Type     | 0.40  | `#742651` | Plum   |        |
 | Comment  | 0.47  | `#5e5a55` | Gray   | italic |
-| Function | 0.50  | `#00756b` | Teal   |        |
+| Function | 0.50  | `#007570` | Teal   |        |
 | String   | 0.53  | `#a75000` | Orange |        |
 
 Lightness gaps: 0.07, 0.07, 0.03, 0.03.
@@ -63,9 +63,8 @@ Lightness gaps: 0.07, 0.07, 0.03, 0.03.
 **Why:**
 
 - **CVD users can distinguish tokens by brightness alone** — even if two colors look identical due to a color vision deficiency, they remain distinguishable because they have different lightness
-- **86/90 syntax pairs verified distinguishable** (96%) under simulated deuteranopia, protanopia, and tritanopia using [culori](https://culorijs.org/) CVD simulation (Brettel-Vienot-Mollon model at severity 1.0)
-- **10 of 14 close pairs mitigated** by font style differentiators (bold keywords, italic comments) per WCAG 1.4.1
-- **4 remaining pairs** (string vs function, type vs function) are distinguishable by syntactic context — literal values never appear in the same position as callable names
+- **Every syntax pair is checked at build time** under simulated deuteranopia, protanopia, and tritanopia using [culori](https://culorijs.org/) CVD simulation (Brettel-Vienot-Mollon model at severity 1.0): CIEDE2000 of at least 8 for pairs that differ only in color (type, function, string), and at least 4.5 for pairs where bold (keyword) or italic (comment) also differs, per WCAG 1.4.1
+- **Type and function hues are tuned for this** — type is plum (h350) rather than purple, because purple collapses into blue under deuteranopia, especially in the high contrast variant
 - **Hue selection** uses maximally spread axes from the Okabe-Ito palette to maximize chromatic distance even for partial CVD
 
 ### Font Style Differentiators (WCAG 1.4.1)
@@ -91,15 +90,17 @@ Every foreground/background pairing is validated at build time:
 | High Contrast  | 7.0:1         | WCAG AAA   |
 
 The build fails if any pairing is below its target. This is enforced for:
-- 8 UI text colors against 4 backgrounds (32 pairings)
-- 5 syntax colors against 4 backgrounds (20 pairings)
-- The 4 backgrounds are bg, panel, hover, and the selection tint (accent at 6% over the panel) used for selected list rows
-- **Total: 52 contrast checks per variant, 156 total**
+- 8 UI text colors and 5 syntax colors against 9 backgrounds (117 pairings): bg, panel, hover, and six tints that tools draw text on — list selection, editor selection, pass/fail/warn highlights (find matches, diff and merge lines) and a neutral tint
+- 3 inverted fills (accent, warn, fail) with bg-colored text, which must also stand out at 3:1 against the background (WCAG 1.4.11): used for selection where a tool can set the selected text color, and for search highlights
+- **Total: 120 contrast checks per variant, 360 total**
+- **CVD distance** for 12 UI and syntax color pairs per variant
+- **ANSI colors** against the terminal background and the terminal selection tint, plus CVD distance between the six chromatic colors
 
-Additionally, the following are validated outside the build pipeline:
+Tint strengths live in `tintAlpha` in `src/palette.js`, per variant. Each is at or below the highest alpha at which every text color keeps its target, rounded to 8 bits as it ends up in `#rrggbbaa`. Tools that cannot set a separate selection text color (VS Code light/dark, Zed, Windows Terminal) use these tints; the light variant is the tightest, because the orange string color has the least headroom.
+
+Additionally, the following are checked outside the build pipeline:
 - **UI element contrast** — button/badge foregrounds adapt automatically to their background (dark text on light accent, white text on dark accent) using WCAG contrast comparison
-- **ANSI bright colors** — bright set is derived differently per variant: darker/bolder on light backgrounds, lighter on dark backgrounds, ensuring all pass 3:1 for UI elements
-- **CVD simulation** — 90 syntax pairs (10 pairs x 3 variants x 3 CVD types) tested at full severity using culori's Brettel-Vienot-Mollon model
+- **Generated files** — an audit of the files in `dist/` checks the actual foreground/background pairs each tool uses, and that no accessibility-relevant key is left to the tool's default (defaults such as Zed's yellow for modified files or VS Code's faded unused code fall below AA on Opo backgrounds)
 
 ## Dark Variant: Lightness Remapping
 

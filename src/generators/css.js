@@ -4,6 +4,29 @@
  */
 
 import { formatHex } from 'culori';
+import { tintAlpha } from '../palette.js';
+
+// Tint and selection variables. Tints use the validated alphas from
+// palette.js, so any palette text color stays at AA (AAA for hc) on them.
+// --opo-selection / --opo-selection-text are a solid fill with bg-colored
+// text, for ::selection and other places that can set the text color.
+function alphaVars(variant, mode) {
+  const hex = (key) => formatHex(variant.ui[key]);
+  const mix = (key, alpha) => `color-mix(in srgb, ${hex(key)} ${Math.round(alpha * 100)}%, transparent)`;
+  const tint = tintAlpha[mode];
+  return [
+    `--opo-selection: ${hex('accent')};`,
+    `--opo-selection-text: ${hex('bg')};`,
+    `--opo-accent-selection: ${mix('accent', tint.textSelection)};`,
+    `--opo-accent-bg: ${mix('accent', tint.listSelection)};`,
+    `--opo-accent-border: ${hex('accent')};`,
+    `--opo-pass-bg: ${mix('pass', tint.highlight)};`,
+    `--opo-fail-bg: ${mix('fail', tint.highlight)};`,
+    `--opo-warn-bg: ${mix('warn', tint.highlight)};`,
+    `--opo-neutral-bg: ${mix('neutral', tint.listSelection)};`,
+    `--opo-border-light: ${mix('neutral', 0.35)};`,
+  ];
+}
 
 function cssVariant(variant, mode) {
   const label = mode === 'hc' ? 'High Contrast' : mode.charAt(0).toUpperCase() + mode.slice(1);
@@ -26,21 +49,9 @@ function cssVariant(variant, mode) {
     lines.push(`  --opo-syntax-${key}: ${formatHex(color)};`);
   }
 
-  // Alpha variants
-  const accent = formatHex(variant.ui.accent);
-  const neutral = formatHex(variant.ui.neutral);
-  const pass = formatHex(variant.ui.pass);
-  const fail = formatHex(variant.ui.fail);
-
   lines.push('');
-  lines.push('  /* Alpha variants */');
-  lines.push(`  --opo-accent-selection: color-mix(in srgb, ${accent} 35%, transparent);`);
-  lines.push(`  --opo-accent-bg: color-mix(in srgb, ${accent} 8%, transparent);`);
-  lines.push(`  --opo-accent-border: color-mix(in srgb, ${accent} 50%, transparent);`);
-  lines.push(`  --opo-pass-bg: color-mix(in srgb, ${pass} 8%, transparent);`);
-  lines.push(`  --opo-fail-bg: color-mix(in srgb, ${fail} 8%, transparent);`);
-  lines.push(`  --opo-neutral-bg: color-mix(in srgb, ${neutral} 8%, transparent);`);
-  lines.push(`  --opo-border-light: color-mix(in srgb, ${neutral} 35%, transparent);`);
+  lines.push('  /* Tints and selection (validated alphas, see palette.js) */');
+  for (const line of alphaVars(variant, mode)) lines.push(`  ${line}`);
 
   lines.push('}');
   return lines.join('\n') + '\n';
@@ -74,19 +85,8 @@ export function generateCssCombined(lightVariant, darkVariant) {
     darkLines.push(`    --opo-syntax-${key}: ${formatHex(color)};`);
   }
 
-  const accent = formatHex(darkVariant.ui.accent);
-  const neutral = formatHex(darkVariant.ui.neutral);
-  const pass = formatHex(darkVariant.ui.pass);
-  const fail = formatHex(darkVariant.ui.fail);
-
   darkLines.push('');
-  darkLines.push(`    --opo-accent-selection: color-mix(in srgb, ${accent} 35%, transparent);`);
-  darkLines.push(`    --opo-accent-bg: color-mix(in srgb, ${accent} 8%, transparent);`);
-  darkLines.push(`    --opo-accent-border: color-mix(in srgb, ${accent} 50%, transparent);`);
-  darkLines.push(`    --opo-pass-bg: color-mix(in srgb, ${pass} 8%, transparent);`);
-  darkLines.push(`    --opo-fail-bg: color-mix(in srgb, ${fail} 8%, transparent);`);
-  darkLines.push(`    --opo-neutral-bg: color-mix(in srgb, ${neutral} 8%, transparent);`);
-  darkLines.push(`    --opo-border-light: color-mix(in srgb, ${neutral} 35%, transparent);`);
+  for (const line of alphaVars(darkVariant, 'dark')) darkLines.push(`    ${line}`);
 
   darkLines.push('  }');
   darkLines.push('}');

@@ -8,6 +8,7 @@
  */
 
 import { formatHex } from 'culori';
+import { tintAlpha } from '../palette.js';
 
 export function generateTypora(variant, mode) {
   const hex = (color) => formatHex(color);
@@ -17,8 +18,12 @@ export function generateTypora(variant, mode) {
   const label = mode === 'hc' ? 'High Contrast' : mode.charAt(0).toUpperCase() + mode.slice(1);
   const isDark = mode === 'dark';
 
-  // Selection color: use accent at reduced opacity
-  const selectionBg = isDark ? 'rgba(0, 92, 204, 0.35)' : 'rgba(0, 92, 204, 0.20)';
+  // Text selection is solid accent with bg-colored text (validated as
+  // 'inverted'). Code blocks (bgPanel) draw selection behind syntax colors,
+  // so they get the accent tint validated over bgPanel instead.
+  const alpha = (a) => Math.round(a * 255).toString(16).padStart(2, '0');
+  const selectionBg = hex(ui.accent);
+  const codeSelectionBg = hex(ui.accent) + alpha(tintAlpha[mode].listSelection);
 
   return `/* Opo ${label} — Colorblind-safe accessible theme for Typora */
 /* https://github.com/IschaGast/opo-theme */
@@ -123,9 +128,10 @@ a:hover { text-decoration: underline; }
 
 strong { font-weight: bold; }
 
+/* Highlight: solid warn with bg-colored text, readable and clearly visible */
 mark {
-    background: rgba(183, 154, 58, 0.25);
-    color: inherit;
+    background: ${hex(ui.warn)};
+    color: ${hex(ui.bg)};
     padding: 1px 3px;
     border-radius: 2px;
 }
@@ -234,16 +240,13 @@ code, tt {
 
 /* ── Selection ── */
 
-::selection {
-    background: var(--select-text-bg-color);
-}
-
 *.in-text-selection, ::selection {
     background: var(--select-text-bg-color);
+    color: ${hex(ui.bg)};
 }
 
-.CodeMirror-selectedtext, .CodeMirror-selected {
-    background: var(--select-text-bg-color) !important;
+.CodeMirror-selected {
+    background: ${codeSelectionBg} !important;
 }
 
 /* ── Sidebar ── */

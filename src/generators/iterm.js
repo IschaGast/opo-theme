@@ -51,8 +51,9 @@ export function generateIterm(variant, ansi, mode) {
   entries.push(colorEntry('Foreground Color', formatHex(variant.ui.text)));
   entries.push(colorEntry('Cursor Color', formatHex(variant.ui.accent)));
   entries.push(colorEntry('Cursor Text Color', formatHex(variant.ui.bg)));
-  entries.push(colorEntry('Selection Color', formatHex(variant.ui.bgHover)));
-  entries.push(colorEntry('Selected Text Color', formatHex(variant.ui.text)));
+  // Solid accent selection with bg-colored text (validated as 'inverted')
+  entries.push(colorEntry('Selection Color', formatHex(variant.ui.accent)));
+  entries.push(colorEntry('Selected Text Color', formatHex(variant.ui.bg)));
   entries.push(colorEntry('Bold Color', formatHex(variant.ui.text)));
   entries.push(colorEntry('Link Color', formatHex(variant.ui.accent)));
 

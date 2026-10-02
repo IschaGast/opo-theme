@@ -68,7 +68,7 @@ console.log('  Light, Dark, High Contrast — done');
 
 // ── Step 2: Validate contrast ratios ──
 console.log('\n🔍 Validating contrast ratios...');
-const allPassed = validateAll(variants);
+const allPassed = validateAll(variants, ansiSets);
 
 if (!allPassed) {
   console.error('\n❌ Contrast validation FAILED. Fix palette before generating themes.');

@@ -17,7 +17,7 @@
     --item-hover-bg-color: #f4efe5;
     --item-hover-text-color: #13191f;
     --control-text-color: #353f4a;
-    --select-text-bg-color: rgba(0, 92, 204, 0.20);
+    --select-text-bg-color: #003c88;
     --monospace: "Atkinson Hyperlegible Mono", "JetBrains Mono", "Fira Code", monospace;
 }
 
@@ -101,9 +101,10 @@ a:hover { text-decoration: underline; }
 
 strong { font-weight: bold; }
 
+/* Highlight: solid warn with bg-colored text, readable and clearly visible */
 mark {
-    background: rgba(183, 154, 58, 0.25);
-    color: inherit;
+    background: #352300;
+    color: #fdfaf3;
     padding: 1px 3px;
     border-radius: 2px;
 }
@@ -174,15 +175,15 @@ code, tt {
 .cm-s-inner .cm-comment    { color: #3e3b35; font-style: italic; }
 .cm-s-inner .cm-number     { color: #6f3500; }
 .cm-s-inner .cm-atom       { color: #001e4b; }
-.cm-s-inner .cm-def        { color: #004c46; }
+.cm-s-inner .cm-def        { color: #004c49; }
 .cm-s-inner .cm-variable   { color: #13191f; }
-.cm-s-inner .cm-variable-2 { color: #4f004f; }
-.cm-s-inner .cm-variable-3 { color: #4f004f; }
-.cm-s-inner .cm-property   { color: #004c46; }
+.cm-s-inner .cm-variable-2 { color: #570036; }
+.cm-s-inner .cm-variable-3 { color: #570036; }
+.cm-s-inner .cm-property   { color: #004c49; }
 .cm-s-inner .cm-operator   { color: #353f4a; }
-.cm-s-inner .cm-builtin    { color: #004c46; }
+.cm-s-inner .cm-builtin    { color: #004c49; }
 .cm-s-inner .cm-tag        { color: #001e4b; }
-.cm-s-inner .cm-attribute  { color: #4f004f; }
+.cm-s-inner .cm-attribute  { color: #570036; }
 .cm-s-inner .cm-header     { color: #001e4b; font-weight: bold; }
 .cm-s-inner .cm-quote      { color: #3e3b35; }
 .cm-s-inner .cm-hr         { color: #f4efe5; }
@@ -190,7 +191,7 @@ code, tt {
 .cm-s-inner .cm-meta       { color: #3a424b; }
 .cm-s-inner .cm-bracket    { color: #353f4a; }
 .cm-s-inner .cm-negative   { color: #6f3500; }
-.cm-s-inner .cm-positive   { color: #004c46; }
+.cm-s-inner .cm-positive   { color: #004c49; }
 
 .CodeMirror div.CodeMirror-cursor {
     border-left: 1px solid #003c88;
@@ -212,16 +213,13 @@ code, tt {
 
 /* ── Selection ── */
 
-::selection {
-    background: var(--select-text-bg-color);
-}
-
 *.in-text-selection, ::selection {
     background: var(--select-text-bg-color);
+    color: #fdfaf3;
 }
 
-.CodeMirror-selectedtext, .CodeMirror-selected {
-    background: var(--select-text-bg-color) !important;
+.CodeMirror-selected {
+    background: #003c881f !important;
 }
 
 /* ── Sidebar ── */

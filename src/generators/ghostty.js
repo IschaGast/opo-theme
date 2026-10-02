@@ -9,8 +9,10 @@ export function generateGhostty(variant, ansi, mode) {
   const bg = formatHex(variant.ui.bg);
   const fg = formatHex(variant.ui.text);
   const cursor = formatHex(variant.ui.accent);
-  const selection = formatHex(variant.ui.bgHover);
-  const selectionFg = formatHex(variant.ui.text);
+  // Solid accent selection with bg-colored text: visible at 3:1+ and
+  // readable at AA/AAA (validated as 'inverted' in validate.js)
+  const selection = formatHex(variant.ui.accent);
+  const selectionFg = bg;
 
   const lines = [
     `# Opo ${mode.charAt(0).toUpperCase() + mode.slice(1)} — Colorblind-safe accessible theme`,

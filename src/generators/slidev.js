@@ -20,6 +20,7 @@
  */
 
 import { formatHex } from 'culori';
+import { tintAlpha } from '../palette.js';
 
 const FONT_SANS = 'Atkinson Hyperlegible Next';
 const FONT_MONO = 'Atkinson Hyperlegible Mono';
@@ -54,7 +55,7 @@ export function generateSlidevStylesIndex() {
   return `import '@slidev/client/styles/layouts-base.css'\nimport './default-layouts.css'\nimport './opo.css'\nimport './ia.css'\n`;
 }
 
-function varBlock(variant, indent) {
+function varBlock(variant, mode, indent) {
   const hex = (c) => formatHex(c);
   const ui = variant.ui;
   const syn = variant.syntax;
@@ -65,7 +66,8 @@ function varBlock(variant, indent) {
     const name = key.replace(/([A-Z])/g, '-$1').toLowerCase();
     lines.push(`--opo-${name}: ${hex(color)};`);
   }
-  lines.push(`--opo-accent-bg: color-mix(in srgb, ${hex(ui.accent)} 10%, transparent);`);
+  // Validated tint (palette.js): every text color stays at AA on it
+  lines.push(`--opo-accent-bg: color-mix(in srgb, ${hex(ui.accent)} ${Math.round(tintAlpha[mode].listSelection * 100)}%, transparent);`);
   lines.push(`--opo-border-light: color-mix(in srgb, ${hex(ui.neutral)} 35%, transparent);`);
   lines.push('');
   lines.push(`--slidev-theme-primary: ${hex(ui.accent)};`);
@@ -95,11 +97,11 @@ export function generateSlidevColors(variants) {
 /* https://github.com/IschaGast/opo-theme */
 
 html:not(.dark) {
-${varBlock(variants.light, 2)}
+${varBlock(variants.light, 'light', 2)}
 }
 
 html.dark {
-${varBlock(variants.dark, 2)}
+${varBlock(variants.dark, 'dark', 2)}
 }
 
 .slidev-slide-content,

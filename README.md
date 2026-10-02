@@ -15,8 +15,9 @@ Named after the Sranantongo word **opo** (to rise, to open), from the Surinamese
 - All colors defined in [OKLCH](https://oklch.com/) for perceptual consistency
 - **Blue + orange** instead of green + red for colorblind safety ([Okabe-Ito, 2008](https://jfly.uni-koeln.de/color/))
 - Every foreground/background pairing validated against WCAG contrast targets
-- 156 contrast checks enforced at build time (52 per variant)
-- CVD-verified under simulated deuteranopia, protanopia, and tritanopia
+- 360 contrast checks enforced at build time (120 per variant), including selection, find and diff tints
+- Color pairs (UI, syntax and ANSI) checked for CVD distance at build time under simulated deuteranopia, protanopia, and tritanopia
+- Selections are solid accent with background-colored text wherever a tool allows it, so they are clearly visible and readable
 - 5 syntax token colors with lightness staircase + font style differentiators
 
 ### Palette (Light)
@@ -36,9 +37,9 @@ Named after the Sranantongo word **opo** (to rise, to open), from the Surinamese
 | Token | Hex | L | Style | Color |
 |-------|-----|---|-------|-------|
 | Keyword | `#002c85` | 0.33 | bold | Blue |
-| Type | `#682b68` | 0.40 | | Purple |
+| Type | `#742651` | 0.40 | | Plum |
 | Comment | `#5e5a55` | 0.47 | italic | Gray |
-| Function | `#00756b` | 0.50 | | Teal |
+| Function | `#007570` | 0.50 | | Teal |
 | String | `#a75000` | 0.53 | | Orange |
 
 ## Installation
@@ -213,8 +214,10 @@ npm run build
 
 The build script:
 1. Derives Dark and HC variants from the Light OKLCH palette
-2. Validates all 108 contrast ratios (fails if any pairing is below target)
+2. Validates contrast and CVD distance for every variant, tint and ANSI color (fails if any check is below target)
 3. Generates all 31 theme files in `dist/`
+
+`npm run audit` then checks the generated files themselves: the foreground/background pairs each tool actually uses, tints composited the way the tool draws them, and accessibility-relevant keys that would otherwise fall back to a tool default.
 
 ## Design Rationale
 

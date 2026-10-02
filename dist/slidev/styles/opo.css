@@ -13,7 +13,7 @@ html:not(.dark) {
   --opo-fail: #a75000;
   --opo-warn: #583500;
   --opo-neutral: #57606a;
-  --opo-accent-bg: color-mix(in srgb, #005ccc 10%, transparent);
+  --opo-accent-bg: color-mix(in srgb, #005ccc 6%, transparent);
   --opo-border-light: color-mix(in srgb, #57606a 35%, transparent);
 
   --slidev-theme-primary: #005ccc;
@@ -30,9 +30,9 @@ html:not(.dark) {
   --slidev-code-line-height: 22px;
 
   --opo-syntax-keyword: #002c85;
-  --opo-syntax-type: #682b68;
+  --opo-syntax-type: #742651;
   --opo-syntax-comment: #5e5a55;
-  --opo-syntax-function: #00756b;
+  --opo-syntax-function: #007570;
   --opo-syntax-string: #a75000;
 }
 
@@ -48,7 +48,7 @@ html.dark {
   --opo-fail: #ea8d4a;
   --opo-warn: #f0c680;
   --opo-neutral: #99a3ae;
-  --opo-accent-bg: color-mix(in srgb, #79afff 10%, transparent);
+  --opo-accent-bg: color-mix(in srgb, #79afff 20%, transparent);
   --opo-border-light: color-mix(in srgb, #99a3ae 35%, transparent);
 
   --slidev-theme-primary: #79afff;
@@ -65,9 +65,9 @@ html.dark {
   --slidev-code-line-height: 22px;
 
   --opo-syntax-keyword: #bad6ff;
-  --opo-syntax-type: #eea8ec;
+  --opo-syntax-type: #ffa3cf;
   --opo-syntax-comment: #b8b4ae;
-  --opo-syntax-function: #58c3b6;
+  --opo-syntax-function: #55c2bc;
   --opo-syntax-string: #ea8d4a;
 }
 

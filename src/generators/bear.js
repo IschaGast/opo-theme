@@ -8,7 +8,8 @@
  * (replaces an existing theme name; custom names don't appear in Bear's UI)
  */
 
-import { formatHex } from 'culori';
+import { formatHex, interpolate } from 'culori';
+import { tintAlpha } from '../palette.js';
 
 export function generateBear(variant, mode) {
   const hex = (color) => formatHex(color);
@@ -16,6 +17,14 @@ export function generateBear(variant, mode) {
   const syn = variant.syntax;
 
   const isDark = mode === 'dark';
+
+  // Bear draws text in its own color on top of selection and search
+  // backgrounds, so these are validated tints, precomposited to opaque hex
+  const tint = tintAlpha[mode];
+  const over = (base, color, alpha) => hex(interpolate([base, color])(alpha));
+  const textSelection = over(ui.bg, ui.accent, tint.textSelection);
+  const listSelection = over(ui.bg, ui.accent, tint.listSelection);
+  const searchBg = over(ui.bg, ui.warn, tint.highlight);
 
   // Sidebar: always dark chrome for light themes (like Red Graphite),
   // slightly lighter panel for dark themes
@@ -50,17 +59,16 @@ export function generateBear(variant, mode) {
     base: {
       'text color': hex(ui.text),
       'text secondary color': hex(ui.textMid),
-      'text tertiary color': hex(ui.bgHover),
+      // Markdown markers and placeholders: readable, not near-invisible
+      'text tertiary color': hex(ui.textFaint),
       'background color': hex(ui.bg),
       'background secondary color': hex(ui.bgPanel),
       'background tertiary color': hex(ui.bgHover),
       'stroke color': hex(ui.bgHover),
       'accent color': hex(ui.accent),
-      'search primary color': '#FFFA5E',
+      'search primary color': searchBg,
       'search secondary color': '$base.selection color',
-      'selection color': isDark
-        ? hex(ui.bgHover)
-        : '#D3E6FB',
+      'selection color': textSelection,
     },
     notes: {
       'title color': '$base.text color',
@@ -72,7 +80,7 @@ export function generateBear(variant, mode) {
       'search background color': '$base.search primary color',
       'attachment background color': '$base.background secondary color',
       'encrypted token color': '$base.background tertiary color',
-      'selection background color': '$base.background secondary color',
+      'selection background color': listSelection,
       'ribbon color': '$base.accent color',
       toolbar: {
         'background color': '$base.background color',

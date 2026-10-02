@@ -34,19 +34,21 @@
  * Docs: https://ia.net/presenter/support/visuals/themes
  */
 
-import { formatHex } from 'culori';
+import { clampChroma, formatHex } from 'culori';
 
 const FONT = 'Atkinson Hyperlegible Next';
 
-// UI role → Accent slot. Opo has 3 core semantic colors + 2 syntax hues;
-// mapped to iA's 6 accent slots so charts/highlights stay colorblind-safe.
+// Accent2-6 have a single value for both light and dark slides, so each
+// uses an Opo hue at a mid lightness that keeps it at 3.4:1+ on both the
+// light and the dark background (WCAG 1.4.11 for charts, and slide text is
+// large text). Teal and gray differ in lightness so they stay apart under
+// protanopia; min CIEDE2000 between all accents under CVD simulation is 6.3.
 const ACCENT_KEYS = [
-  ['Accent1', (ui) => ui.accent],         // primary accent — blue
-  ['Accent2', (ui) => ui.pass],           // pass / emphasis — deep blue
-  ['Accent3', (ui) => ui.fail],           // fail / warm callout — orange
-  ['Accent4', (ui, syn) => syn.function], // teal
-  ['Accent5', (ui, syn) => syn.type],     // purple
-  ['Accent6', (ui) => ui.neutral],        // muted / neutral
+  ['Accent2', (ui) => ui.pass, 0.575],           // blue
+  ['Accent3', (ui) => ui.fail, 0.585],           // orange
+  ['Accent4', (ui, syn) => syn.function, 0.52],  // teal
+  ['Accent5', (ui, syn) => syn.type, 0.585],     // purple
+  ['Accent6', (ui) => ui.neutral, 0.62],         // gray
 ];
 
 // Theme name must match the app-scaffolded folder name exactly
@@ -93,10 +95,9 @@ function buildPreset(name, appearance, variants) {
     DarkAccent1: hex(light.accent),
   };
 
-  // Accent2-6 are flat only, per the verified scaffold shape — use the
-  // light-surface set as the single shared value.
-  for (const [slot, pick] of ACCENT_KEYS) {
-    preset[slot] = hex(pick(light, lightSyn));
+  // Accent2-6 are flat only, per the verified scaffold shape
+  for (const [slot, pick, l] of ACCENT_KEYS) {
+    preset[slot] = hex(clampChroma({ ...pick(light, lightSyn), l }, 'oklch'));
   }
 
   return preset;

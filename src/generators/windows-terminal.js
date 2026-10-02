@@ -4,7 +4,8 @@
  * Note: Windows Terminal uses 'purple' instead of 'magenta'
  */
 
-import { formatHex } from 'culori';
+import { formatHex, interpolate } from 'culori';
+import { tintAlpha } from '../palette.js';
 
 function generateScheme(variant, ansi, mode) {
   const label = mode === 'hc' ? 'High Contrast' : mode.charAt(0).toUpperCase() + mode.slice(1);
@@ -14,7 +15,9 @@ function generateScheme(variant, ansi, mode) {
     background: formatHex(variant.ui.bg),
     foreground: formatHex(variant.ui.text),
     cursorColor: formatHex(variant.ui.accent),
-    selectionBackground: formatHex(variant.ui.bgHover),
+    // No selection foreground here, so text keeps its color: use the
+    // validated accent tint, precomposited because the value is opaque
+    selectionBackground: formatHex(interpolate([variant.ui.bg, variant.ui.accent])(tintAlpha[mode].terminalSelection)),
     black: formatHex(ansi.normal[0]),
     red: formatHex(ansi.normal[1]),
     green: formatHex(ansi.normal[2]),

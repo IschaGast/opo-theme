@@ -16,17 +16,20 @@
 
   /* Syntax */
   --opo-syntax-keyword: #002c85;
-  --opo-syntax-type: #682b68;
+  --opo-syntax-type: #742651;
   --opo-syntax-comment: #5e5a55;
-  --opo-syntax-function: #00756b;
+  --opo-syntax-function: #007570;
   --opo-syntax-string: #a75000;
 
-  /* Alpha variants */
-  --opo-accent-selection: color-mix(in srgb, #005ccc 35%, transparent);
-  --opo-accent-bg: color-mix(in srgb, #005ccc 8%, transparent);
-  --opo-accent-border: color-mix(in srgb, #005ccc 50%, transparent);
+  /* Tints and selection (validated alphas, see palette.js) */
+  --opo-selection: #005ccc;
+  --opo-selection-text: #fbf8f2;
+  --opo-accent-selection: color-mix(in srgb, #005ccc 9%, transparent);
+  --opo-accent-bg: color-mix(in srgb, #005ccc 6%, transparent);
+  --opo-accent-border: #005ccc;
   --opo-pass-bg: color-mix(in srgb, #002c85 8%, transparent);
   --opo-fail-bg: color-mix(in srgb, #a75000 8%, transparent);
-  --opo-neutral-bg: color-mix(in srgb, #57606a 8%, transparent);
+  --opo-warn-bg: color-mix(in srgb, #583500 8%, transparent);
+  --opo-neutral-bg: color-mix(in srgb, #57606a 6%, transparent);
   --opo-border-light: color-mix(in srgb, #57606a 35%, transparent);
 }

@@ -46,16 +46,31 @@ export const light = {
 // Lightness staircase: L=0.33, 0.40, 0.47, 0.50, 0.53
 // Gaps of 0.07/0.07/0.03/0.03 — widened for CVD distinguishability
 // CVD users can distinguish tokens by brightness + font style (bold/italic)
-// Hues from maximally spread Okabe-Ito axes: blue, purple, gray, teal, orange
+// Hues from maximally spread Okabe-Ito axes: blue, plum, gray, teal, orange
+// Type (plum, h350) and function (teal, h190) hues are tuned so every pair
+// stays apart under deuteranopia, protanopia and tritanopia in all variants:
+// min CIEDE2000 9.0 for pairs without a font style, 5.0 for pairs where
+// bold/italic also differs (validated in validate.js)
 export const syntax = {
   keyword:  { mode: 'oklch', l: 0.3300, c: 0.1600, h: 258.00 },  // #003172 — blue (= pass, + bold)
-  type:     { mode: 'oklch', l: 0.4000, c: 0.1200, h: 328.00 },  // #682b68 — purple
+  type:     { mode: 'oklch', l: 0.4000, c: 0.1200, h: 350.00 },  // #742651 — plum
   comment:  { mode: 'oklch', l: 0.4700, c: 0.0100, h: 80.00 },   // #5e5a55 — warm gray (+ italic)
-  function: { mode: 'oklch', l: 0.5000, c: 0.1000, h: 185.00 },  // #00736a — teal
+  function: { mode: 'oklch', l: 0.5000, c: 0.1000, h: 190.00 },  // #007570 — teal
   string:   { mode: 'oklch', l: 0.5300, c: 0.1400, h: 54.00 },   // #a55200 — orange (= fail)
 };
 
-// Selection tint — accent at this alpha over bgPanel marks selected list rows
-// (Zed project panel, VS Code explorer). Validated as a background in
-// validate.js; 0.06 keeps fail/string at AA in the light variant.
-export const selectionAlpha = 0.06;
+// Tints with text drawn on top, per variant. Each value is at or below the
+// highest alpha at which every text and syntax color keeps its contrast
+// target (AA, AAA for hc); validate.js enforces this at build time.
+//   listSelection: accent over bgPanel (selected rows in file trees, lists)
+//   textSelection: accent over bg (editor selection where syntax colors stay)
+//   highlight:     pass/fail/warn over bg (find matches, diff and merge lines)
+//   terminalSelection: accent over bg, with ANSI colors on top (terminals
+//                  without a selection foreground, e.g. Windows Terminal)
+// Tools that support a separate selection foreground use a solid accent
+// selection with bg-colored text instead (see 'inverted' in validate.js).
+export const tintAlpha = {
+  light: { listSelection: 0.06, textSelection: 0.09, highlight: 0.08, terminalSelection: 0.07 },
+  dark:  { listSelection: 0.20, textSelection: 0.20, highlight: 0.16, terminalSelection: 0.10 },
+  hc:    { listSelection: 0.12, textSelection: 0.14, highlight: 0.12, terminalSelection: 0.12 },
+};

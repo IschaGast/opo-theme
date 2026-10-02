@@ -13,12 +13,11 @@
       "DarkTitleTextColor": "#24292f",
       "LightAccent1": "#79afff",
       "DarkAccent1": "#005ccc",
-      "Accent1": "#005ccc",
-      "Accent2": "#002c85",
-      "Accent3": "#a75000",
-      "Accent4": "#00756b",
-      "Accent5": "#682b68",
-      "Accent6": "#57606a"
+      "Accent2": "#3577d5",
+      "Accent3": "#b96013",
+      "Accent4": "#007974",
+      "Accent5": "#b05b86",
+      "Accent6": "#7e8792"
     },
     {
       "Name": "Opo Dark",
@@ -33,12 +32,11 @@
       "DarkTitleTextColor": "#24292f",
       "LightAccent1": "#79afff",
       "DarkAccent1": "#005ccc",
-      "Accent1": "#005ccc",
-      "Accent2": "#002c85",
-      "Accent3": "#a75000",
-      "Accent4": "#00756b",
-      "Accent5": "#682b68",
-      "Accent6": "#57606a"
+      "Accent2": "#3577d5",
+      "Accent3": "#b96013",
+      "Accent4": "#007974",
+      "Accent5": "#b05b86",
+      "Accent6": "#7e8792"
     }
   ]
 }

@@ -18,7 +18,12 @@ export function generateSlack(variant, mode) {
   const hoverItem    = formatHex(variant.ui.bgPanel);
   const textColor    = formatHex(variant.ui.textMid);
   const presence     = formatHex(variant.ui.pass);
-  const mentionBadge = formatHex(variant.ui.fail);
+  // Slack draws white text on the mention badge. The dark variant's orange
+  // is too light for that, so darken it to L=0.54: white text 5.3:1 and
+  // still 3.5:1 against the dark column
+  const mentionBadge = mode === 'dark'
+    ? formatHex({ ...variant.ui.fail, l: 0.54 })
+    : formatHex(variant.ui.fail);
 
   const theme = [
     columnBg, menuBgHover, activeItem, activeText,

@@ -13,8 +13,8 @@
     <option name="GUTTER_BACKGROUND" value="191612" />
     <option name="LINE_NUMBERS_COLOR" value="979fa9" />
     <option name="LINE_NUMBER_ON_CARET_ROW_COLOR" value="d1d7df" />
-    <option name="SELECTION_BACKGROUND" value="1c1a14" />
-    <option name="SELECTION_FOREGROUND" value="d1d7df" />
+    <option name="SELECTION_BACKGROUND" value="79afff" />
+    <option name="SELECTION_FOREGROUND" value="161410" />
     <option name="INDENT_GUIDE" value="979fa9" />
     <option name="RIGHT_MARGIN_COLOR" value="1c1a14" />
     <option name="TEARLINE_COLOR" value="979fa9" />
@@ -73,32 +73,32 @@
     </option>
     <option name="DEFAULT_CLASS_NAME">
       <value>
-        <option name="FOREGROUND" value="eea8ec" />
+        <option name="FOREGROUND" value="ffa3cf" />
       </value>
     </option>
     <option name="DEFAULT_INTERFACE_NAME">
       <value>
-        <option name="FOREGROUND" value="eea8ec" />
+        <option name="FOREGROUND" value="ffa3cf" />
       </value>
     </option>
     <option name="DEFAULT_CLASS_REFERENCE">
       <value>
-        <option name="FOREGROUND" value="eea8ec" />
+        <option name="FOREGROUND" value="ffa3cf" />
       </value>
     </option>
     <option name="DEFAULT_FUNCTION_DECLARATION">
       <value>
-        <option name="FOREGROUND" value="58c3b6" />
+        <option name="FOREGROUND" value="55c2bc" />
       </value>
     </option>
     <option name="DEFAULT_FUNCTION_CALL">
       <value>
-        <option name="FOREGROUND" value="58c3b6" />
+        <option name="FOREGROUND" value="55c2bc" />
       </value>
     </option>
     <option name="DEFAULT_STATIC_METHOD">
       <value>
-        <option name="FOREGROUND" value="58c3b6" />
+        <option name="FOREGROUND" value="55c2bc" />
       </value>
     </option>
     <option name="DEFAULT_IDENTIFIER">

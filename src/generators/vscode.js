@@ -7,7 +7,7 @@
 
 import { formatHex, wcagContrast } from 'culori';
 import { scopeMap } from '../scopes.js';
-import { selectionAlpha } from '../palette.js';
+import { tintAlpha } from '../palette.js';
 
 function hexAlpha(hexColor, a) {
   const aa = Math.round(a * 255).toString(16).padStart(2, '0');
@@ -35,9 +35,12 @@ export function generateTheme(variant, ansi, mode) {
     wcagContrast('#ffffff', bg) >= wcagContrast(p.bg, bg) ? '#ffffff' : p.bg;
 
   // Derive alpha colors
-  const accentBg = hexAlpha(p.accent, selectionAlpha);
-  const accentSelection = hexAlpha(p.accent, 0.35);
-  const accentBorder = hexAlpha(p.accent, 0.5);
+  // Tints with text on top stay within the validated alphas (palette.js)
+  const tint = tintAlpha[mode];
+  const accentBg = hexAlpha(p.accent, tint.listSelection);
+  const accentSelection = hexAlpha(p.accent, tint.textSelection);
+  // Diff and merge draw a text tint on top of a line tint, so each gets half
+  const halfTint = (color) => hexAlpha(color, tint.highlight / 2);
   const borderLight = hexAlpha(p.neutral, 0.35);
   const passBg = hexAlpha(p.pass, 0.08);
   const failBg = hexAlpha(p.fail, 0.08);
@@ -49,25 +52,54 @@ export function generateTheme(variant, ansi, mode) {
 
   return {
     name: `Opo ${variantLabel}`,
-    type: isDark ? 'dark' : 'light',
+    type: isHc ? 'hc-light' : isDark ? 'dark' : 'light',
     colors: {
       // Editor
       'editor.background': p.bg,
       'editor.foreground': p.text,
       'editor.lineHighlightBackground': hexAlpha(p.bgHover, 0.5),
-      'editor.selectionBackground': accentSelection,
-      'editor.inactiveSelectionBackground': hexAlpha(p.accent, 0.15),
-      'editor.wordHighlightBackground': hexAlpha(p.accent, 0.12),
-      'editor.findMatchBackground': hexAlpha(p.accent, 0.25),
-      'editor.findMatchHighlightBackground': hexAlpha(p.accent, 0.12),
+      // High contrast themes honor selectionForeground, so selection there
+      // is solid accent with bg-colored text instead of a tint
+      'editor.selectionBackground': isHc ? p.accent : accentSelection,
+      ...(isHc ? { 'editor.selectionForeground': p.bg } : {}),
+      'editor.inactiveSelectionBackground': hexAlpha(p.accent, tint.textSelection / 2),
+      'editor.selectionHighlightBackground': hexAlpha(p.accent, tint.textSelection / 2),
+      'editor.selectionHighlightBorder': p.neutral,
+      'editor.wordHighlightBackground': hexAlpha(p.accent, tint.textSelection / 2),
+      'editor.wordHighlightBorder': p.neutral,
+      'editor.wordHighlightStrongBackground': hexAlpha(p.accent, tint.textSelection / 2),
+      'editor.wordHighlightStrongBorder': p.accent,
+      // Find matches: the current match is also selected, so it gets only a
+      // border on top of the selection tint; other matches a light warn tint
+      'editor.findMatchBackground': transparent,
+      'editor.findMatchBorder': p.accent,
+      'editor.findMatchHighlightBackground': hexAlpha(p.warn, tint.highlight / 2),
+      'editor.findMatchHighlightBorder': p.warn,
+      'editor.findRangeHighlightBackground': hexAlpha(p.accent, tint.textSelection / 2),
+      'editorLink.activeForeground': p.accent,
+      'editorInlayHint.foreground': p.textMid,
+      'editorInlayHint.background': p.bgPanel,
+      'editorCodeLens.foreground': p.textMid,
+      'editorGhostText.foreground': p.textFaint,
+      // Unused code: keep full contrast, mark it with a border instead of fading
+      'editorUnnecessaryCode.opacity': '#000000ff',
+      'editorUnnecessaryCode.border': p.textFaint,
+      'editorHint.foreground': p.textMid,
+      'editorBracketHighlight.foreground1': p.accent,
+      'editorBracketHighlight.foreground2': s.type,
+      'editorBracketHighlight.foreground3': s.function,
+      'editorBracketHighlight.foreground4': p.warn,
+      'editorBracketHighlight.foreground5': p.textMid,
+      'editorBracketHighlight.foreground6': s.keyword,
+      'editorBracketHighlight.unexpectedBracket.foreground': p.fail,
       'editorCursor.foreground': p.accent,
       'editorWhitespace.foreground': hexAlpha(p.neutral, 0.2),
       'editorIndentGuide.background': borderLight,
       'editorIndentGuide.activeBackground': p.neutral,
       'editorLineNumber.foreground': p.textFaint,
       'editorLineNumber.activeForeground': p.text,
-      'editorBracketMatch.background': hexAlpha(p.accent, 0.12),
-      'editorBracketMatch.border': accentBorder,
+      'editorBracketMatch.background': hexAlpha(p.accent, tint.textSelection / 2),
+      'editorBracketMatch.border': p.accent,
       'editorGutter.addedBackground': p.pass,
       'editorGutter.deletedBackground': p.fail,
       'editorGutter.modifiedBackground': p.accent,
@@ -76,8 +108,35 @@ export function generateTheme(variant, ansi, mode) {
       'editorInfo.foreground': p.accent,
 
       // Diff
-      'diffEditor.insertedTextBackground': hexAlpha(p.pass, 0.1),
-      'diffEditor.removedTextBackground': hexAlpha(p.fail, 0.1),
+      'diffEditor.insertedTextBackground': halfTint(p.pass),
+      'diffEditor.removedTextBackground': halfTint(p.fail),
+      'diffEditor.insertedLineBackground': halfTint(p.pass),
+      'diffEditor.removedLineBackground': halfTint(p.fail),
+      'diffEditorGutter.insertedLineBackground': halfTint(p.pass),
+      'diffEditorGutter.removedLineBackground': halfTint(p.fail),
+      'diffEditorOverview.insertedForeground': p.pass,
+      'diffEditorOverview.removedForeground': p.fail,
+
+      // Merge conflicts: blue/orange instead of the default green/blue
+      'merge.currentHeaderBackground': hexAlpha(p.accent, tint.highlight),
+      'merge.currentContentBackground': halfTint(p.accent),
+      'merge.incomingHeaderBackground': hexAlpha(p.fail, tint.highlight),
+      'merge.incomingContentBackground': halfTint(p.fail),
+      'merge.border': p.neutral,
+      'editorOverviewRuler.currentContentForeground': p.accent,
+      'editorOverviewRuler.incomingContentForeground': p.fail,
+
+      // Overview ruler and minimap gutter: default green/red otherwise
+      'editorOverviewRuler.addedForeground': p.pass,
+      'editorOverviewRuler.modifiedForeground': p.accent,
+      'editorOverviewRuler.deletedForeground': p.fail,
+      'editorOverviewRuler.errorForeground': p.fail,
+      'editorOverviewRuler.warningForeground': p.warn,
+      'editorOverviewRuler.infoForeground': p.accent,
+      'editorOverviewRuler.findMatchForeground': p.warn,
+      'minimapGutter.addedBackground': p.pass,
+      'minimapGutter.modifiedBackground': p.accent,
+      'minimapGutter.deletedBackground': p.fail,
 
       // Sidebar
       'sideBar.background': p.bgPanel,
@@ -102,6 +161,14 @@ export function generateTheme(variant, ansi, mode) {
       'statusBar.debuggingBackground': p.fail,
       'statusBar.debuggingForeground': contrastFg(p.fail),
       'statusBar.noFolderBackground': p.bgPanel,
+      'statusBarItem.remoteBackground': p.accent,
+      'statusBarItem.remoteForeground': contrastFg(p.accent),
+      'statusBarItem.errorBackground': p.fail,
+      'statusBarItem.errorForeground': contrastFg(p.fail),
+      'statusBarItem.warningBackground': p.warn,
+      'statusBarItem.warningForeground': contrastFg(p.warn),
+      'statusBarItem.hoverBackground': p.bgHover,
+      'statusBarItem.hoverForeground': p.text,
 
       // Title bar
       'titleBar.activeBackground': p.bgPanel,
@@ -115,6 +182,9 @@ export function generateTheme(variant, ansi, mode) {
       'tab.activeForeground': p.text,
       'tab.inactiveBackground': p.bgPanel,
       'tab.inactiveForeground': p.textFaint,
+      // Defaults fade these with opacity, which drops below AA
+      'tab.unfocusedActiveForeground': p.textMid,
+      'tab.unfocusedInactiveForeground': p.textFaint,
       'tab.border': borderLight,
       'tab.activeBorder': transparent,
       'tab.activeBorderTop': p.accent,
@@ -133,6 +203,11 @@ export function generateTheme(variant, ansi, mode) {
       'list.errorForeground': p.fail,
       'list.warningForeground': p.warn,
       'list.highlightForeground': p.accent,
+      'list.focusHighlightForeground': p.accent,
+      'list.deemphasizedForeground': p.textFaint,
+      'list.invalidItemForeground': p.fail,
+      'list.filterMatchBackground': hexAlpha(p.warn, tint.highlight),
+      'list.filterMatchBorder': p.warn,
 
       // Input
       'input.background': p.bg,
@@ -151,6 +226,9 @@ export function generateTheme(variant, ansi, mode) {
       'button.background': p.accent,
       'button.foreground': contrastFg(p.accent),
       'button.hoverBackground': hexAlpha(p.accent, 0.85),
+      'button.secondaryBackground': p.bgHover,
+      'button.secondaryForeground': p.text,
+      'button.secondaryHoverBackground': p.bgHover,
 
       // Badge
       'badge.background': p.accent,
@@ -171,9 +249,66 @@ export function generateTheme(variant, ansi, mode) {
 
       // Peek view
       'peekView.border': p.accent,
-      'peekViewEditor.background': p.bgPanel,
+      // An editor with syntax colors and selection tint, so it uses bg
+      'peekViewEditor.background': p.bg,
       'peekViewResult.background': p.bgPanel,
       'peekViewTitle.background': p.bgPanel,
+      'peekViewTitleLabel.foreground': p.text,
+      'peekViewTitleDescription.foreground': p.textMid,
+      'peekViewResult.fileForeground': p.text,
+      'peekViewResult.lineForeground': p.textMid,
+      'peekViewResult.selectionBackground': accentBg,
+      'peekViewResult.selectionForeground': p.text,
+      'peekViewResult.matchHighlightBackground': hexAlpha(p.warn, tint.highlight),
+      'peekViewEditor.matchHighlightBackground': hexAlpha(p.warn, tint.highlight),
+
+      // Widgets: hover, suggest, find, quick input
+      'editorWidget.background': p.bgPanel,
+      'editorWidget.foreground': p.text,
+      'editorWidget.border': borderLight,
+      'editorHoverWidget.background': p.bgPanel,
+      'editorHoverWidget.foreground': p.text,
+      'editorHoverWidget.border': borderLight,
+      'editorSuggestWidget.background': p.bgPanel,
+      'editorSuggestWidget.foreground': p.text,
+      'editorSuggestWidget.border': borderLight,
+      'editorSuggestWidget.highlightForeground': p.accent,
+      'editorSuggestWidget.focusHighlightForeground': p.accent,
+      'editorSuggestWidget.selectedBackground': accentBg,
+      'editorSuggestWidget.selectedForeground': p.text,
+      'quickInput.background': p.bgPanel,
+      'quickInput.foreground': p.text,
+      'quickInputList.focusBackground': accentBg,
+      'quickInputList.focusForeground': p.text,
+      'keybindingLabel.background': p.bgHover,
+      'keybindingLabel.foreground': p.text,
+      'keybindingLabel.border': borderLight,
+      'keybindingLabel.bottomBorder': borderLight,
+      'textPreformat.foreground': p.text,
+      'textPreformat.background': p.bgHover,
+      'textCodeBlock.background': p.bgPanel,
+      'textBlockQuote.background': p.bgPanel,
+      'textBlockQuote.border': p.accent,
+
+      // Input validation
+      'inputValidation.errorBackground': p.bgPanel,
+      'inputValidation.errorForeground': p.text,
+      'inputValidation.errorBorder': p.fail,
+      'inputValidation.warningBackground': p.bgPanel,
+      'inputValidation.warningForeground': p.text,
+      'inputValidation.warningBorder': p.warn,
+      'inputValidation.infoBackground': p.bgPanel,
+      'inputValidation.infoForeground': p.text,
+      'inputValidation.infoBorder': p.accent,
+
+      // Problem and notification icons
+      'problemsErrorIcon.foreground': p.fail,
+      'problemsWarningIcon.foreground': p.warn,
+      'problemsInfoIcon.foreground': p.accent,
+      'notificationsErrorIcon.foreground': p.fail,
+      'notificationsWarningIcon.foreground': p.warn,
+      'notificationsInfoIcon.foreground': p.accent,
+      'notificationLink.foreground': p.accent,
 
       // Git
       'gitDecoration.addedResourceForeground': p.pass,
@@ -221,11 +356,15 @@ export function generateTheme(variant, ansi, mode) {
       'terminal.ansiBrightCyan': a.bright[6],
       'terminal.ansiBrightWhite': a.bright[7],
       'terminalCursor.foreground': p.accent,
+      'terminal.selectionBackground': p.accent,
+      'terminal.selectionForeground': p.bg,
+      'terminal.inactiveSelectionBackground': p.bgHover,
 
       // General
       'foreground': p.text,
       'descriptionForeground': p.textMid,
       'errorForeground': p.fail,
+      'disabledForeground': p.textFaint,
       'icon.foreground': p.textFaint,
       'widget.shadow': shadow,
       'selection.background': accentSelection,
@@ -237,6 +376,24 @@ export function generateTheme(variant, ansi, mode) {
       'testing.iconFailed': p.fail,
       'testing.iconErrored': p.fail,
       'testing.iconSkipped': p.neutral,
+      'testing.iconQueued': p.warn,
+      'testing.iconUnset': p.neutral,
+
+      // Charts (used by some extensions and views)
+      'charts.foreground': p.text,
+      'charts.lines': p.textMid,
+      'charts.red': p.fail,
+      'charts.orange': p.fail,
+      'charts.yellow': p.warn,
+      'charts.green': p.pass,
+      'charts.blue': p.accent,
+      'charts.purple': s.type,
+
+      ...(isHc ? {
+        // hc-light draws these borders everywhere; keep them on palette
+        'contrastBorder': p.neutral,
+        'contrastActiveBorder': p.accent,
+      } : {}),
     },
     tokenColors: [
       ...Object.entries(scopeMap).map(([category, scopes]) => ({

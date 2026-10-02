@@ -2,15 +2,15 @@
   "base": {
     "text color": "#d1d7df",
     "text secondary color": "#99a3ae",
-    "text tertiary color": "#1c1a14",
+    "text tertiary color": "#979fa9",
     "background color": "#161410",
     "background secondary color": "#191612",
     "background tertiary color": "#1c1a14",
     "stroke color": "#1c1a14",
     "accent color": "#79afff",
-    "search primary color": "#FFFA5E",
+    "search primary color": "#393122",
     "search secondary color": "$base.selection color",
-    "selection color": "#1c1a14"
+    "selection color": "#2a3340"
   },
   "notes": {
     "title color": "$base.text color",
@@ -22,7 +22,7 @@
     "search background color": "$base.search primary color",
     "attachment background color": "$base.background secondary color",
     "encrypted token color": "$base.background tertiary color",
-    "selection background color": "$base.background secondary color",
+    "selection background color": "#2a3340",
     "ribbon color": "$base.accent color",
     "toolbar": {
       "background color": "$base.background color",
@@ -85,10 +85,10 @@
         "constant": "#79afff",
         "number": "#79afff",
         "string": "#ea8d4a",
-        "entity": "#58c3b6",
+        "entity": "#55c2bc",
         "keyword": "#bad6ff",
-        "function": "#58c3b6",
-        "variable": "#eea8ec"
+        "function": "#55c2bc",
+        "variable": "#ffa3cf"
       }
     },
     "task": {

@@ -49,8 +49,10 @@ export function generateJetBrains(variant, ansi, mode) {
     option('GUTTER_BACKGROUND', p.bgPanel),
     option('LINE_NUMBERS_COLOR', p.textFaint),
     option('LINE_NUMBER_ON_CARET_ROW_COLOR', p.text),
-    option('SELECTION_BACKGROUND', p.bgHover),
-    option('SELECTION_FOREGROUND', p.text),
+    // Solid accent selection with bg-colored text (validated as 'inverted'),
+    // distinct from the caret row
+    option('SELECTION_BACKGROUND', p.accent),
+    option('SELECTION_FOREGROUND', p.bg),
     option('INDENT_GUIDE', p.textFaint),
     option('RIGHT_MARGIN_COLOR', p.bgHover),
     option('TEARLINE_COLOR', p.textFaint),

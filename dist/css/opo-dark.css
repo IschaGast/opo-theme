@@ -16,17 +16,20 @@
 
   /* Syntax */
   --opo-syntax-keyword: #bad6ff;
-  --opo-syntax-type: #eea8ec;
+  --opo-syntax-type: #ffa3cf;
   --opo-syntax-comment: #b8b4ae;
-  --opo-syntax-function: #58c3b6;
+  --opo-syntax-function: #55c2bc;
   --opo-syntax-string: #ea8d4a;
 
-  /* Alpha variants */
-  --opo-accent-selection: color-mix(in srgb, #79afff 35%, transparent);
-  --opo-accent-bg: color-mix(in srgb, #79afff 8%, transparent);
-  --opo-accent-border: color-mix(in srgb, #79afff 50%, transparent);
-  --opo-pass-bg: color-mix(in srgb, #bad6ff 8%, transparent);
-  --opo-fail-bg: color-mix(in srgb, #ea8d4a 8%, transparent);
-  --opo-neutral-bg: color-mix(in srgb, #99a3ae 8%, transparent);
+  /* Tints and selection (validated alphas, see palette.js) */
+  --opo-selection: #79afff;
+  --opo-selection-text: #161410;
+  --opo-accent-selection: color-mix(in srgb, #79afff 20%, transparent);
+  --opo-accent-bg: color-mix(in srgb, #79afff 20%, transparent);
+  --opo-accent-border: #79afff;
+  --opo-pass-bg: color-mix(in srgb, #bad6ff 16%, transparent);
+  --opo-fail-bg: color-mix(in srgb, #ea8d4a 16%, transparent);
+  --opo-warn-bg: color-mix(in srgb, #f0c680 16%, transparent);
+  --opo-neutral-bg: color-mix(in srgb, #99a3ae 20%, transparent);
   --opo-border-light: color-mix(in srgb, #99a3ae 35%, transparent);
 }
