@@ -110,10 +110,12 @@ ${varBlock(variants.dark, 2)}
 
 /* The default theme dims subtitles and h6 with opacity, which drops text
    below WCAG AA on Opo backgrounds (about 3:1 for h1 + p). Use validated
-   palette colors instead. */
-.slidev-layout h1 + p {
+   palette colors instead. Applies only to elements explicitly marked
+   with class="subtitle" — never based on sibling position. */
+.slidev-layout .subtitle {
   opacity: 1;
-  color: var(--opo-text);
+  color: var(--opo-text-mid);
+  font-weight: 600;
 }
 
 .slidev-layout h6:not(.opacity-100) {
@@ -148,13 +150,6 @@ export function generateSlidevIaLayer() {
     margin: 0 0 0.75rem;
   }
 
-  h1 + p {
-    font-size: 1.6rem;
-    font-weight: 600;
-    line-height: 1.2;
-    margin: 0 0 1.5rem;
-  }
-
   h2 {
     font-size: 1.9rem;
     font-weight: 700;
@@ -179,10 +174,6 @@ export function generateSlidevIaLayer() {
 .grid-cols-2 > .slidev-layout.default {
   h1 {
     font-size: 2rem;
-  }
-
-  h1 + p {
-    font-size: 1.35rem;
   }
 }
 
@@ -340,11 +331,6 @@ export function generateSlidevIaLayer() {
   line-height: 1.1;
 }
 
-.slidev-layout.cover h1 + p,
-.slidev-layout.intro h1 + p {
-  font-size: 1.9rem;
-}
-
 .slidev-layout.section h1,
 .slidev-layout.center h1 {
   font-size: 3.5rem;
@@ -362,10 +348,6 @@ export function generateSlidevIaLayer() {
   font-size: 7rem;
   font-weight: 700;
   line-height: 1;
-}
-
-.slidev-layout.fact h1 + p {
-  font-size: 1.9rem;
 }
 
 .slidev-layout.quote h1 {

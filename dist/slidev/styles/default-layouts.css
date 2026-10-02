@@ -1,8 +1,8 @@
-/* Vendored from @slidev/theme-default 0.25.0 (MIT, see LICENSE). Do not edit; Opo only adds colors and fonts. */
+/* Vendored from @slidev/theme-default 0.25.0 (MIT, see LICENSE). Opo adds colors and fonts, and drops the opacity-50 on h1 + p (contrast/consistency issue — subtitle styling is opt-in via class="subtitle"). */
 
 .slidev-layout {
   h1 + p {
-    @apply -mt-2 opacity-50 mb-4;
+    @apply -mt-2 mb-4;
   }
 
   p + h2, ul + h2, table + h2 {
