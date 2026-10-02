@@ -50,7 +50,7 @@ function M.setup(opts)
 
   -- Diagnostics
   hl(0, "DiagnosticError", { fg = p.fail })
-  hl(0, "DiagnosticWarn",  { fg = p.string })
+  hl(0, "DiagnosticWarn",  { fg = p.warn })
   hl(0, "DiagnosticInfo",  { fg = p.accent })
   hl(0, "DiagnosticHint",  { fg = p.textMid })
 

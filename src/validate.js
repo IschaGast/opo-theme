@@ -9,7 +9,7 @@
 import { formatHex, interpolate, wcagContrast } from 'culori';
 import { selectionAlpha } from './palette.js';
 
-const TEXT_KEYS = ['text', 'textMid', 'textFaint', 'accent', 'pass', 'fail', 'neutral'];
+const TEXT_KEYS = ['text', 'textMid', 'textFaint', 'accent', 'pass', 'fail', 'warn', 'neutral'];
 const SYNTAX_KEYS = ['keyword', 'string', 'comment', 'type', 'function'];
 const BG_KEYS = ['bg', 'bgPanel', 'bgHover', 'selection'];
 

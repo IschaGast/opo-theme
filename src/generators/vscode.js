@@ -72,7 +72,7 @@ export function generateTheme(variant, ansi, mode) {
       'editorGutter.deletedBackground': p.fail,
       'editorGutter.modifiedBackground': p.accent,
       'editorError.foreground': p.fail,
-      'editorWarning.foreground': s.string,
+      'editorWarning.foreground': p.warn,
       'editorInfo.foreground': p.accent,
 
       // Diff
@@ -131,7 +131,7 @@ export function generateTheme(variant, ansi, mode) {
       'list.focusAndSelectionOutline': p.accent,
       'list.inactiveFocusOutline': p.neutral,
       'list.errorForeground': p.fail,
-      'list.warningForeground': s.string,
+      'list.warningForeground': p.warn,
       'list.highlightForeground': p.accent,
 
       // Input

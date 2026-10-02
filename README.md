@@ -15,7 +15,7 @@ Named after the Sranantongo word **opo** (to rise, to open), from the Surinamese
 - All colors defined in [OKLCH](https://oklch.com/) for perceptual consistency
 - **Blue + orange** instead of green + red for colorblind safety ([Okabe-Ito, 2008](https://jfly.uni-koeln.de/color/))
 - Every foreground/background pairing validated against WCAG contrast targets
-- 108 contrast checks enforced at build time (36 per variant)
+- 156 contrast checks enforced at build time (52 per variant)
 - CVD-verified under simulated deuteranopia, protanopia, and tritanopia
 - 5 syntax token colors with lightness staircase + font style differentiators
 
@@ -29,6 +29,7 @@ Named after the Sranantongo word **opo** (to rise, to open), from the Surinamese
 | Accent | `#005ccc` | 5.82:1 |
 | Pass/success | `#002c85` | 11.66:1 |
 | Fail/error | `#a75000` | 5.23:1 |
+| Warning | `#583500` | 10.30:1 |
 
 ### Syntax (Light)
 

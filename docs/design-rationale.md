@@ -91,9 +91,10 @@ Every foreground/background pairing is validated at build time:
 | High Contrast  | 7.0:1         | WCAG AAA   |
 
 The build fails if any pairing is below its target. This is enforced for:
-- 7 UI text colors against 3 background levels (21 pairings)
-- 5 syntax colors against 3 background levels (15 pairings)
-- **Total: 36 contrast checks per variant, 108 total**
+- 8 UI text colors against 4 backgrounds (32 pairings)
+- 5 syntax colors against 4 backgrounds (20 pairings)
+- The 4 backgrounds are bg, panel, hover, and the selection tint (accent at 6% over the panel) used for selected list rows
+- **Total: 52 contrast checks per variant, 156 total**
 
 Additionally, the following are validated outside the build pipeline:
 - **UI element contrast** — button/badge foregrounds adapt automatically to their background (dark text on light accent, white text on dark accent) using WCAG contrast comparison

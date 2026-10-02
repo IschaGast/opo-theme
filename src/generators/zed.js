@@ -61,7 +61,7 @@ function generateZedVariant(variant, ansi, mode) {
       'ignored': hex8(p.textFaint),
       'hidden': hex8(p.textFaint),
       'error': hex8(p.fail),
-      'warning': hex8(s.string),
+      'warning': hex8(p.warn),
       'info': hex8(p.accent),
       'hint': hex8(p.textMid),
       'success': hex8(p.pass),

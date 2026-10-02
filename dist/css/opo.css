@@ -11,6 +11,7 @@
   --opo-accent: #005ccc;
   --opo-pass: #002c85;
   --opo-fail: #a75000;
+  --opo-warn: #583500;
   --opo-neutral: #57606a;
 
   /* Syntax */
@@ -41,6 +42,7 @@
     --opo-accent: #79afff;
     --opo-pass: #bad6ff;
     --opo-fail: #ea8d4a;
+    --opo-warn: #f0c680;
     --opo-neutral: #99a3ae;
 
     --opo-syntax-keyword: #bad6ff;

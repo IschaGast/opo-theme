@@ -36,6 +36,9 @@ export const light = {
   accent:    { mode: 'oklch', l: 0.5000, c: 0.1890, h: 258.00 },  // #005ccc
   pass:      { mode: 'oklch', l: 0.3300, c: 0.1600, h: 258.00 },  // #003172 — blue
   fail:      { mode: 'oklch', l: 0.5300, c: 0.1400, h: 54.00 },   // #a55200 — orange
+  // Warning: amber at a much lower lightness than fail, so error and warning
+  // stay distinct under CVD (min CIEDE2000 9.3 vs fail across all variants)
+  warn:      { mode: 'oklch', l: 0.3600, c: 0.1000, h: 80.00 },   // #583500 — amber
   neutral:   { mode: 'oklch', l: 0.4849, c: 0.0196, h: 251.02 },  // #57606a
 };
 
