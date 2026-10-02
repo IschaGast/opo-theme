@@ -51,3 +51,8 @@ export const syntax = {
   function: { mode: 'oklch', l: 0.5000, c: 0.1000, h: 185.00 },  // #00736a — teal
   string:   { mode: 'oklch', l: 0.5300, c: 0.1400, h: 54.00 },   // #a55200 — orange (= fail)
 };
+
+// Selection tint — accent at this alpha over bgPanel marks selected list rows
+// (Zed project panel, VS Code explorer). Validated as a background in
+// validate.js; 0.06 keeps fail/string at AA in the light variant.
+export const selectionAlpha = 0.06;

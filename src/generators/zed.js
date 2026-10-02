@@ -4,6 +4,7 @@
  */
 
 import { formatHex } from 'culori';
+import { selectionAlpha } from '../palette.js';
 
 function hex8(hexColor, alpha = 1.0) {
   const aa = Math.round(alpha * 255).toString(16).padStart(2, '0');
@@ -43,12 +44,27 @@ function generateZedVariant(variant, ansi, mode) {
       'surface.background': hex8(p.bgPanel),
       'element.background': hex8(p.bgHover),
       'element.hover': hex8(p.bgHover),
-      'element.selected': hex8(p.accent, 0.12),
+      'element.selected': hex8(p.accent, selectionAlpha),
 
       'text': hex8(p.text),
       'text.muted': hex8(p.textMid),
       'text.placeholder': hex8(p.textFaint),
       'text.accent': hex8(p.accent),
+
+      // Git and diagnostic status — mirrors the VS Code mapping so Zed
+      // does not fall back to its low-contrast default yellow
+      'created': hex8(p.pass),
+      'modified': hex8(p.accent),
+      'deleted': hex8(p.fail),
+      'conflict': hex8(p.fail),
+      'renamed': hex8(p.accent),
+      'ignored': hex8(p.textFaint),
+      'hidden': hex8(p.textFaint),
+      'error': hex8(p.fail),
+      'warning': hex8(s.string),
+      'info': hex8(p.accent),
+      'hint': hex8(p.textMid),
+      'success': hex8(p.pass),
 
       'status_bar.background': hex8(p.bgPanel),
       'title_bar.background': hex8(p.bgPanel),

@@ -7,6 +7,7 @@
 
 import { formatHex, wcagContrast } from 'culori';
 import { scopeMap } from '../scopes.js';
+import { selectionAlpha } from '../palette.js';
 
 function hexAlpha(hexColor, a) {
   const aa = Math.round(a * 255).toString(16).padStart(2, '0');
@@ -34,7 +35,7 @@ export function generateTheme(variant, ansi, mode) {
     wcagContrast('#ffffff', bg) >= wcagContrast(p.bg, bg) ? '#ffffff' : p.bg;
 
   // Derive alpha colors
-  const accentBg = hexAlpha(p.accent, 0.08);
+  const accentBg = hexAlpha(p.accent, selectionAlpha);
   const accentSelection = hexAlpha(p.accent, 0.35);
   const accentBorder = hexAlpha(p.accent, 0.5);
   const borderLight = hexAlpha(p.neutral, 0.35);
@@ -123,6 +124,14 @@ export function generateTheme(variant, ansi, mode) {
       'list.activeSelectionForeground': p.text,
       'list.hoverBackground': p.bgHover,
       'list.focusBackground': accentBg,
+      'list.inactiveSelectionBackground': accentBg,
+      'list.inactiveSelectionForeground': p.text,
+      // Selection tint is kept light for text contrast, so an outline
+      // marks the selected row without relying on the tint
+      'list.focusAndSelectionOutline': p.accent,
+      'list.inactiveFocusOutline': p.neutral,
+      'list.errorForeground': p.fail,
+      'list.warningForeground': s.string,
       'list.highlightForeground': p.accent,
 
       // Input
@@ -172,6 +181,11 @@ export function generateTheme(variant, ansi, mode) {
       'gitDecoration.deletedResourceForeground': p.fail,
       'gitDecoration.untrackedResourceForeground': p.pass,
       'gitDecoration.conflictingResourceForeground': p.fail,
+      'gitDecoration.renamedResourceForeground': p.accent,
+      'gitDecoration.stageModifiedResourceForeground': p.accent,
+      'gitDecoration.stageDeletedResourceForeground': p.fail,
+      'gitDecoration.ignoredResourceForeground': p.textFaint,
+      'gitDecoration.submoduleResourceForeground': p.textMid,
 
       // Breadcrumb
       'breadcrumb.foreground': p.textFaint,

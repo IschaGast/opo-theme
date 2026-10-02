@@ -6,11 +6,12 @@
  * High Contrast: AAA (7:1 normal text)
  */
 
-import { formatHex, wcagContrast } from 'culori';
+import { formatHex, interpolate, wcagContrast } from 'culori';
+import { selectionAlpha } from './palette.js';
 
 const TEXT_KEYS = ['text', 'textMid', 'textFaint', 'accent', 'pass', 'fail', 'neutral'];
 const SYNTAX_KEYS = ['keyword', 'string', 'comment', 'type', 'function'];
-const BG_KEYS = ['bg', 'bgPanel', 'bgHover'];
+const BG_KEYS = ['bg', 'bgPanel', 'bgHover', 'selection'];
 
 /**
  * Validate contrast ratios for a variant.
@@ -24,8 +25,14 @@ export function validateVariant(variant, mode) {
   let failed = 0;
 
   // Check all text/semantic colors against all backgrounds
+  // Selected list rows: accent tint composited over the panel background
+  const backgrounds = {
+    ...variant.ui,
+    selection: interpolate([variant.ui.bgPanel, variant.ui.accent])(selectionAlpha),
+  };
+
   for (const bgKey of BG_KEYS) {
-    const bgColor = variant.ui[bgKey];
+    const bgColor = backgrounds[bgKey];
     const bgHex = formatHex(bgColor);
 
     for (const fgKey of TEXT_KEYS) {
