@@ -50,6 +50,7 @@ const APPS = [
     { name: 'iA Presenter', files: 'dist/ia-presenter', readme: 'iA Presenter', how: 'A custom theme folder with light and dark presets.' },
     { name: 'Slidev', files: 'dist/slidev', readme: 'Slidev', how: 'A local Slidev theme: theme: ./path/to/dist/slidev.' },
     { name: 'CSS', files: 'dist/css', readme: 'CSS', how: 'Custom properties with --opo- prefix, or opo.css for auto light/dark.' },
+    { name: 'npm package', files: 'dist/json', readme: 'Use in another project', how: 'Import the CSS in a bundler, or read every color as hex from opo.json.' },
   ]],
 ];
 

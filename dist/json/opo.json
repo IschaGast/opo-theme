@@ -1,0 +1,137 @@
+{
+  "light": {
+    "ui": {
+      "bg": "#fbf8f2",
+      "bgPanel": "#f5f2eb",
+      "bgHover": "#eeeae2",
+      "text": "#24292f",
+      "textMid": "#57606a",
+      "textFaint": "#5c646d",
+      "accent": "#005ccc",
+      "pass": "#002c85",
+      "fail": "#a75000",
+      "warn": "#583500",
+      "neutral": "#57606a"
+    },
+    "syntax": {
+      "keyword": "#002c85",
+      "type": "#742651",
+      "comment": "#5e5a55",
+      "function": "#007570",
+      "string": "#a75000"
+    },
+    "severity": {
+      "critical": "#a75000",
+      "major": "#583500",
+      "minor": "#005ccc"
+    },
+    "ansi": [
+      "#24292f",
+      "#a75000",
+      "#00756b",
+      "#6d3a00",
+      "#002c85",
+      "#782445",
+      "#005ccc",
+      "#eeeae2",
+      "#11161d",
+      "#844000",
+      "#005a52",
+      "#442e00",
+      "#001f4d",
+      "#610030",
+      "#00489f",
+      "#d4d0c6"
+    ]
+  },
+  "dark": {
+    "ui": {
+      "bg": "#161410",
+      "bgPanel": "#191612",
+      "bgHover": "#1c1a14",
+      "text": "#d1d7df",
+      "textMid": "#99a3ae",
+      "textFaint": "#979fa9",
+      "accent": "#79afff",
+      "pass": "#bad6ff",
+      "fail": "#ea8d4a",
+      "warn": "#f0c680",
+      "neutral": "#99a3ae"
+    },
+    "syntax": {
+      "keyword": "#bad6ff",
+      "type": "#ffa3cf",
+      "comment": "#b8b4ae",
+      "function": "#55c2bc",
+      "string": "#ea8d4a"
+    },
+    "severity": {
+      "critical": "#ea8d4a",
+      "major": "#f0c680",
+      "minor": "#79afff"
+    },
+    "ansi": [
+      "#1c1a14",
+      "#e08440",
+      "#33a397",
+      "#dca331",
+      "#498beb",
+      "#cd718f",
+      "#74acff",
+      "#ffffff",
+      "#96a0ab",
+      "#ffaf7a",
+      "#5fc9bc",
+      "#ffcb70",
+      "#7fb3ff",
+      "#f696b4",
+      "#b5d3ff",
+      "#ffffff"
+    ]
+  },
+  "hc": {
+    "ui": {
+      "bg": "#fdfaf3",
+      "bgPanel": "#f9f5ed",
+      "bgHover": "#f4efe5",
+      "text": "#13191f",
+      "textMid": "#353f4a",
+      "textFaint": "#3a424b",
+      "accent": "#003c88",
+      "pass": "#001e4b",
+      "fail": "#6f3500",
+      "warn": "#352300",
+      "neutral": "#353f4a"
+    },
+    "syntax": {
+      "keyword": "#001e4b",
+      "type": "#570036",
+      "comment": "#3e3b35",
+      "function": "#004c49",
+      "string": "#6f3500"
+    },
+    "severity": {
+      "critical": "#6f3500",
+      "major": "#352300",
+      "minor": "#003c88"
+    },
+    "ansi": [
+      "#13191f",
+      "#6f3500",
+      "#004c46",
+      "#3e2a00",
+      "#001e4b",
+      "#59002b",
+      "#003c88",
+      "#f4efe5",
+      "#020409",
+      "#492100",
+      "#002f2b",
+      "#201300",
+      "#000921",
+      "#300014",
+      "#002558",
+      "#e0dbd2"
+    ]
+  }
+}

@@ -38,6 +38,4 @@
   --opo-severity-major-bg: color-mix(in srgb, #583500 8%, transparent);
   --opo-severity-minor: #005ccc;
   --opo-severity-minor-bg: color-mix(in srgb, #005ccc 9%, transparent);
-  --opo-severity-resolved: #002c85;
-  --opo-severity-resolved-bg: color-mix(in srgb, #002c85 8%, transparent);
 }

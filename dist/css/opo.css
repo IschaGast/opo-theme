@@ -38,8 +38,6 @@
   --opo-severity-major-bg: color-mix(in srgb, #583500 8%, transparent);
   --opo-severity-minor: #005ccc;
   --opo-severity-minor-bg: color-mix(in srgb, #005ccc 9%, transparent);
-  --opo-severity-resolved: #002c85;
-  --opo-severity-resolved-bg: color-mix(in srgb, #002c85 8%, transparent);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -78,7 +76,5 @@
     --opo-severity-major-bg: color-mix(in srgb, #f0c680 16%, transparent);
     --opo-severity-minor: #79afff;
     --opo-severity-minor-bg: color-mix(in srgb, #79afff 20%, transparent);
-    --opo-severity-resolved: #bad6ff;
-    --opo-severity-resolved-bg: color-mix(in srgb, #bad6ff 16%, transparent);
   }
 }

@@ -198,17 +198,25 @@ a {
 }
 ```
 
-For issues and findings there is a severity scale: `--opo-severity-critical`, `-major`, `-minor` and `-resolved`, each with a `-bg` tint. They are aliases of fail, warn, accent and pass, so they meet the same contrast targets and stay apart under color vision deficiency. Critical and major differ mostly in lightness, so pair them with a label or icon.
+For issues and findings there is a severity scale: `--opo-severity-critical`, `-major` and `-minor`, each with a `-bg` tint. They are aliases of fail, warn and accent, so they meet the same contrast targets and stay apart under color vision deficiency. Critical and major differ mostly in lightness, so pair them with a label or icon. A resolved finding is a status, not a severity: use `--opo-pass`.
 
-To use the CSS in another project that has a build step, install the package from GitHub and import a file:
+### Use in another project
+
+Install the package from GitHub. With a `semver:` range, `npm update opo-theme` picks up every new 1.x release tag:
 
 ```bash
-npm install github:IschaGast/opo-theme#v1.1.0
+npm install "github:IschaGast/opo-theme#semver:^1.2.0"
 ```
+
+Import a CSS file (with a bundler such as Vite):
 
 ```css
 @import "opo-theme/dist/css/opo-light.css";
 ```
+
+For places that cannot read CSS custom properties, such as a web app manifest or a `theme-color` meta tag, `dist/json/opo.json` has every color per variant as hex (`ui`, `syntax`, `severity` and the 16 `ansi` colors).
+
+A new release is a version bump in `package.json` plus a matching tag (`v1.3.0`), pushed to GitHub.
 
 ### Slidev
 

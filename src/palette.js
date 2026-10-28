@@ -79,10 +79,10 @@ export const tintAlpha = {
 // of the semantic colors, so each one is already validated as text on every
 // background and tint. All pairs stay apart under CVD (see CVD_PAIRS in
 // validate.js); critical and major differ mostly in lightness, so pair them
-// with a label or icon (WCAG 1.4.1).
+// with a label or icon (WCAG 1.4.1). A resolved finding is a status, not a
+// severity: use pass for it.
 export const severity = {
   critical: 'fail',   // orange
   major:    'warn',   // amber
   minor:    'accent', // blue
-  resolved: 'pass',   // dark blue
 };

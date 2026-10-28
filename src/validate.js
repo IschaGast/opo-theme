@@ -206,7 +206,7 @@ const CVD_PAIRS = [
   // UI semantics: pass/fail, error/warning, modified/created
   ['ui.pass', 'ui.fail', 9], ['ui.fail', 'ui.warn', 9], ['ui.accent', 'ui.pass', 9],
   ['ui.accent', 'ui.fail', 9], ['ui.accent', 'ui.warn', 9],
-  // Severity scale (see palette.js): major / resolved, the other pairs are above
+  // Warnings next to passing or resolved items (e.g. major severity / resolved)
   ['ui.warn', 'ui.pass', 9],
   // Syntax pairs without a font-style difference
   ['syntax.type', 'syntax.function', 8], ['syntax.type', 'syntax.string', 8],

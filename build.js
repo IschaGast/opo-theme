@@ -27,6 +27,7 @@ import { generateZed } from './src/generators/zed.js';
 import { generateJetBrains } from './src/generators/jetbrains.js';
 import { generateNeovim } from './src/generators/neovim.js';
 import { generateCssVariant, generateCssCombined } from './src/generators/css.js';
+import { generateJson } from './src/generators/json.js';
 import { generateSlack } from './src/generators/slack.js';
 import { generateBear } from './src/generators/bear.js';
 import { generateTypora } from './src/generators/typora.js';
@@ -177,6 +178,11 @@ for (const mode of MODES) {
 write(join(cssDir, 'opo.css'), generateCssCombined(variants.light, variants.dark));
 fileCount++;
 
+// JSON color tokens
+console.log('\n  JSON:');
+write(join(dir('json'), 'opo.json'), JSON.stringify(generateJson(variants, ansiSets), null, 2));
+fileCount++;
+
 // Bear
 console.log('\n  Bear:');
 const bearDir = dir('bear');
@@ -253,6 +259,6 @@ fileCount += 2;
 console.log(`\n✨ Build complete! ${fileCount} files generated in dist/`);
 console.log('   Variants: Opo Light, Opo Dark, Opo High Contrast');
 console.log('   Formats: VS Code, Ghostty, Alacritty, iTerm2, Windows Terminal,');
-console.log('            Warp, Zed, JetBrains, Neovim, Slack, CSS, Bear, Typora,');
+console.log('            Warp, Zed, JetBrains, Neovim, Slack, CSS, JSON, Bear, Typora,');
 console.log('            iA Presenter, Slidev, Raycast, Firefox');
 console.log('   Site: dist/site/index.html, contrast grid at dist/site/contrast/\n');
