@@ -137,6 +137,9 @@ __OPO_CSS__
   .app .links { display: flex; flex-wrap: wrap; gap: 6px 16px; margin-top: 6px; font-size: 0.93rem; }
   .app .links a { font-weight: 700; }
   .app .raycast { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
+  .app button.button { font: inherit; font-size: 0.9rem; font-weight: 700; cursor: pointer; background: transparent; }
+  .app button.button.primary { background: var(--opo-accent); }
+  .app .copied { font-size: 0.9rem; color: var(--opo-success); min-height: 1.4em; }
 
   footer { margin-top: 96px; border-top: 1px solid var(--opo-bg-hover); padding: 28px 0 48px; color: var(--opo-text-mid); font-size: 0.92rem; }
   footer .wrap { display: flex; flex-wrap: wrap; gap: 8px 24px; justify-content: space-between; }
@@ -475,6 +478,31 @@ function renderAnsi(v) {
   }));
 }
 
+// Copy buttons for an app's values (see apps in site.js), with a spoken
+// confirmation. A value per variant gets a button for each variant (each)
+// or one for the selected variant.
+function copyButtons(items) {
+  const status = el('p', { class: 'copied', role: 'status' });
+  const button = (label, value, primary) => {
+    const b = el('button', { type: 'button', class: 'button small ' + (primary ? 'primary' : 'secondary') }, 'Copy ' + label);
+    b.addEventListener('click', async () => {
+      try {
+        await navigator.clipboard.writeText(value);
+        status.textContent = `Copied ${label}.`;
+      } catch (e) {
+        status.textContent = `Copying is blocked here. Select and copy this instead: ${value}`;
+      }
+    });
+    return b;
+  };
+  const buttons = items.flatMap(item => {
+    if (!item.byMode) return [button(item.label, item.value, false)];
+    if (item.each) return Object.keys(DATA.modes).map(mode => button(`${item.label} (${MODES[mode]})`, item.byMode[mode], mode === state.mode));
+    return [button(`${item.label} (${MODES[state.mode]})`, item.byMode[state.mode], false)];
+  });
+  return [el('div', { class: 'raycast' }, buttons), status];
+}
+
 function renderApps() {
   $('download').href = DATA.repo + '/archive/refs/heads/main.zip';
   $('nav-github').href = DATA.repo;
@@ -485,6 +513,7 @@ function renderApps() {
       el('p', {}, app.how),
       app.raycast ? el('div', { class: 'raycast' }, Object.entries(DATA.modes).map(([mode, m]) =>
         el('a', { class: 'button small ' + (mode === state.mode ? 'primary' : 'secondary'), href: m.raycast }, 'Add ' + MODES[mode]))) : null,
+      app.copy ? copyButtons(app.copy) : null,
       el('div', { class: 'links' },
         el('a', { href: app.files }, 'Files'),
         app.readme ? el('a', { href: app.readme }, 'Install guide') : null)))),

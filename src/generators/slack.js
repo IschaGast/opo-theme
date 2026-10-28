@@ -16,7 +16,8 @@
 
 import { formatHex } from 'culori';
 
-export function generateSlack(variant, mode) {
+// The 4-color theme string and the legacy 8-color string for a variant
+export function slackStrings(variant, mode) {
   const columnBg     = formatHex(variant.ui.bg);
   const menuBgHover  = formatHex(variant.ui.bgHover);
   const activeItem   = formatHex(variant.ui.accent);
@@ -36,7 +37,11 @@ export function generateSlack(variant, mode) {
     columnBg, menuBgHover, activeItem, activeText,
     hoverItem, textColor, presence, mentionBadge,
   ].join(',');
+  return { theme, legacy };
+}
 
+export function generateSlack(variant, mode) {
+  const { theme, legacy } = slackStrings(variant, mode);
   const label = mode === 'hc' ? 'High Contrast' : mode.charAt(0).toUpperCase() + mode.slice(1);
 
   return [

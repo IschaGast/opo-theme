@@ -68,13 +68,14 @@ theme = opo-light
 
 ### Alacritty
 
-Copy a theme file and import in your `alacritty.toml`:
+Copy a theme file and import it in your `alacritty.toml` (since Alacritty 0.14, `import` belongs under `[general]`):
 
 ```bash
-cp dist/alacritty/opo-light.toml ~/.config/alacritty/themes/
+mkdir -p ~/.config/alacritty/themes && cp dist/alacritty/opo-light.toml ~/.config/alacritty/themes/
 ```
 
 ```toml
+[general]
 import = ["~/.config/alacritty/themes/opo-light.toml"]
 ```
 
