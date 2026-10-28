@@ -9,11 +9,15 @@
  *              -bg tints, plus border, focus, link, selection, code, shadow
  *   Severity   --opo-severity-critical, -major, -minor
  * Every text color is validated on every background and tint (validate.js),
- * so any foreground variable may be used on any background variable.
+ * so any foreground variable may be used on any background variable. The
+ * -bg tints are solid colors, the exact composites the build validates, so
+ * they hold their contrast on any surface (a transparent tint over a panel
+ * would be darker than the one that was checked).
  */
 
 import { formatHex } from 'culori';
-import { elevation, hues, roles, severity, tintAlpha } from '../palette.js';
+import { elevation, hues, roles, severity } from '../palette.js';
+import { tintedBackgrounds } from '../validate.js';
 
 const kebab = (key) => key.replace(/([A-Z])/g, '-$1').toLowerCase();
 
@@ -22,11 +26,10 @@ function variantVars(variant, mode) {
   const hex = (key) => formatHex(variant.ui[key]);
   const pick = (path) => { const [group, key] = path.split('.'); return formatHex(variant[group][key]); };
   const mix = (color, alpha) => `color-mix(in srgb, ${color} ${Math.round(alpha * 100)}%, transparent)`;
-  const tint = tintAlpha[mode];
   const lift = elevation[mode];
-  // Info uses the text selection tint, the other roles the highlight tint;
-  // both keep every text color at AA (AAA for hc), see tintAlpha
-  const roleTint = (key) => key === 'accent' ? tint.textSelection : tint.highlight;
+  const tints = Object.fromEntries(Object.entries(tintedBackgrounds(variant, mode)).map(([k, c]) => [k, formatHex(c)]));
+  // Info (accent) uses the text selection tint, the other roles their highlight tint
+  const roleTint = (key) => ({ accent: tints.textSelection, pass: tints.passTint, fail: tints.failTint, warn: tints.warnTint })[key];
 
   return [
     ['Hues (primitive palette)', Object.entries(hues).map(([name, path]) => `--opo-${name}: ${pick(path)};`)],
@@ -35,9 +38,9 @@ function variantVars(variant, mode) {
     ['Roles: error, warning, success and info, each with a tint', [
       ...Object.entries(roles).flatMap(([name, key]) => [
         `--opo-${name}: ${hex(key)};`,
-        `--opo-${name}-bg: ${mix(hex(key), roleTint(key))};`,
+        `--opo-${name}-bg: ${roleTint(key)};`,
       ]),
-      `--opo-neutral-bg: ${mix(hex('neutral'), tint.listSelection)};`,
+      `--opo-neutral-bg: ${tints.neutralTint};`,
       // Text on a solid accent, error, warning or success fill
       `--opo-text-on-fill: ${hex('bg')};`,
     ]],
@@ -52,22 +55,22 @@ function variantVars(variant, mode) {
       `--opo-shadow-strong: ${mix('#000', lift.shadowStrong)};`,
       `--opo-backdrop: ${mix('#000', lift.backdrop)};`,
     ]],
-    ['Selection: solid with bg-colored text, or tints where text keeps its color', [
+    ['Selection: solid with bg-colored text, or a tint where text keeps its color', [
       `--opo-selection: ${hex('accent')};`,
       `--opo-selection-text: ${hex('bg')};`,
-      `--opo-accent-selection: ${mix(hex('accent'), tint.textSelection)};`,
-      `--opo-accent-bg: ${mix(hex('accent'), tint.listSelection)};`,
+      `--opo-accent-selection: ${tints.textSelection};`,
+      `--opo-accent-bg: ${tints.listSelection};`,
       `--opo-accent-border: ${hex('accent')};`,
     ]],
     ['Severity scale for issues and findings (critical and major differ mostly in lightness: add a label or icon)',
       Object.entries(severity).flatMap(([name, key]) => [
         `--opo-severity-${name}: ${hex(key)};`,
-        `--opo-severity-${name}-bg: ${mix(hex(key), roleTint(key))};`,
+        `--opo-severity-${name}-bg: ${roleTint(key)};`,
       ])],
     ['Earlier names, kept so existing code keeps working (prefer the roles above)', [
-      `--opo-pass-bg: ${mix(hex('pass'), tint.highlight)};`,
-      `--opo-fail-bg: ${mix(hex('fail'), tint.highlight)};`,
-      `--opo-warn-bg: ${mix(hex('warn'), tint.highlight)};`,
+      `--opo-pass-bg: ${tints.passTint};`,
+      `--opo-fail-bg: ${tints.failTint};`,
+      `--opo-warn-bg: ${tints.warnTint};`,
       `--opo-border-light: ${mix(hex('neutral'), 0.35)};`,
     ]],
   ];

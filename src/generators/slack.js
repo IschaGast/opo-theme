@@ -1,11 +1,17 @@
 /**
- * Opo Theme — Slack Sidebar Theme Generator
+ * Opo Theme — Slack Theme Generator
  *
- * Slack sidebar themes are 8 comma-separated hex colors:
+ * Slack custom themes are 4 hex colors:
+ *   System navigation, Selected items, Presence indication, Notifications
+ * Slack adapts the colors it derives from them to keep contrast. Import
+ * with Preferences > Appearance > Custom theme > Import.
+ *
+ * The legacy format, still accepted under "Paste your legacy theme colors",
+ * is 8 colors:
  *   Column BG, Menu BG Hover, Active Item, Active Item Text,
  *   Hover Item, Text Color, Active Presence, Mention Badge
- *
- * Paste the string into Slack > Preferences > Themes > Custom Theme.
+ * A legacy string maps to the new fields by positions 1, 3, 7 and 8, so the
+ * 4-color string uses those same values.
  */
 
 import { formatHex } from 'culori';
@@ -25,7 +31,8 @@ export function generateSlack(variant, mode) {
     ? formatHex({ ...variant.ui.fail, l: 0.54 })
     : formatHex(variant.ui.fail);
 
-  const theme = [
+  const theme = [columnBg, activeItem, presence, mentionBadge].join(', ');
+  const legacy = [
     columnBg, menuBgHover, activeItem, activeText,
     hoverItem, textColor, presence, mentionBadge,
   ].join(',');
@@ -33,12 +40,19 @@ export function generateSlack(variant, mode) {
   const label = mode === 'hc' ? 'High Contrast' : mode.charAt(0).toUpperCase() + mode.slice(1);
 
   return [
-    `Opo ${label} — Slack Sidebar Theme`,
+    `Opo ${label} — Slack Theme`,
     `https://github.com/IschaGast/opo-theme`,
     '',
-    `Paste into Slack > Preferences > Themes > Custom Theme:`,
+    `Slack > Preferences > Appearance > Custom theme > Import, then paste:`,
+    `(System navigation, Selected items, Presence indication, Notifications)`,
     '',
     theme,
+    '',
+    mode === 'dark' ? `Keep "Darker sidebars" on.` : `Turn "Darker sidebars" off: with a light navigation color it makes channel names unreadable.`,
+    '',
+    `Legacy theme string (8 colors, for "Paste your legacy theme colors"):`,
+    '',
+    legacy,
     '',
   ].join('\n');
 }

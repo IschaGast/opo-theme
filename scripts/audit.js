@@ -241,6 +241,11 @@ for (const f of ls('dist/slack')) {
   check('slack', f, 'presence dot', c[6], c[0], 'ui');
   check('slack', f, 'mention badge vs column', c[7], c[0], 'ui');
   check('slack', f, 'white mention text on badge', '#ffffff', c[7]);
+  // 4-color string: System navigation, Selected items, Presence, Notifications
+  const n = read(`dist/slack/${f}`).match(/#\w{6}(, #\w{6}){3}/)[0].split(', ');
+  check('slack', f, 'selected items vs navigation', n[1], n[0], 'ui');
+  check('slack', f, 'presence vs navigation', n[2], n[0], 'ui');
+  check('slack', f, 'notifications vs navigation', n[3], n[0], 'ui');
 }
 
 // --- Raycast: text on both backgrounds, named colors as text on the background ---
@@ -271,6 +276,24 @@ for (const dirName of ls('dist/firefox')) {
     check('firefox', f, 'attention icon on toolbar', c.icons_attention, c.toolbar, 'ui');
     check('firefox', f, 'selected tab line vs toolbar', c.tab_line, c.tab_selected, 'ui');
     check('firefox', f, 'focused field border vs toolbar', c.toolbar_field_border_focus, c.toolbar, 'ui');
+  }
+}
+
+// --- CSS tokens: every foreground variable on every background variable, as
+// the README promises. Tints must be solid, so they hold on any surface ---
+for (const f of ls('dist/css').filter(f => f !== 'opo.css')) {
+  const vars = Object.fromEntries([...read(`dist/css/${f}`).matchAll(/--opo-([\w-]+): ([^;]+);/g)].map(m => [m[1], m[2]]));
+  const fgs = Object.keys(vars).filter(k => !/bg|selection|border|shadow|backdrop|focus|on-fill/.test(k));
+  const bgs = Object.keys(vars).filter(k => /^(bg|bg-panel|bg-hover|code-bg|accent-selection)$|-bg$/.test(k));
+  for (const b of bgs) {
+    if (!/^#[0-9a-f]{6}$/.test(vars[b])) { issues.push({ tool: 'css-tokens', mode: modeOf(f), what: `--opo-${b} is not a solid color`, fg: '-', bg: vars[b], ratio: '-', target: '-' }); continue; }
+    for (const fg of fgs) check('css-tokens', f, `--opo-${fg} on --opo-${b}`, vars[fg], vars[b]);
+  }
+  check('css-tokens', f, 'selection text on selection', vars['selection-text'], vars.selection);
+  for (const fill of ['accent', 'error', 'warning', 'success']) check('css-tokens', f, `text-on-fill on --opo-${fill}`, vars['text-on-fill'], vars[fill]);
+  for (const b of ['bg', 'bg-panel', 'bg-hover']) {
+    check('css-tokens', f, `focus vs --opo-${b}`, vars.focus, vars[b], 'ui');
+    check('css-tokens', f, `border vs --opo-${b}`, vars.border, vars[b], 'ui');
   }
 }
 

@@ -32,14 +32,14 @@
 
   /* Roles: error, warning, success and info, each with a tint */
   --opo-error: #a75000;
-  --opo-error-bg: color-mix(in srgb, #a75000 8%, transparent);
+  --opo-error-bg: #f4ebde;
   --opo-warning: #583500;
-  --opo-warning-bg: color-mix(in srgb, #583500 8%, transparent);
+  --opo-warning-bg: #eee9dd;
   --opo-success: #002c85;
-  --opo-success-bg: color-mix(in srgb, #002c85 8%, transparent);
+  --opo-success-bg: #e6e8ea;
   --opo-info: #005ccc;
-  --opo-info-bg: color-mix(in srgb, #005ccc 9%, transparent);
-  --opo-neutral-bg: color-mix(in srgb, #57606a 6%, transparent);
+  --opo-info-bg: #e4eaef;
+  --opo-neutral-bg: #f1efea;
   --opo-text-on-fill: #fbf8f2;
 
   /* Interface */
@@ -52,24 +52,24 @@
   --opo-shadow-strong: color-mix(in srgb, #000 18%, transparent);
   --opo-backdrop: color-mix(in srgb, #000 40%, transparent);
 
-  /* Selection: solid with bg-colored text, or tints where text keeps its color */
+  /* Selection: solid with bg-colored text, or a tint where text keeps its color */
   --opo-selection: #005ccc;
   --opo-selection-text: #fbf8f2;
-  --opo-accent-selection: color-mix(in srgb, #005ccc 9%, transparent);
-  --opo-accent-bg: color-mix(in srgb, #005ccc 6%, transparent);
+  --opo-accent-selection: #e4eaef;
+  --opo-accent-bg: #e7e9e9;
   --opo-accent-border: #005ccc;
 
   /* Severity scale for issues and findings (critical and major differ mostly in lightness: add a label or icon) */
   --opo-severity-critical: #a75000;
-  --opo-severity-critical-bg: color-mix(in srgb, #a75000 8%, transparent);
+  --opo-severity-critical-bg: #f4ebde;
   --opo-severity-major: #583500;
-  --opo-severity-major-bg: color-mix(in srgb, #583500 8%, transparent);
+  --opo-severity-major-bg: #eee9dd;
   --opo-severity-minor: #005ccc;
-  --opo-severity-minor-bg: color-mix(in srgb, #005ccc 9%, transparent);
+  --opo-severity-minor-bg: #e4eaef;
 
   /* Earlier names, kept so existing code keeps working (prefer the roles above) */
-  --opo-pass-bg: color-mix(in srgb, #002c85 8%, transparent);
-  --opo-fail-bg: color-mix(in srgb, #a75000 8%, transparent);
-  --opo-warn-bg: color-mix(in srgb, #583500 8%, transparent);
+  --opo-pass-bg: #e6e8ea;
+  --opo-fail-bg: #f4ebde;
+  --opo-warn-bg: #eee9dd;
   --opo-border-light: color-mix(in srgb, #57606a 35%, transparent);
 }

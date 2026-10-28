@@ -43,7 +43,7 @@ const APPS = [
   ['Apps', [
     { name: 'Raycast', files: 'dist/raycast', readme: 'Raycast', how: 'Add with one click (needs Raycast Pro), then pick it under Appearance.', raycast: true },
     { name: 'Firefox', files: 'dist/firefox', readme: 'Firefox', how: 'One add-on that follows the Firefox light/dark setting.' },
-    { name: 'Slack', files: 'dist/slack', readme: 'Slack', how: 'Paste the color string under Themes > Custom Theme.' },
+    { name: 'Slack', files: 'dist/slack', readme: 'Slack', how: 'Import the 4-color string under Appearance > Custom theme.' },
     { name: 'Bear', files: 'dist/bear', readme: 'Bear', how: 'Replaces one of Bear’s bundled themes, as Bear only lists its own.' },
     { name: 'Typora', files: 'dist/typora', readme: 'Typora', how: 'Copy a .css file to Typora’s themes folder.' },
   ]],

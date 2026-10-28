@@ -27,19 +27,16 @@ const INVERTED_KEYS = ['accent', 'warn', 'fail', 'pass'];
  * syntax colors on all backgrounds and tints, plus inverted fills.
  * Returns { target, label, results }.
  */
-export function contrastPairs(variant, mode) {
-  const target = mode === 'hc' ? 7.0 : 4.5;
-  const label = mode === 'hc' ? 'AAA (7:1)' : 'AA (4.5:1)';
-  const results = [];
-
-  // Check all text/semantic colors against all backgrounds
-  // Tinted backgrounds, composited as the tools draw them (see tintAlpha)
+/**
+ * The tinted backgrounds of a variant, composited as the tools draw them
+ * (see tintAlpha). The CSS uses these exact colors for its -bg tints.
+ */
+export function tintedBackgrounds(variant, mode) {
   const tint = tintAlpha[mode];
   // Alpha is rounded to 8-bit, as it ends up in #rrggbbaa
   const over = (base, color, alpha) => interpolate([base, color])(Math.round(alpha * 255) / 255);
   const { bg, bgPanel, accent, pass, fail, warn, neutral } = variant.ui;
-  const backgrounds = {
-    ...variant.ui,
+  return {
     listSelection: over(bgPanel, accent, tint.listSelection),
     textSelection: over(bg, accent, tint.textSelection),
     passTint: over(bg, pass, tint.highlight),
@@ -47,6 +44,16 @@ export function contrastPairs(variant, mode) {
     warnTint: over(bg, warn, tint.highlight),
     neutralTint: over(bg, neutral, tint.listSelection),
   };
+}
+
+export function contrastPairs(variant, mode) {
+  const target = mode === 'hc' ? 7.0 : 4.5;
+  const label = mode === 'hc' ? 'AAA (7:1)' : 'AA (4.5:1)';
+  const results = [];
+
+  // Check all text/semantic colors against all backgrounds and tints
+  const { bg } = variant.ui;
+  const backgrounds = { ...variant.ui, ...tintedBackgrounds(variant, mode) };
 
   for (const bgKey of BG_KEYS) {
     const bgColor = backgrounds[bgKey];

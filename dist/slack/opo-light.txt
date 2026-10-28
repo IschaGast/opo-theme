@@ -1,6 +1,13 @@
-Opo Light — Slack Sidebar Theme
+Opo Light — Slack Theme
 https://github.com/IschaGast/opo-theme
 
-Paste into Slack > Preferences > Themes > Custom Theme:
+Slack > Preferences > Appearance > Custom theme > Import, then paste:
+(System navigation, Selected items, Presence indication, Notifications)
+
+#fbf8f2, #005ccc, #002c85, #a75000
+
+Turn "Darker sidebars" off: with a light navigation color it makes channel names unreadable.
+
+Legacy theme string (8 colors, for "Paste your legacy theme colors"):
 
 #fbf8f2,#eeeae2,#005ccc,#ffffff,#f5f2eb,#57606a,#002c85,#a75000

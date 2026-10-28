@@ -125,7 +125,7 @@ cp dist/warp/opo-light.yaml ~/.warp/themes/
 
 ### Slack
 
-Open a theme file from `dist/slack/` and copy the comma-separated color string. Then go to Slack > Preferences > Themes > Custom Theme and paste it.
+Open a theme file from `dist/slack/` and copy the 4-color string (System navigation, Selected items, Presence indication, Notifications). In Slack, go to Preferences > Appearance > Custom theme > Import and paste it. For Opo Light and High Contrast, turn "Darker sidebars" off. Each file also has the legacy 8-color string, for "Paste your legacy theme colors".
 
 ### Bear
 
@@ -208,7 +208,7 @@ a { color: var(--opo-link); }
 | Syntax | `--opo-syntax-keyword`, `-type`, `-comment`, `-function`, `-string` |
 | Severity | `--opo-severity-critical`, `-major`, `-minor`, each with a `-bg` tint |
 
-Every text, role, hue and syntax color is validated on every surface and tint, so any foreground may be used on any background. Roles stay apart under color vision deficiency (CIEDE2000 of at least 9); the hues are held to the lower ANSI minimum (5), so give categories in a chart a label as well. Critical and major differ mostly in lightness, so pair them with a label or icon. A resolved finding is a status, not a severity: use `--opo-success`. The earlier names `--opo-pass`, `-fail`, `-warn`, their `-bg` tints and `--opo-border-light` still work.
+Every text, role, hue and syntax color is validated on every surface and tint, so any foreground may be used on any background. The `-bg` tints are solid colors (the exact composites that are checked), so they also hold their contrast on a panel or hover surface; `npm run audit` reads the generated CSS back and checks every pair. `--opo-text-on-fill` is for solid accent and role fills, `--opo-border-muted` is decorative. Roles stay apart under color vision deficiency (CIEDE2000 of at least 9); the hues are held to the lower ANSI minimum (5), so give categories in a chart a label as well. Critical and major differ mostly in lightness, so pair them with a label or icon. A resolved finding is a status, not a severity: use `--opo-success`. The earlier names `--opo-pass`, `-fail`, `-warn`, their `-bg` tints and `--opo-border-light` still work.
 
 ### Use in another project
 

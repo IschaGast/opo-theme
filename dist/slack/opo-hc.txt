@@ -1,6 +1,13 @@
-Opo High Contrast — Slack Sidebar Theme
+Opo High Contrast — Slack Theme
 https://github.com/IschaGast/opo-theme
 
-Paste into Slack > Preferences > Themes > Custom Theme:
+Slack > Preferences > Appearance > Custom theme > Import, then paste:
+(System navigation, Selected items, Presence indication, Notifications)
+
+#fdfaf3, #003c88, #001e4b, #6f3500
+
+Turn "Darker sidebars" off: with a light navigation color it makes channel names unreadable.
+
+Legacy theme string (8 colors, for "Paste your legacy theme colors"):
 
 #fdfaf3,#f4efe5,#003c88,#ffffff,#f9f5ed,#353f4a,#001e4b,#6f3500
