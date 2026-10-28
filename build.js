@@ -254,6 +254,13 @@ console.log('\n  Site:');
 write(join(dir('site'), 'index.html'), generateSite(variants, ansiSets));
 write(join(dir('site', 'contrast'), 'index.html'), generateContrastPage(variants, ansiSets));
 fileCount += 2;
+// Theme files that are imported by opening them, so the site can offer
+// same-origin download buttons (see apps in src/generators/site.js)
+for (const tool of ['iterm', 'jetbrains']) {
+  rmSync(join(DIST, 'site', 'downloads', tool), { recursive: true, force: true });
+  cpSync(join(DIST, tool), dir('site', 'downloads', tool), { recursive: true });
+  console.log(`  ${join(DIST, 'site', 'downloads', tool)}/`);
+}
 
 // ── Summary ──
 console.log(`\n✨ Build complete! ${fileCount} files generated in dist/`);

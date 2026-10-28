@@ -40,10 +40,14 @@ const GHOSTTY_COPY = [
   { label: 'config line', value: 'theme = dark:opo-dark,light:opo-light' },
 ];
 
+// Download buttons, one per variant, for files copied into the site by build.js
+const VARIANT_FILES = { light: 'Opo Light', dark: 'Opo Dark', hc: 'Opo High Contrast' };
+const downloads = (tool, ext) => MODE_KEYS.map(mode => ({ mode, href: `downloads/${tool}/${VARIANT_FILES[mode]}.${ext}` }));
+
 // Supported apps, grouped. `readme` is the README heading with the install
 // steps, `files` the folder in dist/. `copy` lists values with a copy button:
 // one button per value, per variant (`each`), or for the selected variant
-// (`byMode` without `each`).
+// (`byMode` without `each`). `download` lists a file per variant.
 function apps(variants, ansiSets) {
   const schemes = generateWindowsTerminal(variants, ansiSets).trim().replace(/^\[\n|\n\]$/g, '');
   return [
@@ -51,7 +55,7 @@ function apps(variants, ansiSets) {
       { name: 'VS Code', files: 'dist/vscode', readme: 'VS Code', how: 'Install the extension folder or a packaged .vsix.' },
       { name: 'Zed', files: 'dist/zed', readme: 'Zed', how: 'Run the install command, then pick Opo in the theme selector.',
         copy: [{ label: 'install command', value: `mkdir -p ~/.config/zed/themes && curl -fsSL ${RAW}/dist/zed/opo.json -o ~/.config/zed/themes/opo.json` }] },
-      { name: 'JetBrains', files: 'dist/jetbrains', readme: 'JetBrains (IntelliJ, WebStorm, etc.)', how: 'Import an .icls file under Editor > Color Scheme.' },
+      { name: 'JetBrains', files: 'dist/jetbrains', readme: 'JetBrains (IntelliJ, WebStorm, etc.)', how: 'Download a scheme, then import it under Settings > Editor > Color Scheme.', download: downloads('jetbrains', 'icls') },
       { name: 'Neovim', files: 'dist/neovim/opo.nvim', readme: 'Neovim', how: 'Add opo.nvim with your plugin manager, then :colorscheme opo.' },
     ]],
     ['Terminals', [
@@ -62,7 +66,7 @@ function apps(variants, ansiSets) {
           { label: 'install command', value: fetchVariants('~/.config/alacritty/themes', 'dist/alacritty/opo-$v.toml') },
           { label: 'import', byMode: perMode(mode => `[general]\nimport = ["~/.config/alacritty/themes/opo-${mode}.toml"]`) },
         ] },
-      { name: 'iTerm2', files: 'dist/iterm', readme: 'iTerm2', how: 'Double-click an .itermcolors file.' },
+      { name: 'iTerm2', files: 'dist/iterm', readme: 'iTerm2', how: 'Download a preset and double-click it, or import it under Settings > Profiles > Colors.', download: downloads('iterm', 'itermcolors') },
       { name: 'Windows Terminal', files: 'dist/windows-terminal', readme: 'Windows Terminal', how: 'Paste the schemes into the schemes array of settings.json.',
         copy: [{ label: 'schemes', value: schemes }] },
       { name: 'Warp', files: 'dist/warp', readme: 'Warp', how: 'Run the install command, then pick Opo under Appearance > Themes.',

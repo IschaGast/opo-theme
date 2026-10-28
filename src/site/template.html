@@ -514,6 +514,8 @@ function renderApps() {
       app.raycast ? el('div', { class: 'raycast' }, Object.entries(DATA.modes).map(([mode, m]) =>
         el('a', { class: 'button small ' + (mode === state.mode ? 'primary' : 'secondary'), href: m.raycast }, 'Add ' + MODES[mode]))) : null,
       app.copy ? copyButtons(app.copy) : null,
+      app.download ? el('div', { class: 'raycast' }, app.download.map(({ mode, href }) =>
+        el('a', { class: 'button small ' + (mode === state.mode ? 'primary' : 'secondary'), href: encodeURI(href), download: '' }, 'Download ' + MODES[mode]))) : null,
       el('div', { class: 'links' },
         el('a', { href: app.files }, 'Files'),
         app.readme ? el('a', { href: app.readme }, 'Install guide') : null)))),
