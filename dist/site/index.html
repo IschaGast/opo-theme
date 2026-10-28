@@ -6,11 +6,162 @@
 <title>Opo Color Theme</title>
 <meta name="description" content="Opo is a colorblind-safe, OKLCH-based accessible color theme for editors, terminals and the web, with every color pair checked at build time.">
 <style>
-  /* Page colors are set from the selected variant (see applyChrome) */
+/* Opo Light and Dark — Colorblind-safe accessible theme */
+/* https://github.com/IschaGast/opo-theme */
+
+:root {
+  /* Hues (primitive palette) */
+  --opo-blue: #005ccc;
+  --opo-navy: #002c85;
+  --opo-orange: #a75000;
+  --opo-amber: #583500;
+  --opo-teal: #007570;
+  --opo-plum: #75254e;
+
+  /* Surfaces, text and semantic base colors */
+  --opo-bg: #fbf8f2;
+  --opo-bg-panel: #f5f2eb;
+  --opo-bg-hover: #eeeae2;
+  --opo-text: #24292f;
+  --opo-text-mid: #57606a;
+  --opo-text-faint: #5c646d;
+  --opo-accent: #005ccc;
+  --opo-pass: #002c85;
+  --opo-fail: #a75000;
+  --opo-warn: #583500;
+  --opo-neutral: #57606a;
+
+  /* Syntax */
+  --opo-syntax-keyword: #002c85;
+  --opo-syntax-type: #75254e;
+  --opo-syntax-comment: #5e5a55;
+  --opo-syntax-function: #007570;
+  --opo-syntax-string: #a75000;
+
+  /* Roles: error, warning, success and info, each with a tint */
+  --opo-error: #a75000;
+  --opo-error-bg: color-mix(in srgb, #a75000 8%, transparent);
+  --opo-warning: #583500;
+  --opo-warning-bg: color-mix(in srgb, #583500 8%, transparent);
+  --opo-success: #002c85;
+  --opo-success-bg: color-mix(in srgb, #002c85 8%, transparent);
+  --opo-info: #005ccc;
+  --opo-info-bg: color-mix(in srgb, #005ccc 9%, transparent);
+  --opo-neutral-bg: color-mix(in srgb, #57606a 6%, transparent);
+  --opo-text-on-fill: #fbf8f2;
+
+  /* Interface */
+  --opo-border: #57606a;
+  --opo-border-muted: color-mix(in srgb, #57606a 35%, transparent);
+  --opo-focus: #005ccc;
+  --opo-link: #005ccc;
+  --opo-code-bg: #f5f2eb;
+  --opo-shadow: color-mix(in srgb, #000 12%, transparent);
+  --opo-shadow-strong: color-mix(in srgb, #000 18%, transparent);
+  --opo-backdrop: color-mix(in srgb, #000 40%, transparent);
+
+  /* Selection: solid with bg-colored text, or tints where text keeps its color */
+  --opo-selection: #005ccc;
+  --opo-selection-text: #fbf8f2;
+  --opo-accent-selection: color-mix(in srgb, #005ccc 9%, transparent);
+  --opo-accent-bg: color-mix(in srgb, #005ccc 6%, transparent);
+  --opo-accent-border: #005ccc;
+
+  /* Severity scale for issues and findings (critical and major differ mostly in lightness: add a label or icon) */
+  --opo-severity-critical: #a75000;
+  --opo-severity-critical-bg: color-mix(in srgb, #a75000 8%, transparent);
+  --opo-severity-major: #583500;
+  --opo-severity-major-bg: color-mix(in srgb, #583500 8%, transparent);
+  --opo-severity-minor: #005ccc;
+  --opo-severity-minor-bg: color-mix(in srgb, #005ccc 9%, transparent);
+
+  /* Earlier names, kept so existing code keeps working (prefer the roles above) */
+  --opo-pass-bg: color-mix(in srgb, #002c85 8%, transparent);
+  --opo-fail-bg: color-mix(in srgb, #a75000 8%, transparent);
+  --opo-warn-bg: color-mix(in srgb, #583500 8%, transparent);
+  --opo-border-light: color-mix(in srgb, #57606a 35%, transparent);
+}
+
+@media (prefers-color-scheme: dark) {
   :root {
-    --bg: #fbf8f2; --panel: #f5f2eb; --hover: #eeeae2;
-    --text: #24292f; --mid: #57606a; --faint: #5c646d;
-    --accent: #005ccc; --pass: #003172; --fail: #a55200; --warn: #583500;
+    /* Hues (primitive palette) */
+    --opo-blue: #79afff;
+    --opo-navy: #bad6ff;
+    --opo-orange: #ea8d4a;
+    --opo-amber: #f0c680;
+    --opo-teal: #55c2bc;
+    --opo-plum: #ffa4cc;
+
+    /* Surfaces, text and semantic base colors */
+    --opo-bg: #161410;
+    --opo-bg-panel: #191612;
+    --opo-bg-hover: #1c1a14;
+    --opo-text: #d1d7df;
+    --opo-text-mid: #99a3ae;
+    --opo-text-faint: #979fa9;
+    --opo-accent: #79afff;
+    --opo-pass: #bad6ff;
+    --opo-fail: #ea8d4a;
+    --opo-warn: #f0c680;
+    --opo-neutral: #99a3ae;
+
+    /* Syntax */
+    --opo-syntax-keyword: #bad6ff;
+    --opo-syntax-type: #ffa4cc;
+    --opo-syntax-comment: #b8b4ae;
+    --opo-syntax-function: #55c2bc;
+    --opo-syntax-string: #ea8d4a;
+
+    /* Roles: error, warning, success and info, each with a tint */
+    --opo-error: #ea8d4a;
+    --opo-error-bg: color-mix(in srgb, #ea8d4a 16%, transparent);
+    --opo-warning: #f0c680;
+    --opo-warning-bg: color-mix(in srgb, #f0c680 16%, transparent);
+    --opo-success: #bad6ff;
+    --opo-success-bg: color-mix(in srgb, #bad6ff 16%, transparent);
+    --opo-info: #79afff;
+    --opo-info-bg: color-mix(in srgb, #79afff 20%, transparent);
+    --opo-neutral-bg: color-mix(in srgb, #99a3ae 20%, transparent);
+    --opo-text-on-fill: #161410;
+
+    /* Interface */
+    --opo-border: #99a3ae;
+    --opo-border-muted: color-mix(in srgb, #99a3ae 35%, transparent);
+    --opo-focus: #79afff;
+    --opo-link: #79afff;
+    --opo-code-bg: #191612;
+    --opo-shadow: color-mix(in srgb, #000 40%, transparent);
+    --opo-shadow-strong: color-mix(in srgb, #000 60%, transparent);
+    --opo-backdrop: color-mix(in srgb, #000 60%, transparent);
+
+    /* Selection: solid with bg-colored text, or tints where text keeps its color */
+    --opo-selection: #79afff;
+    --opo-selection-text: #161410;
+    --opo-accent-selection: color-mix(in srgb, #79afff 20%, transparent);
+    --opo-accent-bg: color-mix(in srgb, #79afff 20%, transparent);
+    --opo-accent-border: #79afff;
+
+    /* Severity scale for issues and findings (critical and major differ mostly in lightness: add a label or icon) */
+    --opo-severity-critical: #ea8d4a;
+    --opo-severity-critical-bg: color-mix(in srgb, #ea8d4a 16%, transparent);
+    --opo-severity-major: #f0c680;
+    --opo-severity-major-bg: color-mix(in srgb, #f0c680 16%, transparent);
+    --opo-severity-minor: #79afff;
+    --opo-severity-minor-bg: color-mix(in srgb, #79afff 20%, transparent);
+
+    /* Earlier names, kept so existing code keeps working (prefer the roles above) */
+    --opo-pass-bg: color-mix(in srgb, #bad6ff 16%, transparent);
+    --opo-fail-bg: color-mix(in srgb, #ea8d4a 16%, transparent);
+    --opo-warn-bg: color-mix(in srgb, #f0c680 16%, transparent);
+    --opo-border-light: color-mix(in srgb, #99a3ae 35%, transparent);
+  }
+}
+
+</style>
+<style>
+  /* All colors are Opo's custom properties (opo.css above); applyChrome
+     switches them to the selected variant */
+  :root {
     --sans: 'Atkinson Hyperlegible Next', 'Atkinson Hyperlegible', system-ui, -apple-system, 'Segoe UI', sans-serif;
     --mono: 'Atkinson Hyperlegible Mono', ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
     color-scheme: light;
@@ -21,65 +172,65 @@
   html { scroll-behavior: smooth; }
   body {
     margin: 0;
-    background: var(--bg);
-    color: var(--text);
+    background: var(--opo-bg);
+    color: var(--opo-text);
     font: 17px/1.55 var(--sans);
     -webkit-font-smoothing: antialiased;
   }
-  ::selection { background: var(--accent); color: var(--bg); }
+  ::selection { background: var(--opo-selection); color: var(--opo-selection-text); }
   .wrap { max-width: 1160px; margin-left: auto; margin-right: auto; padding: 0 16px; }
   h1, h2, h3 { line-height: 1.15; margin: 0; }
   h2 { font-size: 1.9rem; letter-spacing: -0.01em; }
   h3 { font-size: 1.1rem; }
   p { margin: 0; }
-  a { color: var(--accent); text-underline-offset: 0.15em; }
+  a { color: var(--opo-link); text-underline-offset: 0.15em; }
   a:focus-visible, button:focus-visible, select:focus-visible {
-    outline: 3px solid var(--accent); outline-offset: 2px; border-radius: 4px;
+    outline: 3px solid var(--opo-focus); outline-offset: 2px; border-radius: 4px;
   }
   .mono { font-family: var(--mono); }
-  .muted { color: var(--mid); }
+  .muted { color: var(--opo-text-mid); }
   section { margin-top: 88px; }
-  .intro { color: var(--mid); max-width: 64ch; margin: 10px 0 28px; }
+  .intro { color: var(--opo-text-mid); max-width: 64ch; margin: 10px 0 28px; }
 
   /* Navigation */
-  nav { border-bottom: 1px solid var(--hover); }
+  nav { border-bottom: 1px solid var(--opo-bg-hover); }
   nav .wrap { display: flex; align-items: center; gap: 24px; height: 60px; }
-  nav .brand { font-weight: 700; font-size: 1.15rem; color: var(--text); text-decoration: none; margin-right: auto; }
-  nav a:not(.brand) { color: var(--mid); text-decoration: none; font-size: 0.95rem; }
-  nav a:not(.brand):hover { color: var(--text); }
+  nav .brand { font-weight: 700; font-size: 1.15rem; color: var(--opo-text); text-decoration: none; margin-right: auto; }
+  nav a:not(.brand) { color: var(--opo-text-mid); text-decoration: none; font-size: 0.95rem; }
+  nav a:not(.brand):hover { color: var(--opo-text); }
 
   /* Hero */
   .hero { margin-top: 64px; }
   .hero h1 { font-size: clamp(4rem, 12vw, 8rem); letter-spacing: -0.04em; line-height: 0.95; }
   .hero .tagline { font-size: clamp(1.25rem, 2.5vw, 1.6rem); max-width: 30ch; margin-top: 16px; }
-  .hero .meaning { color: var(--mid); margin-top: 12px; max-width: 60ch; }
+  .hero .meaning { color: var(--opo-text-mid); margin-top: 12px; max-width: 60ch; }
   .actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 28px; }
   .button {
     display: inline-flex; align-items: center; gap: 8px; padding: 10px 18px; border-radius: 8px;
-    font-weight: 700; text-decoration: none; border: 1px solid var(--accent);
+    font-weight: 700; text-decoration: none; border: 1px solid var(--opo-accent);
   }
-  .button.primary { background: var(--accent); color: var(--bg); }
-  .button.secondary { color: var(--accent); }
+  .button.primary { background: var(--opo-accent); color: var(--opo-text-on-fill); }
+  .button.secondary { color: var(--opo-accent); }
   .button.small { padding: 6px 12px; font-size: 0.9rem; }
 
   .controls { display: flex; flex-wrap: wrap; gap: 16px 24px; align-items: end; margin-top: 40px; }
   .field { display: flex; flex-direction: column; gap: 6px; }
-  .field > span { font-size: 0.78rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--mid); }
-  .segmented { display: inline-flex; border: 1px solid var(--faint); border-radius: 8px; overflow: hidden; }
+  .field > span { font-size: 0.78rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--opo-text-mid); }
+  .segmented { display: inline-flex; border: 1px solid var(--opo-text-faint); border-radius: 8px; overflow: hidden; }
   .segmented button {
     font: inherit; font-size: 0.95rem; padding: 8px 14px; border: 0; cursor: pointer;
-    background: var(--bg); color: var(--text);
+    background: var(--opo-bg); color: var(--opo-text);
   }
-  .segmented button + button { border-left: 1px solid var(--faint); }
-  .segmented button[aria-pressed="true"] { background: var(--accent); color: var(--bg); font-weight: 700; }
+  .segmented button + button { border-left: 1px solid var(--opo-text-faint); }
+  .segmented button[aria-pressed="true"] { background: var(--opo-accent); color: var(--opo-text-on-fill); font-weight: 700; }
   select {
     font: inherit; font-size: 0.95rem; padding: 8px 12px; border-radius: 8px;
-    border: 1px solid var(--faint); background: var(--bg); color: var(--text);
+    border: 1px solid var(--opo-text-faint); background: var(--opo-bg); color: var(--opo-text);
   }
 
   /* Previews */
   .previews { display: grid; grid-template-columns: 1.35fr 1fr; gap: 20px; margin-top: 24px; }
-  .window { border-radius: 12px; overflow: hidden; border: 1px solid var(--hover); min-width: 0; }
+  .window { border-radius: 12px; overflow: hidden; border: 1px solid var(--opo-bg-hover); min-width: 0; }
   .window .bar { display: flex; align-items: center; gap: 8px; padding: 0 12px; height: 38px; font-size: 0.85rem; }
   .window .dots { display: flex; gap: 6px; margin-right: 8px; }
   .window .dots i { width: 11px; height: 11px; border-radius: 50%; display: block; }
@@ -101,43 +252,43 @@
 
   /* Principles */
   .principles { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; }
-  .card { background: var(--panel); border-radius: 12px; padding: 20px; }
+  .card { background: var(--opo-bg-panel); border-radius: 12px; padding: 20px; }
   .card h3 { margin-bottom: 8px; }
-  .card p { color: var(--mid); font-size: 0.98rem; }
-  .card .big { font-size: 2.2rem; font-weight: 700; font-variant-numeric: tabular-nums; line-height: 1; margin-bottom: 8px; color: var(--text); }
+  .card p { color: var(--opo-text-mid); font-size: 0.98rem; }
+  .card .big { font-size: 2.2rem; font-weight: 700; font-variant-numeric: tabular-nums; line-height: 1; margin-bottom: 8px; color: var(--opo-text); }
   .card a { display: inline-block; margin-top: 10px; font-weight: 700; }
 
   /* Palette */
-  .scroll { overflow-x: auto; border: 1px solid var(--hover); border-radius: 12px; }
+  .scroll { overflow-x: auto; border: 1px solid var(--opo-bg-hover); border-radius: 12px; }
   table { border-collapse: collapse; width: 100%; font-variant-numeric: tabular-nums; }
   th, td { text-align: left; padding: 10px 14px; vertical-align: middle; }
-  thead th { font-size: 0.85rem; background: var(--panel); white-space: nowrap; }
-  thead th.current { box-shadow: inset 0 -3px 0 var(--accent); }
-  tbody tr + tr td, tbody tr + tr th { border-top: 1px solid var(--hover); }
+  thead th { font-size: 0.85rem; background: var(--opo-bg-panel); white-space: nowrap; }
+  thead th.current { box-shadow: inset 0 -3px 0 var(--opo-accent); }
+  tbody tr + tr td, tbody tr + tr th { border-top: 1px solid var(--opo-bg-hover); }
   tbody th { font-weight: 700; white-space: nowrap; }
-  tbody th small { display: block; font-weight: 400; color: var(--mid); font-size: 0.82rem; }
-  tr.group th { background: var(--bg); color: var(--mid); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.06em; padding-top: 18px; }
+  tbody th small { display: block; font-weight: 400; color: var(--opo-text-mid); font-size: 0.82rem; }
+  tr.group th { background: var(--opo-bg); color: var(--opo-text-mid); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.06em; padding-top: 18px; }
   .swatch-cell { display: flex; gap: 10px; align-items: center; min-width: 190px; }
-  .swatch { width: 36px; height: 36px; border-radius: 8px; flex: none; border: 1px solid var(--hover); display: grid; place-items: center; font-weight: 700; font-size: 0.85rem; }
+  .swatch { width: 36px; height: 36px; border-radius: 8px; flex: none; border: 1px solid var(--opo-bg-hover); display: grid; place-items: center; font-weight: 700; font-size: 0.85rem; }
   .swatch-cell .mono { font-size: 0.85rem; }
-  .swatch-cell small { display: block; color: var(--mid); font-size: 0.75rem; font-family: var(--mono); }
-  td.current { background: var(--panel); }
+  .swatch-cell small { display: block; color: var(--opo-text-mid); font-size: 0.75rem; font-family: var(--mono); }
+  td.current { background: var(--opo-bg-panel); }
 
   .ansi { display: grid; grid-template-columns: repeat(8, 1fr); gap: 8px; margin-top: 16px; }
-  .ansi div { border-radius: 8px; padding: 10px; font-size: 0.78rem; border: 1px solid var(--hover); min-width: 0; }
+  .ansi div { border-radius: 8px; padding: 10px; font-size: 0.78rem; border: 1px solid var(--opo-bg-hover); min-width: 0; }
   .ansi b { display: block; font-family: var(--mono); font-size: 0.9rem; }
   .ansi span { display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
   /* Apps */
-  .group-title { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--mid); margin: 32px 0 12px; }
+  .group-title { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--opo-text-mid); margin: 32px 0 12px; }
   .apps { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 12px; }
-  .app { background: var(--panel); border-radius: 12px; padding: 16px 18px; display: flex; flex-direction: column; gap: 6px; }
-  .app p { color: var(--mid); font-size: 0.93rem; flex: 1; }
+  .app { background: var(--opo-bg-panel); border-radius: 12px; padding: 16px 18px; display: flex; flex-direction: column; gap: 6px; }
+  .app p { color: var(--opo-text-mid); font-size: 0.93rem; flex: 1; }
   .app .links { display: flex; flex-wrap: wrap; gap: 6px 16px; margin-top: 6px; font-size: 0.93rem; }
   .app .links a { font-weight: 700; }
   .app .raycast { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
 
-  footer { margin-top: 96px; border-top: 1px solid var(--hover); padding: 28px 0 48px; color: var(--mid); font-size: 0.92rem; }
+  footer { margin-top: 96px; border-top: 1px solid var(--opo-bg-hover); padding: 28px 0 48px; color: var(--opo-text-mid); font-size: 0.92rem; }
   footer .wrap { display: flex; flex-wrap: wrap; gap: 8px 24px; justify-content: space-between; }
 
   @media (max-width: 900px) {
@@ -226,14 +377,13 @@
 <footer>
   <div class="wrap">
     <span>Opo by Ischa Gast &middot; MIT License</span>
-    <span>Site layout after <a href="https://ethanschoonover.com/solarized/">Solarized</a>; contrast grid after <a href="https://thishueshallpass.clearleft.com/">This Hue Shall Pass</a>.</span>
   </div>
 </footer>
 
 <noscript><p style="text-align:center">This page needs JavaScript to draw the previews and palette.</p></noscript>
 
 <script>
-const DATA = {"modes":{"light":{"name":"Opo Light","target":4.5,"label":"AA (4.5:1)","ui":{"bg":"#fbf8f2","bgPanel":"#f5f2eb","bgHover":"#eeeae2","text":"#24292f","textMid":"#57606a","textFaint":"#5c646d","accent":"#005ccc","pass":"#002c85","fail":"#a75000","warn":"#583500","neutral":"#57606a"},"syntax":{"keyword":"#002c85","type":"#75254e","comment":"#5e5a55","function":"#007570","string":"#a75000"},"hues":{"blue":"#005ccc","navy":"#002c85","orange":"#a75000","amber":"#583500","teal":"#007570","plum":"#75254e"},"oklch":{"hues":{"blue":[0.5,0.189,258],"navy":[0.33,0.16,258],"orange":[0.53,0.14,54],"amber":[0.36,0.1,80],"teal":[0.5,0.1,190],"plum":[0.4,0.12,352]},"ui":{"bg":[0.98,0.008,85],"bgPanel":[0.962,0.01,85],"bgHover":[0.938,0.012,85],"text":[0.279,0.013,253],"textMid":[0.485,0.02,251],"textFaint":[0.5,0.017,251],"accent":[0.5,0.189,258],"pass":[0.33,0.16,258],"fail":[0.53,0.14,54],"warn":[0.36,0.1,80],"neutral":[0.485,0.02,251]},"syntax":{"keyword":[0.33,0.16,258],"type":[0.4,0.12,352],"comment":[0.47,0.01,80],"function":[0.5,0.1,190],"string":[0.53,0.14,54]}},"ratio":{"hues":{"blue":5.82,"navy":11.66,"orange":5.23,"amber":10.3,"teal":5.24,"plum":9.3},"ui":{"bg":1,"bgPanel":1.05,"bgHover":1.13,"text":13.82,"textMid":6.03,"textFaint":5.66,"accent":5.82,"pass":11.66,"fail":5.23,"warn":10.3,"neutral":6.03},"syntax":{"keyword":11.66,"type":9.3,"comment":6.45,"function":5.24,"string":5.23}},"ansi":["#24292f","#a75000","#00756b","#6d3a00","#002c85","#782445","#005ccc","#eeeae2","#11161d","#844000","#005a52","#442e00","#001f4d","#610030","#00489f","#d4d0c6"],"selection":"#e4eaef","stats":{"contrast":[121,121],"cvd":[21,21],"ansi":[62,62]},"raycast":"raycast://theme?author=Ischa%20Gast&authorUsername=ischagast&version=1&name=Opo%20Light&appearance=light&colors=%23fbf8f2,%23f5f2eb,%2324292f,%23005ccc,%23005ccc,%23a75000,%23844000,%236d3a00,%2300756b,%23002c85,%23005ccc,%23782445"},"dark":{"name":"Opo Dark","target":4.5,"label":"AA (4.5:1)","ui":{"bg":"#161410","bgPanel":"#191612","bgHover":"#1c1a14","text":"#d1d7df","textMid":"#99a3ae","textFaint":"#979fa9","accent":"#79afff","pass":"#bad6ff","fail":"#ea8d4a","warn":"#f0c680","neutral":"#99a3ae"},"syntax":{"keyword":"#bad6ff","type":"#ffa4cc","comment":"#b8b4ae","function":"#55c2bc","string":"#ea8d4a"},"hues":{"blue":"#79afff","navy":"#bad6ff","orange":"#ea8d4a","amber":"#f0c680","teal":"#55c2bc","plum":"#ffa4cc"},"oklch":{"hues":{"blue":[0.75,0.129,258],"navy":[0.869,0.065,258],"orange":[0.729,0.14,54],"amber":[0.848,0.1,80],"teal":[0.75,0.1,190],"plum":[0.82,0.118,352]},"ui":{"bg":[0.192,0.008,85],"bgPanel":[0.203,0.01,85],"bgHover":[0.217,0.012,85],"text":[0.877,0.013,253],"textMid":[0.712,0.02,251],"textFaint":[0.7,0.017,251],"accent":[0.75,0.129,258],"pass":[0.869,0.065,258],"fail":[0.729,0.14,54],"warn":[0.848,0.1,80],"neutral":[0.712,0.02,251]},"syntax":{"keyword":[0.869,0.065,258],"type":[0.82,0.118,352],"comment":[0.771,0.01,80],"function":[0.75,0.1,190],"string":[0.729,0.14,54]}},"ratio":{"hues":{"blue":8.22,"navy":12.39,"orange":7.36,"amber":11.47,"teal":8.61,"plum":10.02},"ui":{"bg":1,"bgPanel":1.02,"bgHover":1.06,"text":12.7,"textMid":7.19,"textFaint":6.87,"accent":8.22,"pass":12.39,"fail":7.36,"warn":11.47,"neutral":7.19},"syntax":{"keyword":12.39,"type":10.02,"comment":8.91,"function":8.61,"string":7.36}},"ansi":["#1c1a14","#e08440","#33a397","#dca331","#498beb","#cd718f","#74acff","#ffffff","#96a0ab","#ffaf7a","#5fc9bc","#ffcb70","#7fb3ff","#f696b4","#b5d3ff","#ffffff"],"selection":"#2a3340","stats":{"contrast":[121,121],"cvd":[21,21],"ansi":[62,62]},"raycast":"raycast://theme?author=Ischa%20Gast&authorUsername=ischagast&version=1&name=Opo%20Dark&appearance=dark&colors=%23161410,%23191612,%23d1d7df,%2379afff,%2379afff,%23e08440,%23ffaf7a,%23dca331,%2333a397,%23498beb,%2374acff,%23cd718f"},"hc":{"name":"Opo High Contrast","target":7,"label":"AAA (7:1)","ui":{"bg":"#fdfaf3","bgPanel":"#f9f5ed","bgHover":"#f4efe5","text":"#13191f","textMid":"#353f4a","textFaint":"#3a424b","accent":"#003c88","pass":"#001e4b","fail":"#6f3500","warn":"#352300","neutral":"#353f4a"},"syntax":{"keyword":"#001e4b","type":"#570034","comment":"#3e3b35","function":"#004c49","string":"#6f3500"},"hues":{"blue":"#003c88","navy":"#001e4b","orange":"#6f3500","amber":"#352300","teal":"#004c49","plum":"#570034"},"oklch":{"hues":{"blue":[0.375,0.139,258],"navy":[0.247,0.092,258],"orange":[0.398,0.1,54],"amber":[0.27,0.056,80],"teal":[0.375,0.065,190],"plum":[0.3,0.124,352]},"ui":{"bg":[0.985,0.009,85],"bgPanel":[0.972,0.011,85],"bgHover":[0.954,0.014,85],"text":[0.209,0.015,253],"textMid":[0.364,0.023,251],"textFaint":[0.375,0.02,251],"accent":[0.375,0.139,258],"pass":[0.247,0.092,258],"fail":[0.398,0.1,54],"warn":[0.27,0.056,80],"neutral":[0.364,0.023,251]},"syntax":{"keyword":[0.247,0.092,258],"type":[0.3,0.124,352],"comment":[0.352,0.011,80],"function":[0.375,0.065,190],"string":[0.398,0.1,54]}},"ratio":{"hues":{"blue":10.06,"navy":15.65,"orange":9.22,"amber":14.47,"teal":9.46,"plum":13.85},"ui":{"bg":1,"bgPanel":1.04,"bgHover":1.1,"text":16.98,"textMid":10.27,"textFaint":9.78,"accent":10.06,"pass":15.65,"fail":9.22,"warn":14.47,"neutral":10.27},"syntax":{"keyword":15.65,"type":13.85,"comment":10.71,"function":9.46,"string":9.22}},"ansi":["#13191f","#6f3500","#004c46","#3e2a00","#001e4b","#59002b","#003c88","#f4efe5","#020409","#492100","#002f2b","#201300","#000921","#300014","#002558","#e0dbd2"],"selection":"#d9dfe4","stats":{"contrast":[121,121],"cvd":[21,21],"ansi":[62,62]},"raycast":"raycast://theme?author=Ischa%20Gast&authorUsername=ischagast&version=1&name=Opo%20High%20Contrast&appearance=light&colors=%23fdfaf3,%23f9f5ed,%2313191f,%23003c88,%23003c88,%236f3500,%23492100,%233e2a00,%23004c46,%23001e4b,%23003c88,%2359002b"}},"sims":{"deuteranopia":{"#fbf8f2":"#faf9f2","#f5f2eb":"#f5f3eb","#eeeae2":"#edebe2","#24292f":"#26282f","#57606a":"#5a5e6a","#5c646d":"#5f626d","#005ccc":"#2148ca","#002c85":"#082483","#a75000":"#826501","#583500":"#4e3c01","#75254e":"#393d4c","#5e5a55":"#5d5b55","#007570":"#4b5472","#00756b":"#4c546d","#6d3a00":"#5a4601","#782445":"#3b3d43","#11161d":"#13151d","#844000":"#685001","#005a52":"#3b4053","#442e00":"#413201","#001f4d":"#09184c","#610030":"#191d2d","#00489f":"#1a389d","#d4d0c6":"#d4d1c6","#e4eaef":"#e7e9ef","#161410":"#161410","#191612":"#181712","#1c1a14":"#1c1a14","#d1d7df":"#d3d6df","#99a3ae":"#9da1ae","#979fa9":"#9a9da9","#79afff":"#89a4fd","#bad6ff":"#c2d0fe","#ea8d4a":"#bea44b","#f0c680":"#e5ce82","#ffa4cc":"#bcbfca","#b8b4ae":"#b7b5ae","#55c2bc":"#9ba3bd","#e08440":"#b59b41","#33a397":"#7d8399","#dca331":"#d2ae34","#498beb":"#5d7de9","#cd718f":"#8c8c8d","#74acff":"#85a0fd","#ffffff":"#ffffff","#96a0ab":"#9a9eab","#ffaf7a":"#d8c37b","#5fc9bc":"#a5abbe","#ffcb70":"#f3d572","#7fb3ff":"#8fa8fd","#f696b4":"#b2b2b2","#b5d3ff":"#becdfe","#2a3340":"#2d3140","#fdfaf3":"#fdfbf3","#f9f5ed":"#f8f6ed","#f4efe5":"#f3f0e5","#13191f":"#15181f","#353f4a":"#393d4a","#3a424b":"#3d404b","#003c88":"#152f86","#001e4b":"#09184a","#6f3500":"#564301","#352300":"#322601","#570034":"#141b31","#3e3b35":"#3d3c35","#004c49":"#31374a","#004c46":"#313647","#3e2a00":"#3b2e01","#59002b":"#171b29","#020409":"#020409","#492100":"#372b01","#002f2b":"#1f222c","#201300":"#1c1600","#000921":"#000820","#300014":"#0d0e13","#002558":"#0c1d57","#e0dbd2":"#dfdcd2","#d9dfe4":"#dcdee4"},"protanopia":{"#fbf8f2":"#faf8f2","#f5f2eb":"#f4f2eb","#eeeae2":"#eceae2","#24292f":"#27292f","#57606a":"#5d606b","#5c646d":"#61646d","#005ccc":"#375dd2","#002c85":"#13308a","#a75000":"#6e5200","#583500":"#453400","#75254e":"#293250","#5e5a55":"#5c5a55","#007570":"#646770","#00756b":"#65676b","#6d3a00":"#4e3a00","#782445":"#2a3146","#11161d":"#14161d","#844000":"#574100","#005a52":"#4e4f52","#442e00":"#3b2c00","#001f4d":"#112050","#610030":"#051032","#00489f":"#2b48a4","#d4d0c6":"#d3cfc5","#e4eaef":"#e8eaef","#161410":"#151410","#191612":"#171612","#1c1a14":"#1c1a14","#d1d7df":"#d4d7df","#99a3ae":"#9fa3af","#979fa9":"#9c9faa","#79afff":"#96b1ff","#bad6ff":"#c9d7ff","#ea8d4a":"#a99146","#f0c680":"#dbc47c","#ffa4cc":"#aab2ce","#b8b4ae":"#b6b4ae","#55c2bc":"#b3b5bc","#e08440":"#a0883c","#33a397":"#949597","#dca331":"#c39e2b","#498beb":"#6d8df0","#cd718f":"#797f90","#74acff":"#92aeff","#ffffff":"#ffffff","#96a0ab":"#9ca0ac","#ffaf7a":"#c6b377","#5fc9bc":"#bcbcbc","#ffcb70":"#e6c86b","#7fb3ff":"#9cb5ff","#f696b4":"#9ea4b5","#b5d3ff":"#c5d4ff","#2a3340":"#2f3341","#fdfaf3":"#fcfaf3","#f9f5ed":"#f7f5ed","#f4efe5":"#f2efe4","#13191f":"#17191f","#353f4a":"#3b3f4b","#3a424b":"#3f424b","#003c88":"#233d8c","#001e4b":"#101f4d","#6f3500":"#493600","#352300":"#2d2200","#570034":"#030f36","#3e3b35":"#3d3b35","#004c49":"#414349","#004c46":"#424346","#3e2a00":"#362800","#59002b":"#050e2d","#020409":"#030409","#492100":"#2e2200","#002f2b":"#29292b","#201300":"#191300","#000921":"#030a22","#300014":"#030715","#002558":"#15265b","#e0dbd2":"#dedbd2","#d9dfe4":"#dddfe4"},"tritanopia":{"#fbf8f2":"#fdf7f6","#f5f2eb":"#f7f1f0","#eeeae2":"#f0e9e8","#24292f":"#222a2b","#57606a":"#536263","#5c646d":"#586667","#005ccc":"#00747e","#002c85":"#003d47","#a75000":"#cc3d38","#583500":"#6a2a25","#75254e":"#822532","#5e5a55":"#605958","#007570":"#007d73","#00756b":"#007d71","#6d3a00":"#842d29","#782445":"#88222e","#11161d":"#0e1718","#844000":"#a1312d","#005a52":"#006057","#442e00":"#522520","#001f4d":"#00282d","#610030":"#71000f","#00489f":"#005a62","#d4d0c6":"#d7cecd","#e4eaef":"#e2ebeb","#161410":"#171313","#191612":"#1a1515","#1c1a14":"#1e1918","#d1d7df":"#ced9d9","#99a3ae":"#94a5a6","#979fa9":"#93a1a2","#79afff":"#5dbfc7","#bad6ff":"#acdee2","#ea8d4a":"#ff7c79","#f0c680":"#ffb8b1","#ffa4cc":"#ffa3b1","#b8b4ae":"#bab3b2","#55c2bc":"#3acac0","#e08440":"#ff7370","#33a397":"#19aa9f","#dca331":"#ff8e81","#498beb":"#279ea8","#cd718f":"#df6e7b","#74acff":"#57bdc5","#ffffff":"#ffffff","#96a0ab":"#91a2a3","#ffaf7a":"#ffa19f","#5fc9bc":"#46cfc5","#ffcb70":"#ffb9b0","#7fb3ff":"#64c2ca","#f696b4":"#ff93a0","#b5d3ff":"#a5dce0","#2a3340":"#253637","#fdfaf3":"#fff9f8","#f9f5ed":"#fbf4f3","#f4efe5":"#f7edec","#13191f":"#101a1b","#353f4a":"#304142","#3a424b":"#364445","#003c88":"#004c53","#001e4b":"#00272c","#6f3500":"#872925","#352300":"#401c18","#570034":"#640110","#3e3b35":"#403a39","#004c49":"#00524b","#004c46":"#00514a","#3e2a00":"#4b221d","#59002b":"#68000d","#020409":"#010506","#492100":"#591917","#002f2b":"#00322e","#201300":"#270f0d","#000921":"#000d10","#300014":"#390006","#002558":"#002f34","#e0dbd2":"#e3d9d8","#d9dfe4":"#d7e0e0"}},"apps":[["Editors",[{"name":"VS Code","how":"Install the extension folder or a packaged .vsix.","files":"https://github.com/IschaGast/opo-theme/tree/main/dist/vscode","readme":"https://github.com/IschaGast/opo-theme#vs-code"},{"name":"Zed","how":"Copy opo.json to ~/.config/zed/themes/.","files":"https://github.com/IschaGast/opo-theme/tree/main/dist/zed","readme":"https://github.com/IschaGast/opo-theme#zed"},{"name":"JetBrains","how":"Import an .icls file under Editor > Color Scheme.","files":"https://github.com/IschaGast/opo-theme/tree/main/dist/jetbrains","readme":"https://github.com/IschaGast/opo-theme#jetbrains-intellij-webstorm-etc"},{"name":"Neovim","how":"Add opo.nvim with your plugin manager, then :colorscheme opo.","files":"https://github.com/IschaGast/opo-theme/tree/main/dist/neovim/opo.nvim","readme":"https://github.com/IschaGast/opo-theme#neovim"}]],["Terminals",[{"name":"Ghostty","how":"Copy to ~/.config/ghostty/themes/ and set theme = opo-light.","files":"https://github.com/IschaGast/opo-theme/tree/main/dist/ghostty","readme":"https://github.com/IschaGast/opo-theme#ghostty"},{"name":"cmux","how":"Reads the Ghostty config, so it uses the Ghostty themes.","files":"https://github.com/IschaGast/opo-theme/tree/main/dist/ghostty","readme":"https://github.com/IschaGast/opo-theme#cmux"},{"name":"Alacritty","how":"Import a .toml file from alacritty.toml.","files":"https://github.com/IschaGast/opo-theme/tree/main/dist/alacritty","readme":"https://github.com/IschaGast/opo-theme#alacritty"},{"name":"iTerm2","how":"Double-click an .itermcolors file.","files":"https://github.com/IschaGast/opo-theme/tree/main/dist/iterm","readme":"https://github.com/IschaGast/opo-theme#iterm2"},{"name":"Windows Terminal","how":"Add the schemes to settings.json.","files":"https://github.com/IschaGast/opo-theme/tree/main/dist/windows-terminal","readme":"https://github.com/IschaGast/opo-theme#windows-terminal"},{"name":"Warp","how":"Copy a .yaml file to ~/.warp/themes/.","files":"https://github.com/IschaGast/opo-theme/tree/main/dist/warp","readme":"https://github.com/IschaGast/opo-theme#warp"}]],["Apps",[{"name":"Raycast","how":"Add with one click (needs Raycast Pro), then pick it under Appearance.","raycast":true,"files":"https://github.com/IschaGast/opo-theme/tree/main/dist/raycast","readme":"https://github.com/IschaGast/opo-theme#raycast"},{"name":"Firefox","how":"One add-on that follows the Firefox light/dark setting.","files":"https://github.com/IschaGast/opo-theme/tree/main/dist/firefox","readme":"https://github.com/IschaGast/opo-theme#firefox"},{"name":"Slack","how":"Paste the color string under Themes > Custom Theme.","files":"https://github.com/IschaGast/opo-theme/tree/main/dist/slack","readme":"https://github.com/IschaGast/opo-theme#slack"},{"name":"Bear","how":"Replaces one of Bear’s bundled themes, as Bear only lists its own.","files":"https://github.com/IschaGast/opo-theme/tree/main/dist/bear","readme":"https://github.com/IschaGast/opo-theme#bear"},{"name":"Typora","how":"Copy a .css file to Typora’s themes folder.","files":"https://github.com/IschaGast/opo-theme/tree/main/dist/typora","readme":"https://github.com/IschaGast/opo-theme#typora"}]],["Slides and web",[{"name":"iA Presenter","how":"A custom theme folder with light and dark presets.","files":"https://github.com/IschaGast/opo-theme/tree/main/dist/ia-presenter","readme":"https://github.com/IschaGast/opo-theme#ia-presenter"},{"name":"Slidev","how":"A local Slidev theme: theme: ./path/to/dist/slidev.","files":"https://github.com/IschaGast/opo-theme/tree/main/dist/slidev","readme":"https://github.com/IschaGast/opo-theme#slidev"},{"name":"CSS","how":"Custom properties with --opo- prefix, or opo.css for auto light/dark.","files":"https://github.com/IschaGast/opo-theme/tree/main/dist/css","readme":"https://github.com/IschaGast/opo-theme#css"},{"name":"npm package","how":"Import the CSS in a bundler, or read every color as hex from opo.json.","files":"https://github.com/IschaGast/opo-theme/tree/main/dist/json","readme":"https://github.com/IschaGast/opo-theme#use-in-another-project"}]]],"repo":"https://github.com/IschaGast/opo-theme"};
+const DATA = {"modes":{"light":{"name":"Opo Light","target":4.5,"label":"AA (4.5:1)","ui":{"bg":"#fbf8f2","bgPanel":"#f5f2eb","bgHover":"#eeeae2","text":"#24292f","textMid":"#57606a","textFaint":"#5c646d","accent":"#005ccc","pass":"#002c85","fail":"#a75000","warn":"#583500","neutral":"#57606a"},"syntax":{"keyword":"#002c85","type":"#75254e","comment":"#5e5a55","function":"#007570","string":"#a75000"},"hues":{"blue":"#005ccc","navy":"#002c85","orange":"#a75000","amber":"#583500","teal":"#007570","plum":"#75254e"},"oklch":{"hues":{"blue":[0.5,0.189,258],"navy":[0.33,0.16,258],"orange":[0.53,0.14,54],"amber":[0.36,0.1,80],"teal":[0.5,0.1,190],"plum":[0.4,0.12,352]},"ui":{"bg":[0.98,0.008,85],"bgPanel":[0.962,0.01,85],"bgHover":[0.938,0.012,85],"text":[0.279,0.013,253],"textMid":[0.485,0.02,251],"textFaint":[0.5,0.017,251],"accent":[0.5,0.189,258],"pass":[0.33,0.16,258],"fail":[0.53,0.14,54],"warn":[0.36,0.1,80],"neutral":[0.485,0.02,251]},"syntax":{"keyword":[0.33,0.16,258],"type":[0.4,0.12,352],"comment":[0.47,0.01,80],"function":[0.5,0.1,190],"string":[0.53,0.14,54]}},"ratio":{"hues":{"blue":5.82,"navy":11.66,"orange":5.23,"amber":10.3,"teal":5.24,"plum":9.3},"ui":{"bg":1,"bgPanel":1.05,"bgHover":1.13,"text":13.82,"textMid":6.03,"textFaint":5.66,"accent":5.82,"pass":11.66,"fail":5.23,"warn":10.3,"neutral":6.03},"syntax":{"keyword":11.66,"type":9.3,"comment":6.45,"function":5.24,"string":5.23}},"ansi":["#24292f","#a75000","#00756b","#6d3a00","#002c85","#782445","#005ccc","#eeeae2","#11161d","#844000","#005a52","#442e00","#001f4d","#610030","#00489f","#d4d0c6"],"selection":"#e4eaef","stats":{"contrast":[121,121],"cvd":[21,21],"ansi":[62,62]},"raycast":"raycast://theme?author=Ischa%20Gast&authorUsername=ischagast&version=1&name=Opo%20Light&appearance=light&colors=%23fbf8f2,%23f5f2eb,%2324292f,%23005ccc,%23005ccc,%23a75000,%23844000,%236d3a00,%2300756b,%23002c85,%23005ccc,%23782445"},"dark":{"name":"Opo Dark","target":4.5,"label":"AA (4.5:1)","ui":{"bg":"#161410","bgPanel":"#191612","bgHover":"#1c1a14","text":"#d1d7df","textMid":"#99a3ae","textFaint":"#979fa9","accent":"#79afff","pass":"#bad6ff","fail":"#ea8d4a","warn":"#f0c680","neutral":"#99a3ae"},"syntax":{"keyword":"#bad6ff","type":"#ffa4cc","comment":"#b8b4ae","function":"#55c2bc","string":"#ea8d4a"},"hues":{"blue":"#79afff","navy":"#bad6ff","orange":"#ea8d4a","amber":"#f0c680","teal":"#55c2bc","plum":"#ffa4cc"},"oklch":{"hues":{"blue":[0.75,0.129,258],"navy":[0.869,0.065,258],"orange":[0.729,0.14,54],"amber":[0.848,0.1,80],"teal":[0.75,0.1,190],"plum":[0.82,0.118,352]},"ui":{"bg":[0.192,0.008,85],"bgPanel":[0.203,0.01,85],"bgHover":[0.217,0.012,85],"text":[0.877,0.013,253],"textMid":[0.712,0.02,251],"textFaint":[0.7,0.017,251],"accent":[0.75,0.129,258],"pass":[0.869,0.065,258],"fail":[0.729,0.14,54],"warn":[0.848,0.1,80],"neutral":[0.712,0.02,251]},"syntax":{"keyword":[0.869,0.065,258],"type":[0.82,0.118,352],"comment":[0.771,0.01,80],"function":[0.75,0.1,190],"string":[0.729,0.14,54]}},"ratio":{"hues":{"blue":8.22,"navy":12.39,"orange":7.36,"amber":11.47,"teal":8.61,"plum":10.02},"ui":{"bg":1,"bgPanel":1.02,"bgHover":1.06,"text":12.7,"textMid":7.19,"textFaint":6.87,"accent":8.22,"pass":12.39,"fail":7.36,"warn":11.47,"neutral":7.19},"syntax":{"keyword":12.39,"type":10.02,"comment":8.91,"function":8.61,"string":7.36}},"ansi":["#1c1a14","#e08440","#33a397","#dca331","#498beb","#cd718f","#74acff","#ffffff","#96a0ab","#ffaf7a","#5fc9bc","#ffcb70","#7fb3ff","#f696b4","#b5d3ff","#ffffff"],"selection":"#2a3340","stats":{"contrast":[121,121],"cvd":[21,21],"ansi":[62,62]},"raycast":"raycast://theme?author=Ischa%20Gast&authorUsername=ischagast&version=1&name=Opo%20Dark&appearance=dark&colors=%23161410,%23191612,%23d1d7df,%2379afff,%2379afff,%23e08440,%23ffaf7a,%23dca331,%2333a397,%23498beb,%2374acff,%23cd718f"},"hc":{"name":"Opo High Contrast","target":7,"label":"AAA (7:1)","ui":{"bg":"#fdfaf3","bgPanel":"#f9f5ed","bgHover":"#f4efe5","text":"#13191f","textMid":"#353f4a","textFaint":"#3a424b","accent":"#003c88","pass":"#001e4b","fail":"#6f3500","warn":"#352300","neutral":"#353f4a"},"syntax":{"keyword":"#001e4b","type":"#570034","comment":"#3e3b35","function":"#004c49","string":"#6f3500"},"hues":{"blue":"#003c88","navy":"#001e4b","orange":"#6f3500","amber":"#352300","teal":"#004c49","plum":"#570034"},"oklch":{"hues":{"blue":[0.375,0.139,258],"navy":[0.247,0.092,258],"orange":[0.398,0.1,54],"amber":[0.27,0.056,80],"teal":[0.375,0.065,190],"plum":[0.3,0.124,352]},"ui":{"bg":[0.985,0.009,85],"bgPanel":[0.972,0.011,85],"bgHover":[0.954,0.014,85],"text":[0.209,0.015,253],"textMid":[0.364,0.023,251],"textFaint":[0.375,0.02,251],"accent":[0.375,0.139,258],"pass":[0.247,0.092,258],"fail":[0.398,0.1,54],"warn":[0.27,0.056,80],"neutral":[0.364,0.023,251]},"syntax":{"keyword":[0.247,0.092,258],"type":[0.3,0.124,352],"comment":[0.352,0.011,80],"function":[0.375,0.065,190],"string":[0.398,0.1,54]}},"ratio":{"hues":{"blue":10.06,"navy":15.65,"orange":9.22,"amber":14.47,"teal":9.46,"plum":13.85},"ui":{"bg":1,"bgPanel":1.04,"bgHover":1.1,"text":16.98,"textMid":10.27,"textFaint":9.78,"accent":10.06,"pass":15.65,"fail":9.22,"warn":14.47,"neutral":10.27},"syntax":{"keyword":15.65,"type":13.85,"comment":10.71,"function":9.46,"string":9.22}},"ansi":["#13191f","#6f3500","#004c46","#3e2a00","#001e4b","#59002b","#003c88","#f4efe5","#020409","#492100","#002f2b","#201300","#000921","#300014","#002558","#e0dbd2"],"selection":"#d9dfe4","stats":{"contrast":[121,121],"cvd":[21,21],"ansi":[62,62]},"raycast":"raycast://theme?author=Ischa%20Gast&authorUsername=ischagast&version=1&name=Opo%20High%20Contrast&appearance=light&colors=%23fdfaf3,%23f9f5ed,%2313191f,%23003c88,%23003c88,%236f3500,%23492100,%233e2a00,%23004c46,%23001e4b,%23003c88,%2359002b"}},"apps":[["Editors",[{"name":"VS Code","how":"Install the extension folder or a packaged .vsix.","files":"https://github.com/IschaGast/opo-theme/tree/main/dist/vscode","readme":"https://github.com/IschaGast/opo-theme#vs-code"},{"name":"Zed","how":"Copy opo.json to ~/.config/zed/themes/.","files":"https://github.com/IschaGast/opo-theme/tree/main/dist/zed","readme":"https://github.com/IschaGast/opo-theme#zed"},{"name":"JetBrains","how":"Import an .icls file under Editor > Color Scheme.","files":"https://github.com/IschaGast/opo-theme/tree/main/dist/jetbrains","readme":"https://github.com/IschaGast/opo-theme#jetbrains-intellij-webstorm-etc"},{"name":"Neovim","how":"Add opo.nvim with your plugin manager, then :colorscheme opo.","files":"https://github.com/IschaGast/opo-theme/tree/main/dist/neovim/opo.nvim","readme":"https://github.com/IschaGast/opo-theme#neovim"}]],["Terminals",[{"name":"Ghostty","how":"Copy to ~/.config/ghostty/themes/ and set theme = opo-light.","files":"https://github.com/IschaGast/opo-theme/tree/main/dist/ghostty","readme":"https://github.com/IschaGast/opo-theme#ghostty"},{"name":"cmux","how":"Reads the Ghostty config, so it uses the Ghostty themes.","files":"https://github.com/IschaGast/opo-theme/tree/main/dist/ghostty","readme":"https://github.com/IschaGast/opo-theme#cmux"},{"name":"Alacritty","how":"Import a .toml file from alacritty.toml.","files":"https://github.com/IschaGast/opo-theme/tree/main/dist/alacritty","readme":"https://github.com/IschaGast/opo-theme#alacritty"},{"name":"iTerm2","how":"Double-click an .itermcolors file.","files":"https://github.com/IschaGast/opo-theme/tree/main/dist/iterm","readme":"https://github.com/IschaGast/opo-theme#iterm2"},{"name":"Windows Terminal","how":"Add the schemes to settings.json.","files":"https://github.com/IschaGast/opo-theme/tree/main/dist/windows-terminal","readme":"https://github.com/IschaGast/opo-theme#windows-terminal"},{"name":"Warp","how":"Copy a .yaml file to ~/.warp/themes/.","files":"https://github.com/IschaGast/opo-theme/tree/main/dist/warp","readme":"https://github.com/IschaGast/opo-theme#warp"}]],["Apps",[{"name":"Raycast","how":"Add with one click (needs Raycast Pro), then pick it under Appearance.","raycast":true,"files":"https://github.com/IschaGast/opo-theme/tree/main/dist/raycast","readme":"https://github.com/IschaGast/opo-theme#raycast"},{"name":"Firefox","how":"One add-on that follows the Firefox light/dark setting.","files":"https://github.com/IschaGast/opo-theme/tree/main/dist/firefox","readme":"https://github.com/IschaGast/opo-theme#firefox"},{"name":"Slack","how":"Paste the color string under Themes > Custom Theme.","files":"https://github.com/IschaGast/opo-theme/tree/main/dist/slack","readme":"https://github.com/IschaGast/opo-theme#slack"},{"name":"Bear","how":"Replaces one of Bear’s bundled themes, as Bear only lists its own.","files":"https://github.com/IschaGast/opo-theme/tree/main/dist/bear","readme":"https://github.com/IschaGast/opo-theme#bear"},{"name":"Typora","how":"Copy a .css file to Typora’s themes folder.","files":"https://github.com/IschaGast/opo-theme/tree/main/dist/typora","readme":"https://github.com/IschaGast/opo-theme#typora"}]],["Slides and web",[{"name":"iA Presenter","how":"A custom theme folder with light and dark presets.","files":"https://github.com/IschaGast/opo-theme/tree/main/dist/ia-presenter","readme":"https://github.com/IschaGast/opo-theme#ia-presenter"},{"name":"Slidev","how":"A local Slidev theme: theme: ./path/to/dist/slidev.","files":"https://github.com/IschaGast/opo-theme/tree/main/dist/slidev","readme":"https://github.com/IschaGast/opo-theme#slidev"},{"name":"CSS","how":"Custom properties with --opo- prefix, or opo.css for auto light/dark.","files":"https://github.com/IschaGast/opo-theme/tree/main/dist/css","readme":"https://github.com/IschaGast/opo-theme#css"},{"name":"npm package","how":"Import the CSS in a bundler, or read every color as hex from opo.json.","files":"https://github.com/IschaGast/opo-theme/tree/main/dist/json","readme":"https://github.com/IschaGast/opo-theme#use-in-another-project"}]]],"repo":"https://github.com/IschaGast/opo-theme","vars":{"light":{"--opo-blue":"#005ccc","--opo-navy":"#002c85","--opo-orange":"#a75000","--opo-amber":"#583500","--opo-teal":"#007570","--opo-plum":"#75254e","--opo-bg":"#fbf8f2","--opo-bg-panel":"#f5f2eb","--opo-bg-hover":"#eeeae2","--opo-text":"#24292f","--opo-text-mid":"#57606a","--opo-text-faint":"#5c646d","--opo-accent":"#005ccc","--opo-pass":"#002c85","--opo-fail":"#a75000","--opo-warn":"#583500","--opo-neutral":"#57606a","--opo-syntax-keyword":"#002c85","--opo-syntax-type":"#75254e","--opo-syntax-comment":"#5e5a55","--opo-syntax-function":"#007570","--opo-syntax-string":"#a75000","--opo-error":"#a75000","--opo-error-bg":"color-mix(in srgb, #a75000 8%, transparent)","--opo-warning":"#583500","--opo-warning-bg":"color-mix(in srgb, #583500 8%, transparent)","--opo-success":"#002c85","--opo-success-bg":"color-mix(in srgb, #002c85 8%, transparent)","--opo-info":"#005ccc","--opo-info-bg":"color-mix(in srgb, #005ccc 9%, transparent)","--opo-neutral-bg":"color-mix(in srgb, #57606a 6%, transparent)","--opo-text-on-fill":"#fbf8f2","--opo-border":"#57606a","--opo-border-muted":"color-mix(in srgb, #57606a 35%, transparent)","--opo-focus":"#005ccc","--opo-link":"#005ccc","--opo-code-bg":"#f5f2eb","--opo-shadow":"color-mix(in srgb, #000 12%, transparent)","--opo-shadow-strong":"color-mix(in srgb, #000 18%, transparent)","--opo-backdrop":"color-mix(in srgb, #000 40%, transparent)","--opo-selection":"#005ccc","--opo-selection-text":"#fbf8f2","--opo-accent-selection":"color-mix(in srgb, #005ccc 9%, transparent)","--opo-accent-bg":"color-mix(in srgb, #005ccc 6%, transparent)","--opo-accent-border":"#005ccc","--opo-severity-critical":"#a75000","--opo-severity-critical-bg":"color-mix(in srgb, #a75000 8%, transparent)","--opo-severity-major":"#583500","--opo-severity-major-bg":"color-mix(in srgb, #583500 8%, transparent)","--opo-severity-minor":"#005ccc","--opo-severity-minor-bg":"color-mix(in srgb, #005ccc 9%, transparent)","--opo-pass-bg":"color-mix(in srgb, #002c85 8%, transparent)","--opo-fail-bg":"color-mix(in srgb, #a75000 8%, transparent)","--opo-warn-bg":"color-mix(in srgb, #583500 8%, transparent)","--opo-border-light":"color-mix(in srgb, #57606a 35%, transparent)"},"dark":{"--opo-blue":"#79afff","--opo-navy":"#bad6ff","--opo-orange":"#ea8d4a","--opo-amber":"#f0c680","--opo-teal":"#55c2bc","--opo-plum":"#ffa4cc","--opo-bg":"#161410","--opo-bg-panel":"#191612","--opo-bg-hover":"#1c1a14","--opo-text":"#d1d7df","--opo-text-mid":"#99a3ae","--opo-text-faint":"#979fa9","--opo-accent":"#79afff","--opo-pass":"#bad6ff","--opo-fail":"#ea8d4a","--opo-warn":"#f0c680","--opo-neutral":"#99a3ae","--opo-syntax-keyword":"#bad6ff","--opo-syntax-type":"#ffa4cc","--opo-syntax-comment":"#b8b4ae","--opo-syntax-function":"#55c2bc","--opo-syntax-string":"#ea8d4a","--opo-error":"#ea8d4a","--opo-error-bg":"color-mix(in srgb, #ea8d4a 16%, transparent)","--opo-warning":"#f0c680","--opo-warning-bg":"color-mix(in srgb, #f0c680 16%, transparent)","--opo-success":"#bad6ff","--opo-success-bg":"color-mix(in srgb, #bad6ff 16%, transparent)","--opo-info":"#79afff","--opo-info-bg":"color-mix(in srgb, #79afff 20%, transparent)","--opo-neutral-bg":"color-mix(in srgb, #99a3ae 20%, transparent)","--opo-text-on-fill":"#161410","--opo-border":"#99a3ae","--opo-border-muted":"color-mix(in srgb, #99a3ae 35%, transparent)","--opo-focus":"#79afff","--opo-link":"#79afff","--opo-code-bg":"#191612","--opo-shadow":"color-mix(in srgb, #000 40%, transparent)","--opo-shadow-strong":"color-mix(in srgb, #000 60%, transparent)","--opo-backdrop":"color-mix(in srgb, #000 60%, transparent)","--opo-selection":"#79afff","--opo-selection-text":"#161410","--opo-accent-selection":"color-mix(in srgb, #79afff 20%, transparent)","--opo-accent-bg":"color-mix(in srgb, #79afff 20%, transparent)","--opo-accent-border":"#79afff","--opo-severity-critical":"#ea8d4a","--opo-severity-critical-bg":"color-mix(in srgb, #ea8d4a 16%, transparent)","--opo-severity-major":"#f0c680","--opo-severity-major-bg":"color-mix(in srgb, #f0c680 16%, transparent)","--opo-severity-minor":"#79afff","--opo-severity-minor-bg":"color-mix(in srgb, #79afff 20%, transparent)","--opo-pass-bg":"color-mix(in srgb, #bad6ff 16%, transparent)","--opo-fail-bg":"color-mix(in srgb, #ea8d4a 16%, transparent)","--opo-warn-bg":"color-mix(in srgb, #f0c680 16%, transparent)","--opo-border-light":"color-mix(in srgb, #99a3ae 35%, transparent)"},"hc":{"--opo-blue":"#003c88","--opo-navy":"#001e4b","--opo-orange":"#6f3500","--opo-amber":"#352300","--opo-teal":"#004c49","--opo-plum":"#570034","--opo-bg":"#fdfaf3","--opo-bg-panel":"#f9f5ed","--opo-bg-hover":"#f4efe5","--opo-text":"#13191f","--opo-text-mid":"#353f4a","--opo-text-faint":"#3a424b","--opo-accent":"#003c88","--opo-pass":"#001e4b","--opo-fail":"#6f3500","--opo-warn":"#352300","--opo-neutral":"#353f4a","--opo-syntax-keyword":"#001e4b","--opo-syntax-type":"#570034","--opo-syntax-comment":"#3e3b35","--opo-syntax-function":"#004c49","--opo-syntax-string":"#6f3500","--opo-error":"#6f3500","--opo-error-bg":"color-mix(in srgb, #6f3500 12%, transparent)","--opo-warning":"#352300","--opo-warning-bg":"color-mix(in srgb, #352300 12%, transparent)","--opo-success":"#001e4b","--opo-success-bg":"color-mix(in srgb, #001e4b 12%, transparent)","--opo-info":"#003c88","--opo-info-bg":"color-mix(in srgb, #003c88 14%, transparent)","--opo-neutral-bg":"color-mix(in srgb, #353f4a 12%, transparent)","--opo-text-on-fill":"#fdfaf3","--opo-border":"#353f4a","--opo-border-muted":"color-mix(in srgb, #353f4a 35%, transparent)","--opo-focus":"#003c88","--opo-link":"#003c88","--opo-code-bg":"#f9f5ed","--opo-shadow":"color-mix(in srgb, #000 12%, transparent)","--opo-shadow-strong":"color-mix(in srgb, #000 18%, transparent)","--opo-backdrop":"color-mix(in srgb, #000 40%, transparent)","--opo-selection":"#003c88","--opo-selection-text":"#fdfaf3","--opo-accent-selection":"color-mix(in srgb, #003c88 14%, transparent)","--opo-accent-bg":"color-mix(in srgb, #003c88 12%, transparent)","--opo-accent-border":"#003c88","--opo-severity-critical":"#6f3500","--opo-severity-critical-bg":"color-mix(in srgb, #6f3500 12%, transparent)","--opo-severity-major":"#352300","--opo-severity-major-bg":"color-mix(in srgb, #352300 12%, transparent)","--opo-severity-minor":"#003c88","--opo-severity-minor-bg":"color-mix(in srgb, #003c88 14%, transparent)","--opo-pass-bg":"color-mix(in srgb, #001e4b 12%, transparent)","--opo-fail-bg":"color-mix(in srgb, #6f3500 12%, transparent)","--opo-warn-bg":"color-mix(in srgb, #352300 12%, transparent)","--opo-border-light":"color-mix(in srgb, #353f4a 35%, transparent)"}},"sims":{"deuteranopia":{"#fbf8f2":"#faf9f2","#f5f2eb":"#f5f3eb","#eeeae2":"#edebe2","#24292f":"#26282f","#57606a":"#5a5e6a","#5c646d":"#5f626d","#005ccc":"#2148ca","#002c85":"#082483","#a75000":"#826501","#583500":"#4e3c01","#75254e":"#393d4c","#5e5a55":"#5d5b55","#007570":"#4b5472","#00756b":"#4c546d","#6d3a00":"#5a4601","#782445":"#3b3d43","#11161d":"#13151d","#844000":"#685001","#005a52":"#3b4053","#442e00":"#413201","#001f4d":"#09184c","#610030":"#191d2d","#00489f":"#1a389d","#d4d0c6":"#d4d1c6","#e4eaef":"#e7e9ef","#161410":"#161410","#191612":"#181712","#1c1a14":"#1c1a14","#d1d7df":"#d3d6df","#99a3ae":"#9da1ae","#979fa9":"#9a9da9","#79afff":"#89a4fd","#bad6ff":"#c2d0fe","#ea8d4a":"#bea44b","#f0c680":"#e5ce82","#ffa4cc":"#bcbfca","#b8b4ae":"#b7b5ae","#55c2bc":"#9ba3bd","#e08440":"#b59b41","#33a397":"#7d8399","#dca331":"#d2ae34","#498beb":"#5d7de9","#cd718f":"#8c8c8d","#74acff":"#85a0fd","#ffffff":"#ffffff","#96a0ab":"#9a9eab","#ffaf7a":"#d8c37b","#5fc9bc":"#a5abbe","#ffcb70":"#f3d572","#7fb3ff":"#8fa8fd","#f696b4":"#b2b2b2","#b5d3ff":"#becdfe","#2a3340":"#2d3140","#fdfaf3":"#fdfbf3","#f9f5ed":"#f8f6ed","#f4efe5":"#f3f0e5","#13191f":"#15181f","#353f4a":"#393d4a","#3a424b":"#3d404b","#003c88":"#152f86","#001e4b":"#09184a","#6f3500":"#564301","#352300":"#322601","#570034":"#141b31","#3e3b35":"#3d3c35","#004c49":"#31374a","#004c46":"#313647","#3e2a00":"#3b2e01","#59002b":"#171b29","#020409":"#020409","#492100":"#372b01","#002f2b":"#1f222c","#201300":"#1c1600","#000921":"#000820","#300014":"#0d0e13","#002558":"#0c1d57","#e0dbd2":"#dfdcd2","#d9dfe4":"#dcdee4"},"protanopia":{"#fbf8f2":"#faf8f2","#f5f2eb":"#f4f2eb","#eeeae2":"#eceae2","#24292f":"#27292f","#57606a":"#5d606b","#5c646d":"#61646d","#005ccc":"#375dd2","#002c85":"#13308a","#a75000":"#6e5200","#583500":"#453400","#75254e":"#293250","#5e5a55":"#5c5a55","#007570":"#646770","#00756b":"#65676b","#6d3a00":"#4e3a00","#782445":"#2a3146","#11161d":"#14161d","#844000":"#574100","#005a52":"#4e4f52","#442e00":"#3b2c00","#001f4d":"#112050","#610030":"#051032","#00489f":"#2b48a4","#d4d0c6":"#d3cfc5","#e4eaef":"#e8eaef","#161410":"#151410","#191612":"#171612","#1c1a14":"#1c1a14","#d1d7df":"#d4d7df","#99a3ae":"#9fa3af","#979fa9":"#9c9faa","#79afff":"#96b1ff","#bad6ff":"#c9d7ff","#ea8d4a":"#a99146","#f0c680":"#dbc47c","#ffa4cc":"#aab2ce","#b8b4ae":"#b6b4ae","#55c2bc":"#b3b5bc","#e08440":"#a0883c","#33a397":"#949597","#dca331":"#c39e2b","#498beb":"#6d8df0","#cd718f":"#797f90","#74acff":"#92aeff","#ffffff":"#ffffff","#96a0ab":"#9ca0ac","#ffaf7a":"#c6b377","#5fc9bc":"#bcbcbc","#ffcb70":"#e6c86b","#7fb3ff":"#9cb5ff","#f696b4":"#9ea4b5","#b5d3ff":"#c5d4ff","#2a3340":"#2f3341","#fdfaf3":"#fcfaf3","#f9f5ed":"#f7f5ed","#f4efe5":"#f2efe4","#13191f":"#17191f","#353f4a":"#3b3f4b","#3a424b":"#3f424b","#003c88":"#233d8c","#001e4b":"#101f4d","#6f3500":"#493600","#352300":"#2d2200","#570034":"#030f36","#3e3b35":"#3d3b35","#004c49":"#414349","#004c46":"#424346","#3e2a00":"#362800","#59002b":"#050e2d","#020409":"#030409","#492100":"#2e2200","#002f2b":"#29292b","#201300":"#191300","#000921":"#030a22","#300014":"#030715","#002558":"#15265b","#e0dbd2":"#dedbd2","#d9dfe4":"#dddfe4"},"tritanopia":{"#fbf8f2":"#fdf7f6","#f5f2eb":"#f7f1f0","#eeeae2":"#f0e9e8","#24292f":"#222a2b","#57606a":"#536263","#5c646d":"#586667","#005ccc":"#00747e","#002c85":"#003d47","#a75000":"#cc3d38","#583500":"#6a2a25","#75254e":"#822532","#5e5a55":"#605958","#007570":"#007d73","#00756b":"#007d71","#6d3a00":"#842d29","#782445":"#88222e","#11161d":"#0e1718","#844000":"#a1312d","#005a52":"#006057","#442e00":"#522520","#001f4d":"#00282d","#610030":"#71000f","#00489f":"#005a62","#d4d0c6":"#d7cecd","#e4eaef":"#e2ebeb","#161410":"#171313","#191612":"#1a1515","#1c1a14":"#1e1918","#d1d7df":"#ced9d9","#99a3ae":"#94a5a6","#979fa9":"#93a1a2","#79afff":"#5dbfc7","#bad6ff":"#acdee2","#ea8d4a":"#ff7c79","#f0c680":"#ffb8b1","#ffa4cc":"#ffa3b1","#b8b4ae":"#bab3b2","#55c2bc":"#3acac0","#e08440":"#ff7370","#33a397":"#19aa9f","#dca331":"#ff8e81","#498beb":"#279ea8","#cd718f":"#df6e7b","#74acff":"#57bdc5","#ffffff":"#ffffff","#96a0ab":"#91a2a3","#ffaf7a":"#ffa19f","#5fc9bc":"#46cfc5","#ffcb70":"#ffb9b0","#7fb3ff":"#64c2ca","#f696b4":"#ff93a0","#b5d3ff":"#a5dce0","#2a3340":"#253637","#fdfaf3":"#fff9f8","#f9f5ed":"#fbf4f3","#f4efe5":"#f7edec","#13191f":"#101a1b","#353f4a":"#304142","#3a424b":"#364445","#003c88":"#004c53","#001e4b":"#00272c","#6f3500":"#872925","#352300":"#401c18","#570034":"#640110","#3e3b35":"#403a39","#004c49":"#00524b","#004c46":"#00514a","#3e2a00":"#4b221d","#59002b":"#68000d","#020409":"#010506","#492100":"#591917","#002f2b":"#00322e","#201300":"#270f0d","#000921":"#000d10","#300014":"#390006","#002558":"#002f34","#e0dbd2":"#e3d9d8","#d9dfe4":"#d7e0e0"}}};
 
 const MODES = { light: 'Light', dark: 'Dark', hc: 'High Contrast' };
 const STYLE = { keyword: 'bold', comment: 'italic' };
@@ -288,13 +438,11 @@ function el(tag, attrs = {}, ...children) {
   return node;
 }
 
-function applyChrome(v) {
-  const vars = {
-    bg: v.ui.bg, panel: v.ui.bgPanel, hover: v.ui.bgHover, text: v.ui.text, mid: v.ui.textMid,
-    faint: v.ui.textFaint, accent: v.ui.accent, pass: v.ui.pass, fail: v.ui.fail, warn: v.ui.warn,
-  };
-  for (const [key, hex] of Object.entries(vars)) {
-    document.documentElement.style.setProperty('--' + key, see(hex));
+// Switch every Opo custom property to the selected variant, as seen with
+// the selected vision
+function applyChrome() {
+  for (const [name, value] of Object.entries(DATA.vars[state.mode])) {
+    document.documentElement.style.setProperty(name, value.replace(/#[0-9a-f]{6}/g, (hex) => see(hex)));
   }
   document.documentElement.dataset.mode = state.mode === 'dark' ? 'dark' : 'light';
 }
@@ -495,7 +643,7 @@ function renderApps() {
 
 function render() {
   const v = DATA.modes[state.mode];
-  applyChrome(v);
+  applyChrome();
   renderControls();
   renderEditor(v);
   renderTerminal(v);

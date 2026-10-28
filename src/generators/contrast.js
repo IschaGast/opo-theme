@@ -8,14 +8,16 @@
  * pairs and the ANSI colors. Each color is also simulated under
  * deuteranopia, protanopia and tritanopia, so the page can preview them.
  *
- * The page itself lives in src/contrast/template.html; this file only
- * computes the data and injects it as JSON.
+ * The page itself lives in src/contrast/template.html; this file computes
+ * the data and injects it as JSON, together with opo.css: the page uses
+ * only Opo's custom properties for its own colors.
  */
 
 import { readFileSync } from 'node:fs';
 import { formatHex, parse } from 'culori';
 import { tintAlpha } from '../palette.js';
 import { ansiPairs, contrastPairs, cvdPairs, CVD_SIMULATIONS } from '../validate.js';
+import { cssVariables, generateCssCombined } from './css.js';
 
 const TEMPLATE = new URL('../contrast/template.html', import.meta.url);
 const NAMES = { light: 'Light', dark: 'Dark', hc: 'High Contrast' };
@@ -57,11 +59,12 @@ function variantData(variant, ansi, mode) {
   };
 }
 
-// Simulated hex for every color in the data, per CVD type
+// Simulated hex for every color in the data (also inside color-mix() values),
+// per CVD type
 export function simulations(data) {
   const all = new Set();
   JSON.stringify(data, (key, value) => {
-    if (typeof value === 'string' && /^#[0-9a-f]{6}$/.test(value)) all.add(value);
+    if (typeof value === 'string') for (const [hex] of value.matchAll(/#[0-9a-f]{6}/g)) all.add(hex);
     return value;
   });
   const sims = {};
@@ -77,8 +80,23 @@ export function generateContrastPage(variants, ansiSets) {
   for (const mode of Object.keys(variants)) {
     modes[mode] = variantData(variants[mode], ansiSets[mode], mode);
   }
-  const data = { modes, sims: simulations(modes) };
+  const data = opoPageData(variants, { modes });
+  return fillTemplate(TEMPLATE, variants, data);
+}
+
+// Data shared by the pages that switch variants at runtime: the Opo custom
+// properties per variant and the CVD simulation of every color in them
+export function opoPageData(variants, data) {
+  const vars = Object.fromEntries(Object.entries(variants).map(([mode, v]) => [mode, cssVariables(v, mode)]));
+  return { ...data, vars, sims: simulations({ ...data, vars }) };
+}
+
+// Inline opo.css (so the page has Opo colors before any script runs) and
+// the page data
+export function fillTemplate(template, variants, data) {
   // Escape '<' so the JSON cannot close the script tag
   const json = JSON.stringify(data).replace(/</g, '\\u003c');
-  return readFileSync(TEMPLATE, 'utf-8').replace('__OPO_DATA__', json);
+  return readFileSync(template, 'utf-8')
+    .replace('__OPO_CSS__', generateCssCombined(variants.light, variants.dark))
+    .replace('__OPO_DATA__', json);
 }

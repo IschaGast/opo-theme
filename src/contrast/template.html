@@ -6,11 +6,12 @@
 <title>Opo Contrast Grid</title>
 <meta name="description" content="Every color pair in the Opo theme, with the WCAG contrast ratio and color vision deficiency checks enforced at build time.">
 <style>
-  /* Page colors are set from the selected variant (see applyChrome) */
+__OPO_CSS__
+</style>
+<style>
+  /* All colors are Opo's custom properties (opo.css above); applyChrome
+     switches them to the selected variant */
   :root {
-    --bg: #fbf8f2; --panel: #f5f2eb; --hover: #eeeae2;
-    --text: #24292f; --mid: #57606a; --faint: #5c646d;
-    --accent: #005ccc; --pass: #003172; --fail: #a55200; --warn: #583500;
     --sans: 'Atkinson Hyperlegible Next', 'Atkinson Hyperlegible', system-ui, -apple-system, 'Segoe UI', sans-serif;
     --mono: 'Atkinson Hyperlegible Mono', ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
     color-scheme: light;
@@ -20,8 +21,8 @@
   * { box-sizing: border-box; }
   body {
     margin: 0;
-    background: var(--bg);
-    color: var(--text);
+    background: var(--opo-bg);
+    color: var(--opo-text);
     font: 16px/1.5 var(--sans);
     -webkit-font-smoothing: antialiased;
   }
@@ -30,55 +31,55 @@
   h1 { font-size: 2rem; letter-spacing: -0.01em; }
   h2 { font-size: 1.35rem; margin-bottom: 4px; }
   p { margin: 0; }
-  a { color: var(--accent); }
+  a { color: var(--opo-link); }
   .back { display: inline-block; margin-bottom: 12px; font-weight: 700; text-decoration: none; }
-  .lede { color: var(--mid); max-width: 68ch; margin-top: 8px; }
-  .muted { color: var(--mid); }
+  .lede { color: var(--opo-text-mid); max-width: 68ch; margin-top: 8px; }
+  .muted { color: var(--opo-text-mid); }
   .mono { font-family: var(--mono); }
   section { margin-top: 48px; }
-  section > p { color: var(--mid); max-width: 72ch; margin-bottom: 16px; }
+  section > p { color: var(--opo-text-mid); max-width: 72ch; margin-bottom: 16px; }
 
   /* Controls */
   .controls { display: flex; flex-wrap: wrap; gap: 16px 24px; align-items: end; margin-top: 24px; }
   .field { display: flex; flex-direction: column; gap: 6px; }
-  .field > span { font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--mid); }
-  .segmented { display: inline-flex; border: 1px solid var(--faint); border-radius: 8px; overflow: hidden; }
+  .field > span { font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--opo-text-mid); }
+  .segmented { display: inline-flex; border: 1px solid var(--opo-text-faint); border-radius: 8px; overflow: hidden; }
   .segmented button {
     font: inherit; font-size: 0.95rem; padding: 8px 14px; border: 0; cursor: pointer;
-    background: var(--bg); color: var(--text);
+    background: var(--opo-bg); color: var(--opo-text);
   }
-  .segmented button + button { border-left: 1px solid var(--faint); }
-  .segmented button[aria-pressed="true"] { background: var(--accent); color: var(--bg); font-weight: 700; }
+  .segmented button + button { border-left: 1px solid var(--opo-text-faint); }
+  .segmented button[aria-pressed="true"] { background: var(--opo-accent); color: var(--opo-text-on-fill); font-weight: 700; }
   button:focus-visible, select:focus-visible, td:focus-visible {
-    outline: 3px solid var(--accent); outline-offset: 2px;
+    outline: 3px solid var(--opo-focus); outline-offset: 2px;
   }
   select {
     font: inherit; font-size: 0.95rem; padding: 8px 12px; border-radius: 8px;
-    border: 1px solid var(--faint); background: var(--bg); color: var(--text);
+    border: 1px solid var(--opo-text-faint); background: var(--opo-bg); color: var(--opo-text);
   }
 
   /* Summary */
   .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 12px; margin-top: 24px; }
-  .stat { background: var(--panel); border-radius: 10px; padding: 14px 16px; }
+  .stat { background: var(--opo-bg-panel); border-radius: 10px; padding: 14px 16px; }
   .stat b { display: block; font-size: 1.6rem; font-variant-numeric: tabular-nums; }
-  .stat span { color: var(--mid); font-size: 0.9rem; }
-  .stat.ok b::before { content: '\2713\00a0'; color: var(--pass); }
-  .stat.bad b::before { content: '\2717\00a0'; color: var(--fail); }
-  .tightest { margin-top: 12px; color: var(--mid); font-size: 0.95rem; }
+  .stat span { color: var(--opo-text-mid); font-size: 0.9rem; }
+  .stat.ok b::before { content: '\2713\00a0'; color: var(--opo-success); }
+  .stat.bad b::before { content: '\2717\00a0'; color: var(--opo-error); }
+  .tightest { margin-top: 12px; color: var(--opo-text-mid); font-size: 0.95rem; }
 
   /* Grid */
-  .scroll { overflow-x: auto; border-radius: 10px; border: 1px solid var(--hover); }
+  .scroll { overflow-x: auto; border-radius: 10px; border: 1px solid var(--opo-bg-hover); }
   table { border-collapse: collapse; width: 100%; font-variant-numeric: tabular-nums; }
   th { font-weight: 700; text-align: left; font-size: 0.85rem; }
-  thead th { padding: 10px 8px; vertical-align: bottom; background: var(--panel); position: sticky; top: 0; }
-  thead th .swatch { display: block; height: 14px; border-radius: 4px; margin-bottom: 6px; border: 1px solid var(--hover); }
-  thead th small { display: block; font-weight: 400; color: var(--mid); font-size: 0.75rem; }
+  thead th { padding: 10px 8px; vertical-align: bottom; background: var(--opo-bg-panel); position: sticky; top: 0; }
+  thead th .swatch { display: block; height: 14px; border-radius: 4px; margin-bottom: 6px; border: 1px solid var(--opo-bg-hover); }
+  thead th small { display: block; font-weight: 400; color: var(--opo-text-mid); font-size: 0.75rem; }
   tbody th {
-    padding: 8px 12px; background: var(--panel); white-space: nowrap;
+    padding: 8px 12px; background: var(--opo-bg-panel); white-space: nowrap;
     position: sticky; left: 0; z-index: 1;
   }
-  tbody th small { display: block; font-weight: 400; color: var(--mid); font-family: var(--mono); font-size: 0.75rem; }
-  tr.group th { background: var(--bg); color: var(--mid); text-transform: uppercase; letter-spacing: 0.06em; font-size: 0.75rem; padding-top: 16px; }
+  tbody th small { display: block; font-weight: 400; color: var(--opo-text-mid); font-family: var(--mono); font-size: 0.75rem; }
+  tr.group th { background: var(--opo-bg); color: var(--opo-text-mid); text-transform: uppercase; letter-spacing: 0.06em; font-size: 0.75rem; padding-top: 16px; }
   td.cell {
     min-width: 86px; padding: 8px 10px; vertical-align: top; cursor: default;
     border: 1px solid transparent;
@@ -86,23 +87,23 @@
   td.cell .sample { display: block; font-size: 1.25rem; line-height: 1.2; }
   td.cell .ratio { display: block; font-size: 0.85rem; margin-top: 2px; }
   td.cell .grade { font-size: 0.7rem; font-weight: 700; letter-spacing: 0.04em; }
-  td.cell.fail { outline: 2px dashed var(--fail); outline-offset: -3px; }
-  td.cell.tight { box-shadow: inset 0 0 0 2px var(--accent); }
+  td.cell.fail { outline: 2px dashed var(--opo-error); outline-offset: -3px; }
+  td.cell.tight { box-shadow: inset 0 0 0 2px var(--opo-accent); }
   td.cell.dim { opacity: 0.15; }
-  td.empty { background: var(--bg); }
+  td.empty { background: var(--opo-bg); }
 
   /* Legend */
-  .legend { display: flex; flex-wrap: wrap; gap: 8px 20px; margin-top: 12px; font-size: 0.9rem; color: var(--mid); }
+  .legend { display: flex; flex-wrap: wrap; gap: 8px 20px; margin-top: 12px; font-size: 0.9rem; color: var(--opo-text-mid); }
   .legend i { display: inline-block; width: 14px; height: 14px; vertical-align: -2px; margin-right: 6px; border-radius: 3px; }
-  .legend .l-tight { box-shadow: inset 0 0 0 2px var(--accent); }
-  .legend .l-fail { outline: 2px dashed var(--fail); outline-offset: -2px; }
+  .legend .l-tight { box-shadow: inset 0 0 0 2px var(--opo-accent); }
+  .legend .l-fail { outline: 2px dashed var(--opo-error); outline-offset: -2px; }
   label.check { display: inline-flex; gap: 8px; align-items: center; cursor: pointer; }
-  label.check input { accent-color: var(--accent); width: 16px; height: 16px; }
+  label.check input { accent-color: var(--opo-accent); width: 16px; height: 16px; }
 
   /* Code preview */
   .code {
     font: 15px/1.7 var(--mono); border-radius: 10px; overflow: hidden;
-    border: 1px solid var(--hover); overflow-x: auto;
+    border: 1px solid var(--opo-bg-hover); overflow-x: auto;
   }
   .code .line { display: flex; white-space: pre; }
   .code .gutter { width: 3.5em; flex: none; text-align: right; padding-right: 1em; }
@@ -114,26 +115,26 @@
 
   /* CVD pairs */
   .pairs { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 12px; }
-  .pair { background: var(--panel); border-radius: 10px; padding: 14px 16px; }
+  .pair { background: var(--opo-bg-panel); border-radius: 10px; padding: 14px 16px; }
   .pair header { display: flex; justify-content: space-between; gap: 8px; align-items: baseline; }
   .pair header b { font-size: 0.95rem; }
   .pair header span { font-size: 0.85rem; white-space: nowrap; }
   .pair .visions { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; margin-top: 10px; }
-  .pair .vision { text-align: center; font-size: 0.7rem; color: var(--mid); }
+  .pair .vision { text-align: center; font-size: 0.7rem; color: var(--opo-text-mid); }
   .pair .chips { display: flex; height: 28px; border-radius: 6px; overflow: hidden; margin-bottom: 4px; }
   .pair .chips div { flex: 1; }
-  .pair .vision.worst { color: var(--text); font-weight: 700; }
-  .pair .bar { height: 6px; border-radius: 3px; background: var(--hover); margin-top: 10px; position: relative; overflow: hidden; }
-  .pair .bar div { position: absolute; inset: 0 auto 0 0; background: var(--pass); border-radius: 3px; }
-  .pair .bar.fail div { background: var(--fail); }
+  .pair .vision.worst { color: var(--opo-text); font-weight: 700; }
+  .pair .bar { height: 6px; border-radius: 3px; background: var(--opo-bg-hover); margin-top: 10px; position: relative; overflow: hidden; }
+  .pair .bar div { position: absolute; inset: 0 auto 0 0; background: var(--opo-success); border-radius: 3px; }
+  .pair .bar.fail div { background: var(--opo-error); }
 
   /* ANSI */
   .ansi { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 8px; }
-  .ansi .slot { border-radius: 8px; overflow: hidden; border: 1px solid var(--hover); font-size: 0.85rem; }
+  .ansi .slot { border-radius: 8px; overflow: hidden; border: 1px solid var(--opo-bg-hover); font-size: 0.85rem; }
   .ansi .slot > div { padding: 8px 10px; }
   .ansi .slot b { display: block; font-family: var(--mono); font-size: 0.95rem; }
 
-  footer { margin-top: 64px; color: var(--mid); font-size: 0.9rem; max-width: 72ch; }
+  footer { margin-top: 64px; color: var(--opo-text-mid); font-size: 0.9rem; max-width: 72ch; }
   footer p + p { margin-top: 8px; }
 
   @media (max-width: 640px) {
@@ -265,13 +266,11 @@ function grade(ratio) {
   return 'Fail';
 }
 
-function applyChrome(v) {
-  const vars = {
-    bg: v.ui.bg, panel: v.ui.bgPanel, hover: v.ui.bgHover, text: v.ui.text, mid: v.ui.textMid,
-    faint: v.ui.textFaint, accent: v.ui.accent, pass: v.ui.pass, fail: v.ui.fail, warn: v.ui.warn,
-  };
-  for (const [key, hex] of Object.entries(vars)) {
-    document.documentElement.style.setProperty('--' + key, see(hex));
+// Switch every Opo custom property to the selected variant, as seen with
+// the selected vision
+function applyChrome() {
+  for (const [name, value] of Object.entries(DATA.vars[state.mode])) {
+    document.documentElement.style.setProperty(name, value.replace(/#[0-9a-f]{6}/g, (hex) => see(hex)));
   }
   document.documentElement.dataset.mode = state.mode === 'dark' ? 'dark' : 'light';
 }
@@ -449,7 +448,7 @@ function renderAnsi(v) {
 
 function render() {
   const v = DATA.modes[state.mode];
-  applyChrome(v);
+  applyChrome();
   renderControls();
   renderStats(v);
   renderGrid(v);

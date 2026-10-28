@@ -84,6 +84,15 @@ function rootBlock(variant, mode, indent) {
   return lines;
 }
 
+/**
+ * All custom properties for one variant as { '--opo-bg': '#fbf8f2', ... },
+ * for pages that switch variants at runtime (site, contrast grid).
+ */
+export function cssVariables(variant, mode) {
+  return Object.fromEntries(variantVars(variant, mode).flatMap(([, vars]) =>
+    vars.map(line => line.slice(0, -1).split(': '))));
+}
+
 function header(label) {
   return [
     `/* Opo ${label} — Colorblind-safe accessible theme */`,

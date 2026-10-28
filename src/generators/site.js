@@ -8,15 +8,15 @@
  * colors come from the derived variants, so the page cannot drift from the
  * themes. The contrast grid is published next to it at contrast/.
  *
- * The page itself lives in src/site/template.html; this file only computes
- * the data and injects it as JSON.
+ * The page itself lives in src/site/template.html; this file computes the
+ * data and injects it as JSON, together with opo.css: the page uses only
+ * Opo's custom properties for its own colors.
  */
 
-import { readFileSync } from 'node:fs';
 import { formatHex, wcagContrast } from 'culori';
 import { hues } from '../palette.js';
 import { ansiPairs, contrastPairs, cvdPairs } from '../validate.js';
-import { simulations } from './contrast.js';
+import { fillTemplate, opoPageData } from './contrast.js';
 import { generateRaycastLink, generateRaycastTheme } from './raycast.js';
 
 const TEMPLATE = new URL('../site/template.html', import.meta.url);
@@ -113,8 +113,5 @@ export function generateSite(variants, ansiSets) {
     files: `${REPO}/tree/main/${files}`,
     ...(readme && { readme: `${REPO}#${anchor(readme)}` }),
   }))]);
-  const data = { modes, sims: simulations(modes), apps, repo: REPO };
-  // Escape '<' so the JSON cannot close the script tag
-  const json = JSON.stringify(data).replace(/</g, '\\u003c');
-  return readFileSync(TEMPLATE, 'utf-8').replace('__OPO_DATA__', json);
+  return fillTemplate(TEMPLATE, variants, opoPageData(variants, { modes, apps, repo: REPO }));
 }

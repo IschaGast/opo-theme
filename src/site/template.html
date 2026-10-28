@@ -6,11 +6,12 @@
 <title>Opo Color Theme</title>
 <meta name="description" content="Opo is a colorblind-safe, OKLCH-based accessible color theme for editors, terminals and the web, with every color pair checked at build time.">
 <style>
-  /* Page colors are set from the selected variant (see applyChrome) */
+__OPO_CSS__
+</style>
+<style>
+  /* All colors are Opo's custom properties (opo.css above); applyChrome
+     switches them to the selected variant */
   :root {
-    --bg: #fbf8f2; --panel: #f5f2eb; --hover: #eeeae2;
-    --text: #24292f; --mid: #57606a; --faint: #5c646d;
-    --accent: #005ccc; --pass: #003172; --fail: #a55200; --warn: #583500;
     --sans: 'Atkinson Hyperlegible Next', 'Atkinson Hyperlegible', system-ui, -apple-system, 'Segoe UI', sans-serif;
     --mono: 'Atkinson Hyperlegible Mono', ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
     color-scheme: light;
@@ -21,65 +22,65 @@
   html { scroll-behavior: smooth; }
   body {
     margin: 0;
-    background: var(--bg);
-    color: var(--text);
+    background: var(--opo-bg);
+    color: var(--opo-text);
     font: 17px/1.55 var(--sans);
     -webkit-font-smoothing: antialiased;
   }
-  ::selection { background: var(--accent); color: var(--bg); }
+  ::selection { background: var(--opo-selection); color: var(--opo-selection-text); }
   .wrap { max-width: 1160px; margin-left: auto; margin-right: auto; padding: 0 16px; }
   h1, h2, h3 { line-height: 1.15; margin: 0; }
   h2 { font-size: 1.9rem; letter-spacing: -0.01em; }
   h3 { font-size: 1.1rem; }
   p { margin: 0; }
-  a { color: var(--accent); text-underline-offset: 0.15em; }
+  a { color: var(--opo-link); text-underline-offset: 0.15em; }
   a:focus-visible, button:focus-visible, select:focus-visible {
-    outline: 3px solid var(--accent); outline-offset: 2px; border-radius: 4px;
+    outline: 3px solid var(--opo-focus); outline-offset: 2px; border-radius: 4px;
   }
   .mono { font-family: var(--mono); }
-  .muted { color: var(--mid); }
+  .muted { color: var(--opo-text-mid); }
   section { margin-top: 88px; }
-  .intro { color: var(--mid); max-width: 64ch; margin: 10px 0 28px; }
+  .intro { color: var(--opo-text-mid); max-width: 64ch; margin: 10px 0 28px; }
 
   /* Navigation */
-  nav { border-bottom: 1px solid var(--hover); }
+  nav { border-bottom: 1px solid var(--opo-bg-hover); }
   nav .wrap { display: flex; align-items: center; gap: 24px; height: 60px; }
-  nav .brand { font-weight: 700; font-size: 1.15rem; color: var(--text); text-decoration: none; margin-right: auto; }
-  nav a:not(.brand) { color: var(--mid); text-decoration: none; font-size: 0.95rem; }
-  nav a:not(.brand):hover { color: var(--text); }
+  nav .brand { font-weight: 700; font-size: 1.15rem; color: var(--opo-text); text-decoration: none; margin-right: auto; }
+  nav a:not(.brand) { color: var(--opo-text-mid); text-decoration: none; font-size: 0.95rem; }
+  nav a:not(.brand):hover { color: var(--opo-text); }
 
   /* Hero */
   .hero { margin-top: 64px; }
   .hero h1 { font-size: clamp(4rem, 12vw, 8rem); letter-spacing: -0.04em; line-height: 0.95; }
   .hero .tagline { font-size: clamp(1.25rem, 2.5vw, 1.6rem); max-width: 30ch; margin-top: 16px; }
-  .hero .meaning { color: var(--mid); margin-top: 12px; max-width: 60ch; }
+  .hero .meaning { color: var(--opo-text-mid); margin-top: 12px; max-width: 60ch; }
   .actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 28px; }
   .button {
     display: inline-flex; align-items: center; gap: 8px; padding: 10px 18px; border-radius: 8px;
-    font-weight: 700; text-decoration: none; border: 1px solid var(--accent);
+    font-weight: 700; text-decoration: none; border: 1px solid var(--opo-accent);
   }
-  .button.primary { background: var(--accent); color: var(--bg); }
-  .button.secondary { color: var(--accent); }
+  .button.primary { background: var(--opo-accent); color: var(--opo-text-on-fill); }
+  .button.secondary { color: var(--opo-accent); }
   .button.small { padding: 6px 12px; font-size: 0.9rem; }
 
   .controls { display: flex; flex-wrap: wrap; gap: 16px 24px; align-items: end; margin-top: 40px; }
   .field { display: flex; flex-direction: column; gap: 6px; }
-  .field > span { font-size: 0.78rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--mid); }
-  .segmented { display: inline-flex; border: 1px solid var(--faint); border-radius: 8px; overflow: hidden; }
+  .field > span { font-size: 0.78rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--opo-text-mid); }
+  .segmented { display: inline-flex; border: 1px solid var(--opo-text-faint); border-radius: 8px; overflow: hidden; }
   .segmented button {
     font: inherit; font-size: 0.95rem; padding: 8px 14px; border: 0; cursor: pointer;
-    background: var(--bg); color: var(--text);
+    background: var(--opo-bg); color: var(--opo-text);
   }
-  .segmented button + button { border-left: 1px solid var(--faint); }
-  .segmented button[aria-pressed="true"] { background: var(--accent); color: var(--bg); font-weight: 700; }
+  .segmented button + button { border-left: 1px solid var(--opo-text-faint); }
+  .segmented button[aria-pressed="true"] { background: var(--opo-accent); color: var(--opo-text-on-fill); font-weight: 700; }
   select {
     font: inherit; font-size: 0.95rem; padding: 8px 12px; border-radius: 8px;
-    border: 1px solid var(--faint); background: var(--bg); color: var(--text);
+    border: 1px solid var(--opo-text-faint); background: var(--opo-bg); color: var(--opo-text);
   }
 
   /* Previews */
   .previews { display: grid; grid-template-columns: 1.35fr 1fr; gap: 20px; margin-top: 24px; }
-  .window { border-radius: 12px; overflow: hidden; border: 1px solid var(--hover); min-width: 0; }
+  .window { border-radius: 12px; overflow: hidden; border: 1px solid var(--opo-bg-hover); min-width: 0; }
   .window .bar { display: flex; align-items: center; gap: 8px; padding: 0 12px; height: 38px; font-size: 0.85rem; }
   .window .dots { display: flex; gap: 6px; margin-right: 8px; }
   .window .dots i { width: 11px; height: 11px; border-radius: 50%; display: block; }
@@ -101,43 +102,43 @@
 
   /* Principles */
   .principles { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; }
-  .card { background: var(--panel); border-radius: 12px; padding: 20px; }
+  .card { background: var(--opo-bg-panel); border-radius: 12px; padding: 20px; }
   .card h3 { margin-bottom: 8px; }
-  .card p { color: var(--mid); font-size: 0.98rem; }
-  .card .big { font-size: 2.2rem; font-weight: 700; font-variant-numeric: tabular-nums; line-height: 1; margin-bottom: 8px; color: var(--text); }
+  .card p { color: var(--opo-text-mid); font-size: 0.98rem; }
+  .card .big { font-size: 2.2rem; font-weight: 700; font-variant-numeric: tabular-nums; line-height: 1; margin-bottom: 8px; color: var(--opo-text); }
   .card a { display: inline-block; margin-top: 10px; font-weight: 700; }
 
   /* Palette */
-  .scroll { overflow-x: auto; border: 1px solid var(--hover); border-radius: 12px; }
+  .scroll { overflow-x: auto; border: 1px solid var(--opo-bg-hover); border-radius: 12px; }
   table { border-collapse: collapse; width: 100%; font-variant-numeric: tabular-nums; }
   th, td { text-align: left; padding: 10px 14px; vertical-align: middle; }
-  thead th { font-size: 0.85rem; background: var(--panel); white-space: nowrap; }
-  thead th.current { box-shadow: inset 0 -3px 0 var(--accent); }
-  tbody tr + tr td, tbody tr + tr th { border-top: 1px solid var(--hover); }
+  thead th { font-size: 0.85rem; background: var(--opo-bg-panel); white-space: nowrap; }
+  thead th.current { box-shadow: inset 0 -3px 0 var(--opo-accent); }
+  tbody tr + tr td, tbody tr + tr th { border-top: 1px solid var(--opo-bg-hover); }
   tbody th { font-weight: 700; white-space: nowrap; }
-  tbody th small { display: block; font-weight: 400; color: var(--mid); font-size: 0.82rem; }
-  tr.group th { background: var(--bg); color: var(--mid); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.06em; padding-top: 18px; }
+  tbody th small { display: block; font-weight: 400; color: var(--opo-text-mid); font-size: 0.82rem; }
+  tr.group th { background: var(--opo-bg); color: var(--opo-text-mid); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.06em; padding-top: 18px; }
   .swatch-cell { display: flex; gap: 10px; align-items: center; min-width: 190px; }
-  .swatch { width: 36px; height: 36px; border-radius: 8px; flex: none; border: 1px solid var(--hover); display: grid; place-items: center; font-weight: 700; font-size: 0.85rem; }
+  .swatch { width: 36px; height: 36px; border-radius: 8px; flex: none; border: 1px solid var(--opo-bg-hover); display: grid; place-items: center; font-weight: 700; font-size: 0.85rem; }
   .swatch-cell .mono { font-size: 0.85rem; }
-  .swatch-cell small { display: block; color: var(--mid); font-size: 0.75rem; font-family: var(--mono); }
-  td.current { background: var(--panel); }
+  .swatch-cell small { display: block; color: var(--opo-text-mid); font-size: 0.75rem; font-family: var(--mono); }
+  td.current { background: var(--opo-bg-panel); }
 
   .ansi { display: grid; grid-template-columns: repeat(8, 1fr); gap: 8px; margin-top: 16px; }
-  .ansi div { border-radius: 8px; padding: 10px; font-size: 0.78rem; border: 1px solid var(--hover); min-width: 0; }
+  .ansi div { border-radius: 8px; padding: 10px; font-size: 0.78rem; border: 1px solid var(--opo-bg-hover); min-width: 0; }
   .ansi b { display: block; font-family: var(--mono); font-size: 0.9rem; }
   .ansi span { display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 
   /* Apps */
-  .group-title { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--mid); margin: 32px 0 12px; }
+  .group-title { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--opo-text-mid); margin: 32px 0 12px; }
   .apps { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 12px; }
-  .app { background: var(--panel); border-radius: 12px; padding: 16px 18px; display: flex; flex-direction: column; gap: 6px; }
-  .app p { color: var(--mid); font-size: 0.93rem; flex: 1; }
+  .app { background: var(--opo-bg-panel); border-radius: 12px; padding: 16px 18px; display: flex; flex-direction: column; gap: 6px; }
+  .app p { color: var(--opo-text-mid); font-size: 0.93rem; flex: 1; }
   .app .links { display: flex; flex-wrap: wrap; gap: 6px 16px; margin-top: 6px; font-size: 0.93rem; }
   .app .links a { font-weight: 700; }
   .app .raycast { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
 
-  footer { margin-top: 96px; border-top: 1px solid var(--hover); padding: 28px 0 48px; color: var(--mid); font-size: 0.92rem; }
+  footer { margin-top: 96px; border-top: 1px solid var(--opo-bg-hover); padding: 28px 0 48px; color: var(--opo-text-mid); font-size: 0.92rem; }
   footer .wrap { display: flex; flex-wrap: wrap; gap: 8px 24px; justify-content: space-between; }
 
   @media (max-width: 900px) {
@@ -226,7 +227,6 @@
 <footer>
   <div class="wrap">
     <span>Opo by Ischa Gast &middot; MIT License</span>
-    <span>Site layout after <a href="https://ethanschoonover.com/solarized/">Solarized</a>; contrast grid after <a href="https://thishueshallpass.clearleft.com/">This Hue Shall Pass</a>.</span>
   </div>
 </footer>
 
@@ -288,13 +288,11 @@ function el(tag, attrs = {}, ...children) {
   return node;
 }
 
-function applyChrome(v) {
-  const vars = {
-    bg: v.ui.bg, panel: v.ui.bgPanel, hover: v.ui.bgHover, text: v.ui.text, mid: v.ui.textMid,
-    faint: v.ui.textFaint, accent: v.ui.accent, pass: v.ui.pass, fail: v.ui.fail, warn: v.ui.warn,
-  };
-  for (const [key, hex] of Object.entries(vars)) {
-    document.documentElement.style.setProperty('--' + key, see(hex));
+// Switch every Opo custom property to the selected variant, as seen with
+// the selected vision
+function applyChrome() {
+  for (const [name, value] of Object.entries(DATA.vars[state.mode])) {
+    document.documentElement.style.setProperty(name, value.replace(/#[0-9a-f]{6}/g, (hex) => see(hex)));
   }
   document.documentElement.dataset.mode = state.mode === 'dark' ? 'dark' : 'light';
 }
@@ -495,7 +493,7 @@ function renderApps() {
 
 function render() {
   const v = DATA.modes[state.mode];
-  applyChrome(v);
+  applyChrome();
   renderControls();
   renderEditor(v);
   renderTerminal(v);
