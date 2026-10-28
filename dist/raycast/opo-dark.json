@@ -1,0 +1,21 @@
+{
+  "author": "Ischa Gast",
+  "authorUsername": "ischagast",
+  "version": "1",
+  "name": "Opo Dark",
+  "appearance": "dark",
+  "colors": {
+    "background": "#161410",
+    "backgroundSecondary": "#191612",
+    "text": "#d1d7df",
+    "selection": "#79afff",
+    "loader": "#79afff",
+    "red": "#e08440",
+    "orange": "#ffaf7a",
+    "yellow": "#dca331",
+    "green": "#33a397",
+    "blue": "#498beb",
+    "purple": "#74acff",
+    "magenta": "#cd718f"
+  }
+}

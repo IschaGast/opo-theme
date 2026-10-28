@@ -1,0 +1,54 @@
+{
+  "manifest_version": 2,
+  "name": "Opo High Contrast",
+  "version": "1.0.0",
+  "description": "Colorblind-safe, OKLCH-based accessible theme at WCAG AAA (7:1).",
+  "author": "Ischa Gast",
+  "homepage_url": "https://github.com/IschaGast/opo-theme",
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "opo-theme-hc@ischagast"
+    }
+  },
+  "theme": {
+    "colors": {
+      "frame": "#f4efe5",
+      "frame_inactive": "#f9f5ed",
+      "tab_background_text": "#353f4a",
+      "tab_selected": "#fdfaf3",
+      "tab_text": "#13191f",
+      "tab_line": "#003c88",
+      "tab_loading": "#003c88",
+      "toolbar": "#fdfaf3",
+      "toolbar_text": "#13191f",
+      "toolbar_top_separator": "#f4efe5",
+      "toolbar_bottom_separator": "#f4efe5",
+      "toolbar_vertical_separator": "#f4efe5",
+      "toolbar_field": "#f9f5ed",
+      "toolbar_field_text": "#13191f",
+      "toolbar_field_border": "#353f4a59",
+      "toolbar_field_focus": "#fdfaf3",
+      "toolbar_field_text_focus": "#13191f",
+      "toolbar_field_border_focus": "#003c88",
+      "toolbar_field_highlight": "#003c88",
+      "toolbar_field_highlight_text": "#fdfaf3",
+      "popup": "#fdfaf3",
+      "popup_text": "#13191f",
+      "popup_border": "#f4efe5",
+      "popup_highlight": "#003c88",
+      "popup_highlight_text": "#fdfaf3",
+      "sidebar": "#f9f5ed",
+      "sidebar_text": "#13191f",
+      "sidebar_border": "#f4efe5",
+      "sidebar_highlight": "#003c88",
+      "sidebar_highlight_text": "#fdfaf3",
+      "ntp_background": "#fdfaf3",
+      "ntp_card_background": "#f9f5ed",
+      "ntp_text": "#13191f",
+      "icons": "#353f4a",
+      "icons_attention": "#003c88",
+      "button_background_hover": "#f4efe5",
+      "button_background_active": "#003c8824"
+    }
+  }
+}

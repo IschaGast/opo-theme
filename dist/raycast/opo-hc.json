@@ -1,0 +1,21 @@
+{
+  "author": "Ischa Gast",
+  "authorUsername": "ischagast",
+  "version": "1",
+  "name": "Opo High Contrast",
+  "appearance": "light",
+  "colors": {
+    "background": "#fdfaf3",
+    "backgroundSecondary": "#f9f5ed",
+    "text": "#13191f",
+    "selection": "#003c88",
+    "loader": "#003c88",
+    "red": "#6f3500",
+    "orange": "#492100",
+    "yellow": "#3e2a00",
+    "green": "#004c46",
+    "blue": "#001e4b",
+    "purple": "#003c88",
+    "magenta": "#59002b"
+  }
+}

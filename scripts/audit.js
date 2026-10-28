@@ -243,6 +243,37 @@ for (const f of ls('dist/slack')) {
   check('slack', f, 'white mention text on badge', '#ffffff', c[7]);
 }
 
+// --- Raycast: text on both backgrounds, named colors as text on the background ---
+for (const f of ls('dist/raycast').filter(f => f.endsWith('.json'))) {
+  const c = JSON.parse(read(`dist/raycast/${f}`)).colors;
+  check('raycast', f, 'text on background', c.text, c.background);
+  check('raycast', f, 'text on secondary background', c.text, c.backgroundSecondary);
+  check('raycast', f, 'selection vs background', c.selection, c.background, 'ui');
+  for (const k of ['red', 'orange', 'yellow', 'green', 'blue', 'purple', 'magenta']) check('raycast', f, `${k} on background`, c[k], c.background);
+}
+
+// --- Firefox: tabs, toolbar, fields, popups, sidebar, new tab page ---
+for (const dirName of ls('dist/firefox')) {
+  const m = JSON.parse(read(`dist/firefox/${dirName}/manifest.json`));
+  for (const [key, label] of [['theme', dirName.endsWith('hc') ? 'hc' : 'light'], ['dark_theme', 'dark']]) {
+    if (!m[key]) continue;
+    const c = m[key].colors; const f = `${dirName}/${label}`;
+    const pairs = [
+      ['tab_background_text', 'frame'], ['tab_background_text', 'frame_inactive'], ['tab_text', 'tab_selected'],
+      ['toolbar_text', 'toolbar'], ['toolbar_field_text', 'toolbar_field'], ['toolbar_field_text_focus', 'toolbar_field_focus'],
+      ['toolbar_field_highlight_text', 'toolbar_field_highlight'], ['popup_text', 'popup'], ['popup_highlight_text', 'popup_highlight'],
+      ['sidebar_text', 'sidebar'], ['sidebar_highlight_text', 'sidebar_highlight'], ['ntp_text', 'ntp_background'], ['ntp_text', 'ntp_card_background'],
+    ];
+    for (const [fg, bg] of pairs) check('firefox', f, `${fg} on ${bg}`, c[fg], c[bg]);
+    check('firefox', f, 'icons on toolbar', c.icons, c.toolbar, 'ui');
+    check('firefox', f, 'icons on hovered button', c.icons, flat(c.button_background_hover, c.toolbar), 'ui');
+    check('firefox', f, 'icons on pressed button', c.icons, flat(c.button_background_active, c.toolbar), 'ui');
+    check('firefox', f, 'attention icon on toolbar', c.icons_attention, c.toolbar, 'ui');
+    check('firefox', f, 'selected tab line vs toolbar', c.tab_line, c.tab_selected, 'ui');
+    check('firefox', f, 'focused field border vs toolbar', c.toolbar_field_border_focus, c.toolbar, 'ui');
+  }
+}
+
 // --- CSS-based (css, typora, bear, slidev, ia-presenter): every color declaration vs page bg ---
 function cssAudit(tool, file, text) {
   for (const block of text.split('}')) {

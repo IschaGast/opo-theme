@@ -1,0 +1,21 @@
+{
+  "author": "Ischa Gast",
+  "authorUsername": "ischagast",
+  "version": "1",
+  "name": "Opo Light",
+  "appearance": "light",
+  "colors": {
+    "background": "#fbf8f2",
+    "backgroundSecondary": "#f5f2eb",
+    "text": "#24292f",
+    "selection": "#005ccc",
+    "loader": "#005ccc",
+    "red": "#a75000",
+    "orange": "#844000",
+    "yellow": "#6d3a00",
+    "green": "#00756b",
+    "blue": "#002c85",
+    "purple": "#005ccc",
+    "magenta": "#782445"
+  }
+}

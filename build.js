@@ -31,6 +31,8 @@ import { generateSlack } from './src/generators/slack.js';
 import { generateBear } from './src/generators/bear.js';
 import { generateTypora } from './src/generators/typora.js';
 import { generateTemplateJson, generatePresetsJson } from './src/generators/ia-presenter.js';
+import { generateRaycastTheme, generateRaycastLink } from './src/generators/raycast.js';
+import { generateFirefox } from './src/generators/firefox.js';
 import { generateContrastPage } from './src/generators/contrast.js';
 import {
   generateSlidevPackageJson,
@@ -221,6 +223,25 @@ cpSync('src/slidev-default', slidevDir, { recursive: true });
 console.log(`  ${slidevDir}/ (default theme layouts and styles)`);
 fileCount += 9;
 
+// Raycast
+console.log('\n  Raycast:');
+const raycastDir = dir('raycast');
+for (const mode of MODES) {
+  const theme = generateRaycastTheme(variants[mode], ansiSets[mode], mode);
+  write(join(raycastDir, `opo-${mode}.json`), JSON.stringify(theme, null, 2));
+  write(join(raycastDir, `opo-${mode}.txt`), generateRaycastLink(theme) + '\n');
+  fileCount += 2;
+}
+
+// Firefox
+console.log('\n  Firefox:');
+for (const [relPath, content] of Object.entries(generateFirefox(variants))) {
+  const fullPath = join(DIST, 'firefox', relPath);
+  mkdirSync(join(fullPath, '..'), { recursive: true });
+  write(fullPath, JSON.stringify(content, null, 2));
+  fileCount++;
+}
+
 // Contrast grid
 console.log('\n  Contrast grid:');
 write(join(dir('contrast'), 'index.html'), generateContrastPage(variants, ansiSets));
@@ -231,5 +252,5 @@ console.log(`\n✨ Build complete! ${fileCount} files generated in dist/`);
 console.log('   Variants: Opo Light, Opo Dark, Opo High Contrast');
 console.log('   Formats: VS Code, Ghostty, Alacritty, iTerm2, Windows Terminal,');
 console.log('            Warp, Zed, JetBrains, Neovim, Slack, CSS, Bear, Typora,');
-console.log('            iA Presenter, Slidev');
+console.log('            iA Presenter, Slidev, Raycast, Firefox');
 console.log('   Contrast grid: dist/contrast/index.html\n');

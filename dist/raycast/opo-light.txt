@@ -1,0 +1,1 @@
+raycast://theme?author=Ischa%20Gast&authorUsername=ischagast&version=1&name=Opo%20Light&appearance=light&colors=%23fbf8f2,%23f5f2eb,%2324292f,%23005ccc,%23005ccc,%23a75000,%23844000,%236d3a00,%2300756b,%23002c85,%23005ccc,%23782445

@@ -1,0 +1,1 @@
+raycast://theme?author=Ischa%20Gast&authorUsername=ischagast&version=1&name=Opo%20High%20Contrast&appearance=light&colors=%23fdfaf3,%23f9f5ed,%2313191f,%23003c88,%23003c88,%236f3500,%23492100,%233e2a00,%23004c46,%23001e4b,%23003c88,%2359002b

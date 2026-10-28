@@ -127,6 +127,29 @@ cp dist/warp/opo-light.yaml ~/.warp/themes/
 
 Open a theme file from `dist/slack/` and copy the comma-separated color string. Then go to Slack > Preferences > Themes > Custom Theme and paste it.
 
+### cmux
+
+cmux reads its terminal colors from the Ghostty config, so it uses the Ghostty theme files. Copy them as described under [Ghostty](#ghostty), then set a theme per appearance in `~/.config/ghostty/config`:
+
+```
+theme = dark:opo-dark,light:opo-light
+```
+
+### Raycast
+
+Custom themes need Raycast Pro. Open the import link for a variant, which adds the theme to Raycast:
+
+```bash
+open "$(cat dist/raycast/opo-light.txt)"
+open "$(cat dist/raycast/opo-dark.txt)"
+```
+
+Then pick Opo Light and Opo Dark under Settings > General > Appearance. `dist/raycast/` also has each theme as JSON (ray.so format).
+
+### Firefox
+
+`dist/firefox/opo/` is one theme add-on that follows the Firefox light/dark setting; `dist/firefox/opo-hc/` is High Contrast. To try one, open `about:debugging`, choose This Firefox > Load Temporary Add-on and select its `manifest.json`. A temporary add-on is removed when Firefox restarts; a permanent install needs an add-on signed by addons.mozilla.org.
+
 ### CSS
 
 Include a CSS file in your web project:
