@@ -1,0 +1,465 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Opo Contrast Grid</title>
+<meta name="description" content="Every color pair in the Opo theme, with the WCAG contrast ratio and color vision deficiency checks enforced at build time.">
+<style>
+  /* Page colors are set from the selected variant (see applyChrome) */
+  :root {
+    --bg: #fbf8f2; --panel: #f5f2eb; --hover: #eeeae2;
+    --text: #24292f; --mid: #57606a; --faint: #5c646d;
+    --accent: #005ccc; --pass: #003172; --fail: #a55200; --warn: #583500;
+    --sans: 'Atkinson Hyperlegible Next', 'Atkinson Hyperlegible', system-ui, -apple-system, 'Segoe UI', sans-serif;
+    --mono: 'Atkinson Hyperlegible Mono', ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+    color-scheme: light;
+  }
+  :root[data-mode="dark"] { color-scheme: dark; }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font: 16px/1.5 var(--sans);
+    -webkit-font-smoothing: antialiased;
+  }
+  main { max-width: 1240px; margin: 0 auto; padding: 32px 16px 64px; }
+  h1, h2, h3 { line-height: 1.2; margin: 0; }
+  h1 { font-size: 2rem; letter-spacing: -0.01em; }
+  h2 { font-size: 1.35rem; margin-bottom: 4px; }
+  p { margin: 0; }
+  a { color: var(--accent); }
+  .lede { color: var(--mid); max-width: 68ch; margin-top: 8px; }
+  .muted { color: var(--mid); }
+  .mono { font-family: var(--mono); }
+  section { margin-top: 48px; }
+  section > p { color: var(--mid); max-width: 72ch; margin-bottom: 16px; }
+
+  /* Controls */
+  .controls { display: flex; flex-wrap: wrap; gap: 16px 24px; align-items: end; margin-top: 24px; }
+  .field { display: flex; flex-direction: column; gap: 6px; }
+  .field > span { font-size: 0.8rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--mid); }
+  .segmented { display: inline-flex; border: 1px solid var(--faint); border-radius: 8px; overflow: hidden; }
+  .segmented button {
+    font: inherit; font-size: 0.95rem; padding: 8px 14px; border: 0; cursor: pointer;
+    background: var(--bg); color: var(--text);
+  }
+  .segmented button + button { border-left: 1px solid var(--faint); }
+  .segmented button[aria-pressed="true"] { background: var(--accent); color: var(--bg); font-weight: 700; }
+  button:focus-visible, select:focus-visible, td:focus-visible {
+    outline: 3px solid var(--accent); outline-offset: 2px;
+  }
+  select {
+    font: inherit; font-size: 0.95rem; padding: 8px 12px; border-radius: 8px;
+    border: 1px solid var(--faint); background: var(--bg); color: var(--text);
+  }
+
+  /* Summary */
+  .stats { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 12px; margin-top: 24px; }
+  .stat { background: var(--panel); border-radius: 10px; padding: 14px 16px; }
+  .stat b { display: block; font-size: 1.6rem; font-variant-numeric: tabular-nums; }
+  .stat span { color: var(--mid); font-size: 0.9rem; }
+  .stat.ok b::before { content: '\2713\00a0'; color: var(--pass); }
+  .stat.bad b::before { content: '\2717\00a0'; color: var(--fail); }
+  .tightest { margin-top: 12px; color: var(--mid); font-size: 0.95rem; }
+
+  /* Grid */
+  .scroll { overflow-x: auto; border-radius: 10px; border: 1px solid var(--hover); }
+  table { border-collapse: collapse; width: 100%; font-variant-numeric: tabular-nums; }
+  th { font-weight: 700; text-align: left; font-size: 0.85rem; }
+  thead th { padding: 10px 8px; vertical-align: bottom; background: var(--panel); position: sticky; top: 0; }
+  thead th .swatch { display: block; height: 14px; border-radius: 4px; margin-bottom: 6px; border: 1px solid var(--hover); }
+  thead th small { display: block; font-weight: 400; color: var(--mid); font-size: 0.75rem; }
+  tbody th {
+    padding: 8px 12px; background: var(--panel); white-space: nowrap;
+    position: sticky; left: 0; z-index: 1;
+  }
+  tbody th small { display: block; font-weight: 400; color: var(--mid); font-family: var(--mono); font-size: 0.75rem; }
+  tr.group th { background: var(--bg); color: var(--mid); text-transform: uppercase; letter-spacing: 0.06em; font-size: 0.75rem; padding-top: 16px; }
+  td.cell {
+    min-width: 86px; padding: 8px 10px; vertical-align: top; cursor: default;
+    border: 1px solid transparent;
+  }
+  td.cell .sample { display: block; font-size: 1.25rem; line-height: 1.2; }
+  td.cell .ratio { display: block; font-size: 0.85rem; margin-top: 2px; }
+  td.cell .grade { font-size: 0.7rem; font-weight: 700; letter-spacing: 0.04em; }
+  td.cell.fail { outline: 2px dashed var(--fail); outline-offset: -3px; }
+  td.cell.tight { box-shadow: inset 0 0 0 2px var(--accent); }
+  td.cell.dim { opacity: 0.15; }
+  td.empty { background: var(--bg); }
+
+  /* Legend */
+  .legend { display: flex; flex-wrap: wrap; gap: 8px 20px; margin-top: 12px; font-size: 0.9rem; color: var(--mid); }
+  .legend i { display: inline-block; width: 14px; height: 14px; vertical-align: -2px; margin-right: 6px; border-radius: 3px; }
+  .legend .l-tight { box-shadow: inset 0 0 0 2px var(--accent); }
+  .legend .l-fail { outline: 2px dashed var(--fail); outline-offset: -2px; }
+  label.check { display: inline-flex; gap: 8px; align-items: center; cursor: pointer; }
+  label.check input { accent-color: var(--accent); width: 16px; height: 16px; }
+
+  /* Code preview */
+  .code {
+    font: 15px/1.7 var(--mono); border-radius: 10px; overflow: hidden;
+    border: 1px solid var(--hover); overflow-x: auto;
+  }
+  .code .line { display: flex; white-space: pre; }
+  .code .gutter { width: 3.5em; flex: none; text-align: right; padding-right: 1em; }
+  .code .tag { width: 1.5em; flex: none; text-align: center; }
+  .code .src { padding-right: 16px; }
+  .code .bold { font-weight: 700; }
+  .code .italic { font-style: italic; }
+  .code .match { border-radius: 3px; padding: 0 2px; }
+
+  /* CVD pairs */
+  .pairs { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 12px; }
+  .pair { background: var(--panel); border-radius: 10px; padding: 14px 16px; }
+  .pair header { display: flex; justify-content: space-between; gap: 8px; align-items: baseline; }
+  .pair header b { font-size: 0.95rem; }
+  .pair header span { font-size: 0.85rem; white-space: nowrap; }
+  .pair .visions { display: grid; grid-template-columns: repeat(4, 1fr); gap: 6px; margin-top: 10px; }
+  .pair .vision { text-align: center; font-size: 0.7rem; color: var(--mid); }
+  .pair .chips { display: flex; height: 28px; border-radius: 6px; overflow: hidden; margin-bottom: 4px; }
+  .pair .chips div { flex: 1; }
+  .pair .vision.worst { color: var(--text); font-weight: 700; }
+  .pair .bar { height: 6px; border-radius: 3px; background: var(--hover); margin-top: 10px; position: relative; overflow: hidden; }
+  .pair .bar div { position: absolute; inset: 0 auto 0 0; background: var(--pass); border-radius: 3px; }
+  .pair .bar.fail div { background: var(--fail); }
+
+  /* ANSI */
+  .ansi { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 8px; }
+  .ansi .slot { border-radius: 8px; overflow: hidden; border: 1px solid var(--hover); font-size: 0.85rem; }
+  .ansi .slot > div { padding: 8px 10px; }
+  .ansi .slot b { display: block; font-family: var(--mono); font-size: 0.95rem; }
+  .ansi .slot.skip { opacity: 0.55; }
+
+  footer { margin-top: 64px; color: var(--mid); font-size: 0.9rem; max-width: 72ch; }
+  footer p + p { margin-top: 8px; }
+
+  @media (max-width: 640px) {
+    h1 { font-size: 1.6rem; }
+    td.cell { min-width: 72px; padding: 6px 8px; }
+    td.cell .sample { font-size: 1.05rem; }
+  }
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <h1>Opo Contrast Grid</h1>
+    <p class="lede">Every color pair the build checks, drawn in its real colors. A theme only builds when every cell here passes, so this page is a picture of the gate, not a separate test.</p>
+
+    <div class="controls">
+      <div class="field">
+        <span id="variant-label">Variant</span>
+        <div class="segmented" role="group" aria-labelledby="variant-label" id="variants"></div>
+      </div>
+      <label class="field">
+        <span>Vision</span>
+        <select id="vision">
+          <option value="normal">Normal vision</option>
+          <option value="deuteranopia">Deuteranopia (no green cones)</option>
+          <option value="protanopia">Protanopia (no red cones)</option>
+          <option value="tritanopia">Tritanopia (no blue cones)</option>
+        </select>
+      </label>
+    </div>
+
+    <div class="stats" id="stats" aria-live="polite"></div>
+    <p class="tightest" id="tightest"></p>
+  </header>
+
+  <section aria-labelledby="grid-title">
+    <h2 id="grid-title">Text on backgrounds</h2>
+    <p>Rows are text colors, columns are the surfaces they are drawn on, including selection and diff tints composited the way editors draw them. Each cell shows the WCAG 2 contrast ratio and the level it reaches.</p>
+    <div class="scroll"><table id="grid"></table></div>
+    <div class="legend">
+      <span><i class="l-tight"></i>5 lowest ratios in this variant</span>
+      <span><i class="l-fail"></i>Below target (fails the build)</span>
+      <label class="check"><input type="checkbox" id="only-tight"> Fade everything with 1.0 or more headroom</label>
+    </div>
+  </section>
+
+  <section aria-labelledby="inverted-title">
+    <h2 id="inverted-title">Inverted fills</h2>
+    <p>Where a tool lets the theme set the text color, selections and search matches are a solid color with background-colored text. The fill must also stand out from the background as a UI state (3:1, WCAG 1.4.11).</p>
+    <div class="scroll"><table id="inverted"></table></div>
+  </section>
+
+  <section aria-labelledby="code-title">
+    <h2 id="code-title">In context</h2>
+    <p>The same colors in an editor: syntax tokens, a selected line, added, removed and warning lines and a search match. Bold keywords and italic comments keep tokens apart without relying on color (WCAG 1.4.1).</p>
+    <div class="code" id="code"></div>
+  </section>
+
+  <section aria-labelledby="cvd-title">
+    <h2 id="cvd-title">Distinguishable under color vision deficiency</h2>
+    <p>Pairs that carry meaning must stay apart for everyone. Each pair is simulated for normal vision and full-strength deuteranopia, protanopia and tritanopia; the smallest CIEDE2000 distance of the four has to reach the minimum. Pairs that also differ in bold or italic may sit closer.</p>
+    <div class="pairs" id="pairs"></div>
+  </section>
+
+  <section aria-labelledby="ansi-title">
+    <h2 id="ansi-title">Terminal colors</h2>
+    <p>The 16 ANSI colors on the terminal background and on the selection tint. The slot that matches the background by convention is not checked.</p>
+    <div class="ansi" id="ansi"></div>
+    <p class="tightest" id="ansi-cvd"></p>
+  </section>
+
+  <footer>
+    <p>Generated by <span class="mono">npm run build</span> from <span class="mono">src/palette.js</span>. Ratios use the WCAG 2 relative luminance formula; color vision simulation uses the Brettel, Vi&eacute;not and Mollon model at full severity (culori). Ratios are for normal vision; the simulation only changes how colors are shown.</p>
+    <p>Inspired by <a href="https://thishueshallpass.clearleft.com/">This Hue Shall Pass</a> by Clearleft.</p>
+  </footer>
+</main>
+
+<noscript><p style="text-align:center">This page needs JavaScript to draw the grid.</p></noscript>
+
+<script>
+const DATA = {"modes":{"light":{"name":"Opo Light","target":4.5,"label":"AA (4.5:1)","ui":{"bg":"#fbf8f2","bgPanel":"#f5f2eb","bgHover":"#eeeae2","text":"#24292f","textMid":"#57606a","textFaint":"#5c646d","accent":"#005ccc","pass":"#002c85","fail":"#a75000","warn":"#583500","neutral":"#57606a"},"syntax":{"keyword":"#002c85","type":"#742651","comment":"#5e5a55","function":"#007570","string":"#a75000"},"notes":{"listSelection":"accent 6% over bgPanel","textSelection":"accent 9% over bg","passTint":"pass 8% over bg","failTint":"fail 8% over bg","warnTint":"warn 8% over bg","neutralTint":"neutral 6% over bg"},"contrast":[{"kind":"ui","fg":"text","bg":"bg","fgHex":"#24292f","bgHex":"#fbf8f2","ratio":13.82,"ok":true},{"kind":"ui","fg":"textMid","bg":"bg","fgHex":"#57606a","bgHex":"#fbf8f2","ratio":6.03,"ok":true},{"kind":"ui","fg":"textFaint","bg":"bg","fgHex":"#5c646d","bgHex":"#fbf8f2","ratio":5.66,"ok":true},{"kind":"ui","fg":"accent","bg":"bg","fgHex":"#005ccc","bgHex":"#fbf8f2","ratio":5.82,"ok":true},{"kind":"ui","fg":"pass","bg":"bg","fgHex":"#002c85","bgHex":"#fbf8f2","ratio":11.66,"ok":true},{"kind":"ui","fg":"fail","bg":"bg","fgHex":"#a75000","bgHex":"#fbf8f2","ratio":5.23,"ok":true},{"kind":"ui","fg":"warn","bg":"bg","fgHex":"#583500","bgHex":"#fbf8f2","ratio":10.3,"ok":true},{"kind":"ui","fg":"neutral","bg":"bg","fgHex":"#57606a","bgHex":"#fbf8f2","ratio":6.03,"ok":true},{"kind":"syntax","fg":"keyword","bg":"bg","fgHex":"#002c85","bgHex":"#fbf8f2","ratio":11.66,"ok":true},{"kind":"syntax","fg":"string","bg":"bg","fgHex":"#a75000","bgHex":"#fbf8f2","ratio":5.23,"ok":true},{"kind":"syntax","fg":"comment","bg":"bg","fgHex":"#5e5a55","bgHex":"#fbf8f2","ratio":6.45,"ok":true},{"kind":"syntax","fg":"type","bg":"bg","fgHex":"#742651","bgHex":"#fbf8f2","ratio":9.26,"ok":true},{"kind":"syntax","fg":"function","bg":"bg","fgHex":"#007570","bgHex":"#fbf8f2","ratio":5.24,"ok":true},{"kind":"ui","fg":"text","bg":"bgPanel","fgHex":"#24292f","bgHex":"#f5f2eb","ratio":13.11,"ok":true},{"kind":"ui","fg":"textMid","bg":"bgPanel","fgHex":"#57606a","bgHex":"#f5f2eb","ratio":5.72,"ok":true},{"kind":"ui","fg":"textFaint","bg":"bgPanel","fgHex":"#5c646d","bgHex":"#f5f2eb","ratio":5.37,"ok":true},{"kind":"ui","fg":"accent","bg":"bgPanel","fgHex":"#005ccc","bgHex":"#f5f2eb","ratio":5.52,"ok":true},{"kind":"ui","fg":"pass","bg":"bgPanel","fgHex":"#002c85","bgHex":"#f5f2eb","ratio":11.06,"ok":true},{"kind":"ui","fg":"fail","bg":"bgPanel","fgHex":"#a75000","bgHex":"#f5f2eb","ratio":4.96,"ok":true},{"kind":"ui","fg":"warn","bg":"bgPanel","fgHex":"#583500","bgHex":"#f5f2eb","ratio":9.76,"ok":true},{"kind":"ui","fg":"neutral","bg":"bgPanel","fgHex":"#57606a","bgHex":"#f5f2eb","ratio":5.72,"ok":true},{"kind":"syntax","fg":"keyword","bg":"bgPanel","fgHex":"#002c85","bgHex":"#f5f2eb","ratio":11.06,"ok":true},{"kind":"syntax","fg":"string","bg":"bgPanel","fgHex":"#a75000","bgHex":"#f5f2eb","ratio":4.96,"ok":true},{"kind":"syntax","fg":"comment","bg":"bgPanel","fgHex":"#5e5a55","bgHex":"#f5f2eb","ratio":6.12,"ok":true},{"kind":"syntax","fg":"type","bg":"bgPanel","fgHex":"#742651","bgHex":"#f5f2eb","ratio":8.78,"ok":true},{"kind":"syntax","fg":"function","bg":"bgPanel","fgHex":"#007570","bgHex":"#f5f2eb","ratio":4.97,"ok":true},{"kind":"ui","fg":"text","bg":"bgHover","fgHex":"#24292f","bgHex":"#eeeae2","ratio":12.21,"ok":true},{"kind":"ui","fg":"textMid","bg":"bgHover","fgHex":"#57606a","bgHex":"#eeeae2","ratio":5.33,"ok":true},{"kind":"ui","fg":"textFaint","bg":"bgHover","fgHex":"#5c646d","bgHex":"#eeeae2","ratio":5,"ok":true},{"kind":"ui","fg":"accent","bg":"bgHover","fgHex":"#005ccc","bgHex":"#eeeae2","ratio":5.14,"ok":true},{"kind":"ui","fg":"pass","bg":"bgHover","fgHex":"#002c85","bgHex":"#eeeae2","ratio":10.3,"ok":true},{"kind":"ui","fg":"fail","bg":"bgHover","fgHex":"#a75000","bgHex":"#eeeae2","ratio":4.62,"ok":true},{"kind":"ui","fg":"warn","bg":"bgHover","fgHex":"#583500","bgHex":"#eeeae2","ratio":9.1,"ok":true},{"kind":"ui","fg":"neutral","bg":"bgHover","fgHex":"#57606a","bgHex":"#eeeae2","ratio":5.33,"ok":true},{"kind":"syntax","fg":"keyword","bg":"bgHover","fgHex":"#002c85","bgHex":"#eeeae2","ratio":10.3,"ok":true},{"kind":"syntax","fg":"string","bg":"bgHover","fgHex":"#a75000","bgHex":"#eeeae2","ratio":4.62,"ok":true},{"kind":"syntax","fg":"comment","bg":"bgHover","fgHex":"#5e5a55","bgHex":"#eeeae2","ratio":5.7,"ok":true},{"kind":"syntax","fg":"type","bg":"bgHover","fgHex":"#742651","bgHex":"#eeeae2","ratio":8.18,"ok":true},{"kind":"syntax","fg":"function","bg":"bgHover","fgHex":"#007570","bgHex":"#eeeae2","ratio":4.63,"ok":true},{"kind":"ui","fg":"text","bg":"listSelection","fgHex":"#24292f","bgHex":"#e7e9e9","ratio":12.02,"ok":true},{"kind":"ui","fg":"textMid","bg":"listSelection","fgHex":"#57606a","bgHex":"#e7e9e9","ratio":5.24,"ok":true},{"kind":"ui","fg":"textFaint","bg":"listSelection","fgHex":"#5c646d","bgHex":"#e7e9e9","ratio":4.92,"ok":true},{"kind":"ui","fg":"accent","bg":"listSelection","fgHex":"#005ccc","bgHex":"#e7e9e9","ratio":5.06,"ok":true},{"kind":"ui","fg":"pass","bg":"listSelection","fgHex":"#002c85","bgHex":"#e7e9e9","ratio":10.14,"ok":true},{"kind":"ui","fg":"fail","bg":"listSelection","fgHex":"#a75000","bgHex":"#e7e9e9","ratio":4.55,"ok":true},{"kind":"ui","fg":"warn","bg":"listSelection","fgHex":"#583500","bgHex":"#e7e9e9","ratio":8.95,"ok":true},{"kind":"ui","fg":"neutral","bg":"listSelection","fgHex":"#57606a","bgHex":"#e7e9e9","ratio":5.24,"ok":true},{"kind":"syntax","fg":"keyword","bg":"listSelection","fgHex":"#002c85","bgHex":"#e7e9e9","ratio":10.14,"ok":true},{"kind":"syntax","fg":"string","bg":"listSelection","fgHex":"#a75000","bgHex":"#e7e9e9","ratio":4.55,"ok":true},{"kind":"syntax","fg":"comment","bg":"listSelection","fgHex":"#5e5a55","bgHex":"#e7e9e9","ratio":5.61,"ok":true},{"kind":"syntax","fg":"type","bg":"listSelection","fgHex":"#742651","bgHex":"#e7e9e9","ratio":8.06,"ok":true},{"kind":"syntax","fg":"function","bg":"listSelection","fgHex":"#007570","bgHex":"#e7e9e9","ratio":4.56,"ok":true},{"kind":"ui","fg":"text","bg":"textSelection","fgHex":"#24292f","bgHex":"#e4eaef","ratio":12.08,"ok":true},{"kind":"ui","fg":"textMid","bg":"textSelection","fgHex":"#57606a","bgHex":"#e4eaef","ratio":5.27,"ok":true},{"kind":"ui","fg":"textFaint","bg":"textSelection","fgHex":"#5c646d","bgHex":"#e4eaef","ratio":4.95,"ok":true},{"kind":"ui","fg":"accent","bg":"textSelection","fgHex":"#005ccc","bgHex":"#e4eaef","ratio":5.09,"ok":true},{"kind":"ui","fg":"pass","bg":"textSelection","fgHex":"#002c85","bgHex":"#e4eaef","ratio":10.19,"ok":true},{"kind":"ui","fg":"fail","bg":"textSelection","fgHex":"#a75000","bgHex":"#e4eaef","ratio":4.57,"ok":true},{"kind":"ui","fg":"warn","bg":"textSelection","fgHex":"#583500","bgHex":"#e4eaef","ratio":9,"ok":true},{"kind":"ui","fg":"neutral","bg":"textSelection","fgHex":"#57606a","bgHex":"#e4eaef","ratio":5.27,"ok":true},{"kind":"syntax","fg":"keyword","bg":"textSelection","fgHex":"#002c85","bgHex":"#e4eaef","ratio":10.19,"ok":true},{"kind":"syntax","fg":"string","bg":"textSelection","fgHex":"#a75000","bgHex":"#e4eaef","ratio":4.57,"ok":true},{"kind":"syntax","fg":"comment","bg":"textSelection","fgHex":"#5e5a55","bgHex":"#e4eaef","ratio":5.64,"ok":true},{"kind":"syntax","fg":"type","bg":"textSelection","fgHex":"#742651","bgHex":"#e4eaef","ratio":8.1,"ok":true},{"kind":"syntax","fg":"function","bg":"textSelection","fgHex":"#007570","bgHex":"#e4eaef","ratio":4.58,"ok":true},{"kind":"ui","fg":"text","bg":"passTint","fgHex":"#24292f","bgHex":"#e6e8ea","ratio":11.93,"ok":true},{"kind":"ui","fg":"textMid","bg":"passTint","fgHex":"#57606a","bgHex":"#e6e8ea","ratio":5.2,"ok":true},{"kind":"ui","fg":"textFaint","bg":"passTint","fgHex":"#5c646d","bgHex":"#e6e8ea","ratio":4.89,"ok":true},{"kind":"ui","fg":"accent","bg":"passTint","fgHex":"#005ccc","bgHex":"#e6e8ea","ratio":5.02,"ok":true},{"kind":"ui","fg":"pass","bg":"passTint","fgHex":"#002c85","bgHex":"#e6e8ea","ratio":10.06,"ok":true},{"kind":"ui","fg":"fail","bg":"passTint","fgHex":"#a75000","bgHex":"#e6e8ea","ratio":4.51,"ok":true},{"kind":"ui","fg":"warn","bg":"passTint","fgHex":"#583500","bgHex":"#e6e8ea","ratio":8.88,"ok":true},{"kind":"ui","fg":"neutral","bg":"passTint","fgHex":"#57606a","bgHex":"#e6e8ea","ratio":5.2,"ok":true},{"kind":"syntax","fg":"keyword","bg":"passTint","fgHex":"#002c85","bgHex":"#e6e8ea","ratio":10.06,"ok":true},{"kind":"syntax","fg":"string","bg":"passTint","fgHex":"#a75000","bgHex":"#e6e8ea","ratio":4.51,"ok":true},{"kind":"syntax","fg":"comment","bg":"passTint","fgHex":"#5e5a55","bgHex":"#e6e8ea","ratio":5.57,"ok":true},{"kind":"syntax","fg":"type","bg":"passTint","fgHex":"#742651","bgHex":"#e6e8ea","ratio":7.99,"ok":true},{"kind":"syntax","fg":"function","bg":"passTint","fgHex":"#007570","bgHex":"#e6e8ea","ratio":4.52,"ok":true},{"kind":"ui","fg":"text","bg":"failTint","fgHex":"#24292f","bgHex":"#f4ebde","ratio":12.41,"ok":true},{"kind":"ui","fg":"textMid","bg":"failTint","fgHex":"#57606a","bgHex":"#f4ebde","ratio":5.41,"ok":true},{"kind":"ui","fg":"textFaint","bg":"failTint","fgHex":"#5c646d","bgHex":"#f4ebde","ratio":5.08,"ok":true},{"kind":"ui","fg":"accent","bg":"failTint","fgHex":"#005ccc","bgHex":"#f4ebde","ratio":5.23,"ok":true},{"kind":"ui","fg":"pass","bg":"failTint","fgHex":"#002c85","bgHex":"#f4ebde","ratio":10.47,"ok":true},{"kind":"ui","fg":"fail","bg":"failTint","fgHex":"#a75000","bgHex":"#f4ebde","ratio":4.69,"ok":true},{"kind":"ui","fg":"warn","bg":"failTint","fgHex":"#583500","bgHex":"#f4ebde","ratio":9.24,"ok":true},{"kind":"ui","fg":"neutral","bg":"failTint","fgHex":"#57606a","bgHex":"#f4ebde","ratio":5.41,"ok":true},{"kind":"syntax","fg":"keyword","bg":"failTint","fgHex":"#002c85","bgHex":"#f4ebde","ratio":10.47,"ok":true},{"kind":"syntax","fg":"string","bg":"failTint","fgHex":"#a75000","bgHex":"#f4ebde","ratio":4.69,"ok":true},{"kind":"syntax","fg":"comment","bg":"failTint","fgHex":"#5e5a55","bgHex":"#f4ebde","ratio":5.79,"ok":true},{"kind":"syntax","fg":"type","bg":"failTint","fgHex":"#742651","bgHex":"#f4ebde","ratio":8.32,"ok":true},{"kind":"syntax","fg":"function","bg":"failTint","fgHex":"#007570","bgHex":"#f4ebde","ratio":4.71,"ok":true},{"kind":"ui","fg":"text","bg":"warnTint","fgHex":"#24292f","bgHex":"#eee9dd","ratio":12.1,"ok":true},{"kind":"ui","fg":"textMid","bg":"warnTint","fgHex":"#57606a","bgHex":"#eee9dd","ratio":5.27,"ok":true},{"kind":"ui","fg":"textFaint","bg":"warnTint","fgHex":"#5c646d","bgHex":"#eee9dd","ratio":4.95,"ok":true},{"kind":"ui","fg":"accent","bg":"warnTint","fgHex":"#005ccc","bgHex":"#eee9dd","ratio":5.09,"ok":true},{"kind":"ui","fg":"pass","bg":"warnTint","fgHex":"#002c85","bgHex":"#eee9dd","ratio":10.2,"ok":true},{"kind":"ui","fg":"fail","bg":"warnTint","fgHex":"#a75000","bgHex":"#eee9dd","ratio":4.57,"ok":true},{"kind":"ui","fg":"warn","bg":"warnTint","fgHex":"#583500","bgHex":"#eee9dd","ratio":9.01,"ok":true},{"kind":"ui","fg":"neutral","bg":"warnTint","fgHex":"#57606a","bgHex":"#eee9dd","ratio":5.27,"ok":true},{"kind":"syntax","fg":"keyword","bg":"warnTint","fgHex":"#002c85","bgHex":"#eee9dd","ratio":10.2,"ok":true},{"kind":"syntax","fg":"string","bg":"warnTint","fgHex":"#a75000","bgHex":"#eee9dd","ratio":4.57,"ok":true},{"kind":"syntax","fg":"comment","bg":"warnTint","fgHex":"#5e5a55","bgHex":"#eee9dd","ratio":5.65,"ok":true},{"kind":"syntax","fg":"type","bg":"warnTint","fgHex":"#742651","bgHex":"#eee9dd","ratio":8.11,"ok":true},{"kind":"syntax","fg":"function","bg":"warnTint","fgHex":"#007570","bgHex":"#eee9dd","ratio":4.59,"ok":true},{"kind":"ui","fg":"text","bg":"neutralTint","fgHex":"#24292f","bgHex":"#f1efea","ratio":12.75,"ok":true},{"kind":"ui","fg":"textMid","bg":"neutralTint","fgHex":"#57606a","bgHex":"#f1efea","ratio":5.56,"ok":true},{"kind":"ui","fg":"textFaint","bg":"neutralTint","fgHex":"#5c646d","bgHex":"#f1efea","ratio":5.22,"ok":true},{"kind":"ui","fg":"accent","bg":"neutralTint","fgHex":"#005ccc","bgHex":"#f1efea","ratio":5.37,"ok":true},{"kind":"ui","fg":"pass","bg":"neutralTint","fgHex":"#002c85","bgHex":"#f1efea","ratio":10.76,"ok":true},{"kind":"ui","fg":"fail","bg":"neutralTint","fgHex":"#a75000","bgHex":"#f1efea","ratio":4.82,"ok":true},{"kind":"ui","fg":"warn","bg":"neutralTint","fgHex":"#583500","bgHex":"#f1efea","ratio":9.5,"ok":true},{"kind":"ui","fg":"neutral","bg":"neutralTint","fgHex":"#57606a","bgHex":"#f1efea","ratio":5.56,"ok":true},{"kind":"syntax","fg":"keyword","bg":"neutralTint","fgHex":"#002c85","bgHex":"#f1efea","ratio":10.76,"ok":true},{"kind":"syntax","fg":"string","bg":"neutralTint","fgHex":"#a75000","bgHex":"#f1efea","ratio":4.82,"ok":true},{"kind":"syntax","fg":"comment","bg":"neutralTint","fgHex":"#5e5a55","bgHex":"#f1efea","ratio":5.95,"ok":true},{"kind":"syntax","fg":"type","bg":"neutralTint","fgHex":"#742651","bgHex":"#f1efea","ratio":8.54,"ok":true},{"kind":"syntax","fg":"function","bg":"neutralTint","fgHex":"#007570","bgHex":"#f1efea","ratio":4.84,"ok":true},{"kind":"inverted","fg":"bg","bg":"accent","fgHex":"#fbf8f2","bgHex":"#005ccc","ratio":5.82,"ok":true},{"kind":"inverted","fg":"bg","bg":"warn","fgHex":"#fbf8f2","bgHex":"#583500","ratio":10.3,"ok":true},{"kind":"inverted","fg":"bg","bg":"fail","fgHex":"#fbf8f2","bgHex":"#a75000","ratio":5.23,"ok":true}],"cvd":[{"a":"ui.pass","b":"ui.fail","min":9,"d":52.88,"under":"normal","ok":true},{"a":"ui.fail","b":"ui.warn","min":9,"d":11.12,"under":"protanopia","ok":true},{"a":"ui.accent","b":"ui.pass","min":9,"d":14.04,"under":"deuteranopia","ok":true},{"a":"ui.accent","b":"ui.fail","min":9,"d":51.53,"under":"normal","ok":true},{"a":"ui.accent","b":"ui.warn","min":9,"d":47.66,"under":"tritanopia","ok":true},{"a":"syntax.type","b":"syntax.function","min":8,"d":9.1,"under":"deuteranopia","ok":true},{"a":"syntax.type","b":"syntax.string","min":8,"d":19.01,"under":"tritanopia","ok":true},{"a":"syntax.function","b":"syntax.string","min":8,"d":32.99,"under":"protanopia","ok":true},{"a":"syntax.keyword","b":"syntax.type","min":4.5,"d":11.12,"under":"protanopia","ok":true},{"a":"syntax.keyword","b":"syntax.function","min":4.5,"d":14.77,"under":"deuteranopia","ok":true},{"a":"syntax.comment","b":"syntax.type","min":4.5,"d":16.42,"under":"deuteranopia","ok":true},{"a":"syntax.comment","b":"syntax.function","min":4.5,"d":11.25,"under":"protanopia","ok":true}],"ansi":{"colors":["#24292f","#a75000","#00756b","#6d3a00","#002c85","#782445","#005ccc","#eeeae2","#11161d","#844000","#005a52","#442e00","#001f4d","#610030","#00489f","#d4d0c6"],"contrast":[{"index":0,"bg":"bg","fgHex":"#24292f","bgHex":"#fbf8f2","ratio":13.82,"ok":true},{"index":0,"bg":"terminalSelection","fgHex":"#24292f","bgHex":"#e9edf0","ratio":12.45,"ok":true},{"index":1,"bg":"bg","fgHex":"#a75000","bgHex":"#fbf8f2","ratio":5.23,"ok":true},{"index":1,"bg":"terminalSelection","fgHex":"#a75000","bgHex":"#e9edf0","ratio":4.71,"ok":true},{"index":2,"bg":"bg","fgHex":"#00756b","bgHex":"#fbf8f2","ratio":5.27,"ok":true},{"index":2,"bg":"terminalSelection","fgHex":"#00756b","bgHex":"#e9edf0","ratio":4.75,"ok":true},{"index":3,"bg":"bg","fgHex":"#6d3a00","bgHex":"#fbf8f2","ratio":8.78,"ok":true},{"index":3,"bg":"terminalSelection","fgHex":"#6d3a00","bgHex":"#e9edf0","ratio":7.91,"ok":true},{"index":4,"bg":"bg","fgHex":"#002c85","bgHex":"#fbf8f2","ratio":11.66,"ok":true},{"index":4,"bg":"terminalSelection","fgHex":"#002c85","bgHex":"#e9edf0","ratio":10.5,"ok":true},{"index":5,"bg":"bg","fgHex":"#782445","bgHex":"#fbf8f2","ratio":9.27,"ok":true},{"index":5,"bg":"terminalSelection","fgHex":"#782445","bgHex":"#e9edf0","ratio":8.35,"ok":true},{"index":6,"bg":"bg","fgHex":"#005ccc","bgHex":"#fbf8f2","ratio":5.82,"ok":true},{"index":6,"bg":"terminalSelection","fgHex":"#005ccc","bgHex":"#e9edf0","ratio":5.24,"ok":true},{"index":8,"bg":"bg","fgHex":"#11161d","bgHex":"#fbf8f2","ratio":17.13,"ok":true},{"index":8,"bg":"terminalSelection","fgHex":"#11161d","bgHex":"#e9edf0","ratio":15.43,"ok":true},{"index":9,"bg":"bg","fgHex":"#844000","bgHex":"#fbf8f2","ratio":7.3,"ok":true},{"index":9,"bg":"terminalSelection","fgHex":"#844000","bgHex":"#e9edf0","ratio":6.57,"ok":true},{"index":10,"bg":"bg","fgHex":"#005a52","bgHex":"#fbf8f2","ratio":7.67,"ok":true},{"index":10,"bg":"terminalSelection","fgHex":"#005a52","bgHex":"#e9edf0","ratio":6.9,"ok":true},{"index":11,"bg":"bg","fgHex":"#442e00","bgHex":"#fbf8f2","ratio":12.11,"ok":true},{"index":11,"bg":"terminalSelection","fgHex":"#442e00","bgHex":"#e9edf0","ratio":10.9,"ok":true},{"index":12,"bg":"bg","fgHex":"#001f4d","bgHex":"#fbf8f2","ratio":15.2,"ok":true},{"index":12,"bg":"terminalSelection","fgHex":"#001f4d","bgHex":"#e9edf0","ratio":13.69,"ok":true},{"index":13,"bg":"bg","fgHex":"#610030","bgHex":"#fbf8f2","ratio":12.77,"ok":true},{"index":13,"bg":"terminalSelection","fgHex":"#610030","bgHex":"#e9edf0","ratio":11.5,"ok":true},{"index":14,"bg":"bg","fgHex":"#00489f","bgHex":"#fbf8f2","ratio":8.16,"ok":true},{"index":14,"bg":"terminalSelection","fgHex":"#00489f","bgHex":"#e9edf0","ratio":7.35,"ok":true}],"cvd":[{"set":"normal","i":1,"j":2,"d":30.11,"min":5,"ok":true},{"set":"normal","i":1,"j":3,"d":10.22,"min":5,"ok":true},{"set":"normal","i":1,"j":4,"d":52.88,"min":5,"ok":true},{"set":"normal","i":1,"j":5,"d":17.33,"min":5,"ok":true},{"set":"normal","i":1,"j":6,"d":51.53,"min":5,"ok":true},{"set":"normal","i":2,"j":3,"d":35.64,"min":5,"ok":true},{"set":"normal","i":2,"j":4,"d":15.76,"min":5,"ok":true},{"set":"normal","i":2,"j":5,"d":12.63,"min":5,"ok":true},{"set":"normal","i":2,"j":6,"d":10.62,"min":5,"ok":true},{"set":"normal","i":3,"j":4,"d":51.19,"min":5,"ok":true},{"set":"normal","i":3,"j":5,"d":7.96,"min":5,"ok":true},{"set":"normal","i":3,"j":6,"d":50.25,"min":5,"ok":true},{"set":"normal","i":4,"j":5,"d":14.13,"min":5,"ok":true},{"set":"normal","i":4,"j":6,"d":14.04,"min":5,"ok":true},{"set":"normal","i":5,"j":6,"d":23.99,"min":5,"ok":true},{"set":"bright","i":1,"j":2,"d":23.74,"min":5,"ok":true},{"set":"bright","i":1,"j":3,"d":8.67,"min":5,"ok":true},{"set":"bright","i":1,"j":4,"d":43.78,"min":5,"ok":true},{"set":"bright","i":1,"j":5,"d":11.97,"min":5,"ok":true},{"set":"bright","i":1,"j":6,"d":46.37,"min":5,"ok":true},{"set":"bright","i":2,"j":3,"d":22.44,"min":5,"ok":true},{"set":"bright","i":2,"j":4,"d":15.5,"min":5,"ok":true},{"set":"bright","i":2,"j":5,"d":11.13,"min":5,"ok":true},{"set":"bright","i":2,"j":6,"d":7.53,"min":5,"ok":true},{"set":"bright","i":3,"j":4,"d":36.87,"min":5,"ok":true},{"set":"bright","i":3,"j":5,"d":10.46,"min":5,"ok":true},{"set":"bright","i":3,"j":6,"d":40.4,"min":5,"ok":true},{"set":"bright","i":4,"j":5,"d":6.03,"min":5,"ok":true},{"set":"bright","i":4,"j":6,"d":14.36,"min":5,"ok":true},{"set":"bright","i":5,"j":6,"d":20.44,"min":5,"ok":true}]}},"dark":{"name":"Opo Dark","target":4.5,"label":"AA (4.5:1)","ui":{"bg":"#161410","bgPanel":"#191612","bgHover":"#1c1a14","text":"#d1d7df","textMid":"#99a3ae","textFaint":"#979fa9","accent":"#79afff","pass":"#bad6ff","fail":"#ea8d4a","warn":"#f0c680","neutral":"#99a3ae"},"syntax":{"keyword":"#bad6ff","type":"#ffa3cf","comment":"#b8b4ae","function":"#55c2bc","string":"#ea8d4a"},"notes":{"listSelection":"accent 20% over bgPanel","textSelection":"accent 20% over bg","passTint":"pass 16% over bg","failTint":"fail 16% over bg","warnTint":"warn 16% over bg","neutralTint":"neutral 20% over bg"},"contrast":[{"kind":"ui","fg":"text","bg":"bg","fgHex":"#d1d7df","bgHex":"#161410","ratio":12.7,"ok":true},{"kind":"ui","fg":"textMid","bg":"bg","fgHex":"#99a3ae","bgHex":"#161410","ratio":7.19,"ok":true},{"kind":"ui","fg":"textFaint","bg":"bg","fgHex":"#979fa9","bgHex":"#161410","ratio":6.87,"ok":true},{"kind":"ui","fg":"accent","bg":"bg","fgHex":"#79afff","bgHex":"#161410","ratio":8.22,"ok":true},{"kind":"ui","fg":"pass","bg":"bg","fgHex":"#bad6ff","bgHex":"#161410","ratio":12.39,"ok":true},{"kind":"ui","fg":"fail","bg":"bg","fgHex":"#ea8d4a","bgHex":"#161410","ratio":7.36,"ok":true},{"kind":"ui","fg":"warn","bg":"bg","fgHex":"#f0c680","bgHex":"#161410","ratio":11.47,"ok":true},{"kind":"ui","fg":"neutral","bg":"bg","fgHex":"#99a3ae","bgHex":"#161410","ratio":7.19,"ok":true},{"kind":"syntax","fg":"keyword","bg":"bg","fgHex":"#bad6ff","bgHex":"#161410","ratio":12.39,"ok":true},{"kind":"syntax","fg":"string","bg":"bg","fgHex":"#ea8d4a","bgHex":"#161410","ratio":7.36,"ok":true},{"kind":"syntax","fg":"comment","bg":"bg","fgHex":"#b8b4ae","bgHex":"#161410","ratio":8.91,"ok":true},{"kind":"syntax","fg":"type","bg":"bg","fgHex":"#ffa3cf","bgHex":"#161410","ratio":9.98,"ok":true},{"kind":"syntax","fg":"function","bg":"bg","fgHex":"#55c2bc","bgHex":"#161410","ratio":8.61,"ok":true},{"kind":"ui","fg":"text","bg":"bgPanel","fgHex":"#d1d7df","bgHex":"#191612","ratio":12.45,"ok":true},{"kind":"ui","fg":"textMid","bg":"bgPanel","fgHex":"#99a3ae","bgHex":"#191612","ratio":7.04,"ok":true},{"kind":"ui","fg":"textFaint","bg":"bgPanel","fgHex":"#979fa9","bgHex":"#191612","ratio":6.74,"ok":true},{"kind":"ui","fg":"accent","bg":"bgPanel","fgHex":"#79afff","bgHex":"#191612","ratio":8.06,"ok":true},{"kind":"ui","fg":"pass","bg":"bgPanel","fgHex":"#bad6ff","bgHex":"#191612","ratio":12.15,"ok":true},{"kind":"ui","fg":"fail","bg":"bgPanel","fgHex":"#ea8d4a","bgHex":"#191612","ratio":7.22,"ok":true},{"kind":"ui","fg":"warn","bg":"bgPanel","fgHex":"#f0c680","bgHex":"#191612","ratio":11.24,"ok":true},{"kind":"ui","fg":"neutral","bg":"bgPanel","fgHex":"#99a3ae","bgHex":"#191612","ratio":7.04,"ok":true},{"kind":"syntax","fg":"keyword","bg":"bgPanel","fgHex":"#bad6ff","bgHex":"#191612","ratio":12.15,"ok":true},{"kind":"syntax","fg":"string","bg":"bgPanel","fgHex":"#ea8d4a","bgHex":"#191612","ratio":7.22,"ok":true},{"kind":"syntax","fg":"comment","bg":"bgPanel","fgHex":"#b8b4ae","bgHex":"#191612","ratio":8.74,"ok":true},{"kind":"syntax","fg":"type","bg":"bgPanel","fgHex":"#ffa3cf","bgHex":"#191612","ratio":9.78,"ok":true},{"kind":"syntax","fg":"function","bg":"bgPanel","fgHex":"#55c2bc","bgHex":"#191612","ratio":8.44,"ok":true},{"kind":"ui","fg":"text","bg":"bgHover","fgHex":"#d1d7df","bgHex":"#1c1a14","ratio":12.01,"ok":true},{"kind":"ui","fg":"textMid","bg":"bgHover","fgHex":"#99a3ae","bgHex":"#1c1a14","ratio":6.8,"ok":true},{"kind":"ui","fg":"textFaint","bg":"bgHover","fgHex":"#979fa9","bgHex":"#1c1a14","ratio":6.5,"ok":true},{"kind":"ui","fg":"accent","bg":"bgHover","fgHex":"#79afff","bgHex":"#1c1a14","ratio":7.78,"ok":true},{"kind":"ui","fg":"pass","bg":"bgHover","fgHex":"#bad6ff","bgHex":"#1c1a14","ratio":11.72,"ok":true},{"kind":"ui","fg":"fail","bg":"bgHover","fgHex":"#ea8d4a","bgHex":"#1c1a14","ratio":6.96,"ok":true},{"kind":"ui","fg":"warn","bg":"bgHover","fgHex":"#f0c680","bgHex":"#1c1a14","ratio":10.85,"ok":true},{"kind":"ui","fg":"neutral","bg":"bgHover","fgHex":"#99a3ae","bgHex":"#1c1a14","ratio":6.8,"ok":true},{"kind":"syntax","fg":"keyword","bg":"bgHover","fgHex":"#bad6ff","bgHex":"#1c1a14","ratio":11.72,"ok":true},{"kind":"syntax","fg":"string","bg":"bgHover","fgHex":"#ea8d4a","bgHex":"#1c1a14","ratio":6.96,"ok":true},{"kind":"syntax","fg":"comment","bg":"bgHover","fgHex":"#b8b4ae","bgHex":"#1c1a14","ratio":8.43,"ok":true},{"kind":"syntax","fg":"type","bg":"bgHover","fgHex":"#ffa3cf","bgHex":"#1c1a14","ratio":9.44,"ok":true},{"kind":"syntax","fg":"function","bg":"bgHover","fgHex":"#55c2bc","bgHex":"#1c1a14","ratio":8.14,"ok":true},{"kind":"ui","fg":"text","bg":"listSelection","fgHex":"#d1d7df","bgHex":"#2c3541","ratio":8.56,"ok":true},{"kind":"ui","fg":"textMid","bg":"listSelection","fgHex":"#99a3ae","bgHex":"#2c3541","ratio":4.85,"ok":true},{"kind":"ui","fg":"textFaint","bg":"listSelection","fgHex":"#979fa9","bgHex":"#2c3541","ratio":4.64,"ok":true},{"kind":"ui","fg":"accent","bg":"listSelection","fgHex":"#79afff","bgHex":"#2c3541","ratio":5.55,"ok":true},{"kind":"ui","fg":"pass","bg":"listSelection","fgHex":"#bad6ff","bgHex":"#2c3541","ratio":8.36,"ok":true},{"kind":"ui","fg":"fail","bg":"listSelection","fgHex":"#ea8d4a","bgHex":"#2c3541","ratio":4.97,"ok":true},{"kind":"ui","fg":"warn","bg":"listSelection","fgHex":"#f0c680","bgHex":"#2c3541","ratio":7.74,"ok":true},{"kind":"ui","fg":"neutral","bg":"listSelection","fgHex":"#99a3ae","bgHex":"#2c3541","ratio":4.85,"ok":true},{"kind":"syntax","fg":"keyword","bg":"listSelection","fgHex":"#bad6ff","bgHex":"#2c3541","ratio":8.36,"ok":true},{"kind":"syntax","fg":"string","bg":"listSelection","fgHex":"#ea8d4a","bgHex":"#2c3541","ratio":4.97,"ok":true},{"kind":"syntax","fg":"comment","bg":"listSelection","fgHex":"#b8b4ae","bgHex":"#2c3541","ratio":6.01,"ok":true},{"kind":"syntax","fg":"type","bg":"listSelection","fgHex":"#ffa3cf","bgHex":"#2c3541","ratio":6.73,"ok":true},{"kind":"syntax","fg":"function","bg":"listSelection","fgHex":"#55c2bc","bgHex":"#2c3541","ratio":5.81,"ok":true},{"kind":"ui","fg":"text","bg":"textSelection","fgHex":"#d1d7df","bgHex":"#2a3340","ratio":8.81,"ok":true},{"kind":"ui","fg":"textMid","bg":"textSelection","fgHex":"#99a3ae","bgHex":"#2a3340","ratio":4.98,"ok":true},{"kind":"ui","fg":"textFaint","bg":"textSelection","fgHex":"#979fa9","bgHex":"#2a3340","ratio":4.77,"ok":true},{"kind":"ui","fg":"accent","bg":"textSelection","fgHex":"#79afff","bgHex":"#2a3340","ratio":5.7,"ok":true},{"kind":"ui","fg":"pass","bg":"textSelection","fgHex":"#bad6ff","bgHex":"#2a3340","ratio":8.6,"ok":true},{"kind":"ui","fg":"fail","bg":"textSelection","fgHex":"#ea8d4a","bgHex":"#2a3340","ratio":5.11,"ok":true},{"kind":"ui","fg":"warn","bg":"textSelection","fgHex":"#f0c680","bgHex":"#2a3340","ratio":7.96,"ok":true},{"kind":"ui","fg":"neutral","bg":"textSelection","fgHex":"#99a3ae","bgHex":"#2a3340","ratio":4.98,"ok":true},{"kind":"syntax","fg":"keyword","bg":"textSelection","fgHex":"#bad6ff","bgHex":"#2a3340","ratio":8.6,"ok":true},{"kind":"syntax","fg":"string","bg":"textSelection","fgHex":"#ea8d4a","bgHex":"#2a3340","ratio":5.11,"ok":true},{"kind":"syntax","fg":"comment","bg":"textSelection","fgHex":"#b8b4ae","bgHex":"#2a3340","ratio":6.18,"ok":true},{"kind":"syntax","fg":"type","bg":"textSelection","fgHex":"#ffa3cf","bgHex":"#2a3340","ratio":6.92,"ok":true},{"kind":"syntax","fg":"function","bg":"textSelection","fgHex":"#55c2bc","bgHex":"#2a3340","ratio":5.97,"ok":true},{"kind":"ui","fg":"text","bg":"passTint","fgHex":"#d1d7df","bgHex":"#303337","ratio":8.76,"ok":true},{"kind":"ui","fg":"textMid","bg":"passTint","fgHex":"#99a3ae","bgHex":"#303337","ratio":4.96,"ok":true},{"kind":"ui","fg":"textFaint","bg":"passTint","fgHex":"#979fa9","bgHex":"#303337","ratio":4.74,"ok":true},{"kind":"ui","fg":"accent","bg":"passTint","fgHex":"#79afff","bgHex":"#303337","ratio":5.68,"ok":true},{"kind":"ui","fg":"pass","bg":"passTint","fgHex":"#bad6ff","bgHex":"#303337","ratio":8.55,"ok":true},{"kind":"ui","fg":"fail","bg":"passTint","fgHex":"#ea8d4a","bgHex":"#303337","ratio":5.08,"ok":true},{"kind":"ui","fg":"warn","bg":"passTint","fgHex":"#f0c680","bgHex":"#303337","ratio":7.92,"ok":true},{"kind":"ui","fg":"neutral","bg":"passTint","fgHex":"#99a3ae","bgHex":"#303337","ratio":4.96,"ok":true},{"kind":"syntax","fg":"keyword","bg":"passTint","fgHex":"#bad6ff","bgHex":"#303337","ratio":8.55,"ok":true},{"kind":"syntax","fg":"string","bg":"passTint","fgHex":"#ea8d4a","bgHex":"#303337","ratio":5.08,"ok":true},{"kind":"syntax","fg":"comment","bg":"passTint","fgHex":"#b8b4ae","bgHex":"#303337","ratio":6.15,"ok":true},{"kind":"syntax","fg":"type","bg":"passTint","fgHex":"#ffa3cf","bgHex":"#303337","ratio":6.89,"ok":true},{"kind":"syntax","fg":"function","bg":"passTint","fgHex":"#55c2bc","bgHex":"#303337","ratio":5.94,"ok":true},{"kind":"ui","fg":"text","bg":"failTint","fgHex":"#d1d7df","bgHex":"#382719","ratio":9.85,"ok":true},{"kind":"ui","fg":"textMid","bg":"failTint","fgHex":"#99a3ae","bgHex":"#382719","ratio":5.57,"ok":true},{"kind":"ui","fg":"textFaint","bg":"failTint","fgHex":"#979fa9","bgHex":"#382719","ratio":5.33,"ok":true},{"kind":"ui","fg":"accent","bg":"failTint","fgHex":"#79afff","bgHex":"#382719","ratio":6.38,"ok":true},{"kind":"ui","fg":"pass","bg":"failTint","fgHex":"#bad6ff","bgHex":"#382719","ratio":9.61,"ok":true},{"kind":"ui","fg":"fail","bg":"failTint","fgHex":"#ea8d4a","bgHex":"#382719","ratio":5.71,"ok":true},{"kind":"ui","fg":"warn","bg":"failTint","fgHex":"#f0c680","bgHex":"#382719","ratio":8.89,"ok":true},{"kind":"ui","fg":"neutral","bg":"failTint","fgHex":"#99a3ae","bgHex":"#382719","ratio":5.57,"ok":true},{"kind":"syntax","fg":"keyword","bg":"failTint","fgHex":"#bad6ff","bgHex":"#382719","ratio":9.61,"ok":true},{"kind":"syntax","fg":"string","bg":"failTint","fgHex":"#ea8d4a","bgHex":"#382719","ratio":5.71,"ok":true},{"kind":"syntax","fg":"comment","bg":"failTint","fgHex":"#b8b4ae","bgHex":"#382719","ratio":6.91,"ok":true},{"kind":"syntax","fg":"type","bg":"failTint","fgHex":"#ffa3cf","bgHex":"#382719","ratio":7.74,"ok":true},{"kind":"syntax","fg":"function","bg":"failTint","fgHex":"#55c2bc","bgHex":"#382719","ratio":6.68,"ok":true},{"kind":"ui","fg":"text","bg":"warnTint","fgHex":"#d1d7df","bgHex":"#393122","ratio":8.86,"ok":true},{"kind":"ui","fg":"textMid","bg":"warnTint","fgHex":"#99a3ae","bgHex":"#393122","ratio":5.01,"ok":true},{"kind":"ui","fg":"textFaint","bg":"warnTint","fgHex":"#979fa9","bgHex":"#393122","ratio":4.8,"ok":true},{"kind":"ui","fg":"accent","bg":"warnTint","fgHex":"#79afff","bgHex":"#393122","ratio":5.74,"ok":true},{"kind":"ui","fg":"pass","bg":"warnTint","fgHex":"#bad6ff","bgHex":"#393122","ratio":8.65,"ok":true},{"kind":"ui","fg":"fail","bg":"warnTint","fgHex":"#ea8d4a","bgHex":"#393122","ratio":5.14,"ok":true},{"kind":"ui","fg":"warn","bg":"warnTint","fgHex":"#f0c680","bgHex":"#393122","ratio":8,"ok":true},{"kind":"ui","fg":"neutral","bg":"warnTint","fgHex":"#99a3ae","bgHex":"#393122","ratio":5.01,"ok":true},{"kind":"syntax","fg":"keyword","bg":"warnTint","fgHex":"#bad6ff","bgHex":"#393122","ratio":8.65,"ok":true},{"kind":"syntax","fg":"string","bg":"warnTint","fgHex":"#ea8d4a","bgHex":"#393122","ratio":5.14,"ok":true},{"kind":"syntax","fg":"comment","bg":"warnTint","fgHex":"#b8b4ae","bgHex":"#393122","ratio":6.22,"ok":true},{"kind":"syntax","fg":"type","bg":"warnTint","fgHex":"#ffa3cf","bgHex":"#393122","ratio":6.96,"ok":true},{"kind":"syntax","fg":"function","bg":"warnTint","fgHex":"#55c2bc","bgHex":"#393122","ratio":6.01,"ok":true},{"kind":"ui","fg":"text","bg":"neutralTint","fgHex":"#d1d7df","bgHex":"#303130","ratio":9.02,"ok":true},{"kind":"ui","fg":"textMid","bg":"neutralTint","fgHex":"#99a3ae","bgHex":"#303130","ratio":5.1,"ok":true},{"kind":"ui","fg":"textFaint","bg":"neutralTint","fgHex":"#979fa9","bgHex":"#303130","ratio":4.88,"ok":true},{"kind":"ui","fg":"accent","bg":"neutralTint","fgHex":"#79afff","bgHex":"#303130","ratio":5.84,"ok":true},{"kind":"ui","fg":"pass","bg":"neutralTint","fgHex":"#bad6ff","bgHex":"#303130","ratio":8.8,"ok":true},{"kind":"ui","fg":"fail","bg":"neutralTint","fgHex":"#ea8d4a","bgHex":"#303130","ratio":5.23,"ok":true},{"kind":"ui","fg":"warn","bg":"neutralTint","fgHex":"#f0c680","bgHex":"#303130","ratio":8.14,"ok":true},{"kind":"ui","fg":"neutral","bg":"neutralTint","fgHex":"#99a3ae","bgHex":"#303130","ratio":5.1,"ok":true},{"kind":"syntax","fg":"keyword","bg":"neutralTint","fgHex":"#bad6ff","bgHex":"#303130","ratio":8.8,"ok":true},{"kind":"syntax","fg":"string","bg":"neutralTint","fgHex":"#ea8d4a","bgHex":"#303130","ratio":5.23,"ok":true},{"kind":"syntax","fg":"comment","bg":"neutralTint","fgHex":"#b8b4ae","bgHex":"#303130","ratio":6.33,"ok":true},{"kind":"syntax","fg":"type","bg":"neutralTint","fgHex":"#ffa3cf","bgHex":"#303130","ratio":7.09,"ok":true},{"kind":"syntax","fg":"function","bg":"neutralTint","fgHex":"#55c2bc","bgHex":"#303130","ratio":6.11,"ok":true},{"kind":"inverted","fg":"bg","bg":"accent","fgHex":"#161410","bgHex":"#79afff","ratio":8.22,"ok":true},{"kind":"inverted","fg":"bg","bg":"warn","fgHex":"#161410","bgHex":"#f0c680","ratio":11.47,"ok":true},{"kind":"inverted","fg":"bg","bg":"fail","fgHex":"#161410","bgHex":"#ea8d4a","ratio":7.36,"ok":true}],"cvd":[{"a":"ui.pass","b":"ui.fail","min":9,"d":41.59,"under":"normal","ok":true},{"a":"ui.fail","b":"ui.warn","min":9,"d":11.45,"under":"deuteranopia","ok":true},{"a":"ui.accent","b":"ui.pass","min":9,"d":11.32,"under":"tritanopia","ok":true},{"a":"ui.accent","b":"ui.fail","min":9,"d":46.18,"under":"normal","ok":true},{"a":"ui.accent","b":"ui.warn","min":9,"d":43.29,"under":"tritanopia","ok":true},{"a":"syntax.type","b":"syntax.function","min":8,"d":9.02,"under":"deuteranopia","ok":true},{"a":"syntax.type","b":"syntax.string","min":8,"d":11.35,"under":"tritanopia","ok":true},{"a":"syntax.function","b":"syntax.string","min":8,"d":27.9,"under":"protanopia","ok":true},{"a":"syntax.keyword","b":"syntax.type","min":4.5,"d":9.75,"under":"protanopia","ok":true},{"a":"syntax.keyword","b":"syntax.function","min":4.5,"d":13.11,"under":"deuteranopia","ok":true},{"a":"syntax.comment","b":"syntax.type","min":4.5,"d":10.68,"under":"deuteranopia","ok":true},{"a":"syntax.comment","b":"syntax.function","min":4.5,"d":7.04,"under":"protanopia","ok":true}],"ansi":{"colors":["#727b86","#e08440","#33a397","#dca331","#498beb","#cd718f","#74acff","#ffffff","#96a0ab","#ffaf7a","#5fc9bc","#ffcb70","#7fb3ff","#f696b4","#b5d3ff","#ffffff"],"contrast":[{"index":1,"bg":"bg","fgHex":"#e08440","bgHex":"#161410","ratio":6.61,"ok":true},{"index":1,"bg":"terminalSelection","fgHex":"#e08440","bgHex":"#202429","ratio":5.61,"ok":true},{"index":2,"bg":"bg","fgHex":"#33a397","bgHex":"#161410","ratio":5.98,"ok":true},{"index":2,"bg":"terminalSelection","fgHex":"#33a397","bgHex":"#202429","ratio":5.07,"ok":true},{"index":3,"bg":"bg","fgHex":"#dca331","bgHex":"#161410","ratio":8.17,"ok":true},{"index":3,"bg":"terminalSelection","fgHex":"#dca331","bgHex":"#202429","ratio":6.93,"ok":true},{"index":4,"bg":"bg","fgHex":"#498beb","bgHex":"#161410","ratio":5.41,"ok":true},{"index":4,"bg":"terminalSelection","fgHex":"#498beb","bgHex":"#202429","ratio":4.59,"ok":true},{"index":5,"bg":"bg","fgHex":"#cd718f","bgHex":"#161410","ratio":5.57,"ok":true},{"index":5,"bg":"terminalSelection","fgHex":"#cd718f","bgHex":"#202429","ratio":4.72,"ok":true},{"index":6,"bg":"bg","fgHex":"#74acff","bgHex":"#161410","ratio":7.96,"ok":true},{"index":6,"bg":"terminalSelection","fgHex":"#74acff","bgHex":"#202429","ratio":6.75,"ok":true},{"index":7,"bg":"bg","fgHex":"#ffffff","bgHex":"#161410","ratio":18.39,"ok":true},{"index":7,"bg":"terminalSelection","fgHex":"#ffffff","bgHex":"#202429","ratio":15.6,"ok":true},{"index":8,"bg":"bg","fgHex":"#96a0ab","bgHex":"#161410","ratio":6.93,"ok":true},{"index":8,"bg":"terminalSelection","fgHex":"#96a0ab","bgHex":"#202429","ratio":5.88,"ok":true},{"index":9,"bg":"bg","fgHex":"#ffaf7a","bgHex":"#161410","ratio":10.22,"ok":true},{"index":9,"bg":"terminalSelection","fgHex":"#ffaf7a","bgHex":"#202429","ratio":8.67,"ok":true},{"index":10,"bg":"bg","fgHex":"#5fc9bc","bgHex":"#161410","ratio":9.26,"ok":true},{"index":10,"bg":"terminalSelection","fgHex":"#5fc9bc","bgHex":"#202429","ratio":7.85,"ok":true},{"index":11,"bg":"bg","fgHex":"#ffcb70","bgHex":"#161410","ratio":12.29,"ok":true},{"index":11,"bg":"terminalSelection","fgHex":"#ffcb70","bgHex":"#202429","ratio":10.42,"ok":true},{"index":12,"bg":"bg","fgHex":"#7fb3ff","bgHex":"#161410","ratio":8.58,"ok":true},{"index":12,"bg":"terminalSelection","fgHex":"#7fb3ff","bgHex":"#202429","ratio":7.28,"ok":true},{"index":13,"bg":"bg","fgHex":"#f696b4","bgHex":"#161410","ratio":8.71,"ok":true},{"index":13,"bg":"terminalSelection","fgHex":"#f696b4","bgHex":"#202429","ratio":7.39,"ok":true},{"index":14,"bg":"bg","fgHex":"#b5d3ff","bgHex":"#161410","ratio":12.02,"ok":true},{"index":14,"bg":"terminalSelection","fgHex":"#b5d3ff","bgHex":"#202429","ratio":10.2,"ok":true},{"index":15,"bg":"bg","fgHex":"#ffffff","bgHex":"#161410","ratio":18.39,"ok":true},{"index":15,"bg":"terminalSelection","fgHex":"#ffffff","bgHex":"#202429","ratio":15.6,"ok":true}],"cvd":[{"set":"normal","i":1,"j":2,"d":23.57,"min":5,"ok":true},{"set":"normal","i":1,"j":3,"d":5.8,"min":5,"ok":true},{"set":"normal","i":1,"j":4,"d":48.27,"min":5,"ok":true},{"set":"normal","i":1,"j":5,"d":8.83,"min":5,"ok":true},{"set":"normal","i":1,"j":6,"d":46.85,"min":5,"ok":true},{"set":"normal","i":2,"j":3,"d":27.43,"min":5,"ok":true},{"set":"normal","i":2,"j":4,"d":8.77,"min":5,"ok":true},{"set":"normal","i":2,"j":5,"d":10.08,"min":5,"ok":true},{"set":"normal","i":2,"j":6,"d":10.45,"min":5,"ok":true},{"set":"normal","i":3,"j":4,"d":49.09,"min":5,"ok":true},{"set":"normal","i":3,"j":5,"d":11.58,"min":5,"ok":true},{"set":"normal","i":3,"j":6,"d":47.77,"min":5,"ok":true},{"set":"normal","i":4,"j":5,"d":17.69,"min":5,"ok":true},{"set":"normal","i":4,"j":6,"d":9.27,"min":5,"ok":true},{"set":"normal","i":5,"j":6,"d":21.88,"min":5,"ok":true},{"set":"bright","i":1,"j":2,"d":19.49,"min":5,"ok":true},{"set":"bright","i":1,"j":3,"d":5.52,"min":5,"ok":true},{"set":"bright","i":1,"j":4,"d":43.21,"min":5,"ok":true},{"set":"bright","i":1,"j":5,"d":5.9,"min":5,"ok":true},{"set":"bright","i":1,"j":6,"d":37.8,"min":5,"ok":true},{"set":"bright","i":2,"j":3,"d":24.14,"min":5,"ok":true},{"set":"bright","i":2,"j":4,"d":8.4,"min":5,"ok":true},{"set":"bright","i":2,"j":5,"d":9.14,"min":5,"ok":true},{"set":"bright","i":2,"j":6,"d":12.46,"min":5,"ok":true},{"set":"bright","i":3,"j":4,"d":45.63,"min":5,"ok":true},{"set":"bright","i":3,"j":5,"d":10.21,"min":5,"ok":true},{"set":"bright","i":3,"j":6,"d":39.88,"min":5,"ok":true},{"set":"bright","i":4,"j":5,"d":15.24,"min":5,"ok":true},{"set":"bright","i":4,"j":6,"d":9.52,"min":5,"ok":true},{"set":"bright","i":5,"j":6,"d":15.2,"min":5,"ok":true}]}},"hc":{"name":"Opo High Contrast","target":7,"label":"AAA (7:1)","ui":{"bg":"#fdfaf3","bgPanel":"#f9f5ed","bgHover":"#f4efe5","text":"#13191f","textMid":"#353f4a","textFaint":"#3a424b","accent":"#003c88","pass":"#001e4b","fail":"#6f3500","warn":"#352300","neutral":"#353f4a"},"syntax":{"keyword":"#001e4b","type":"#570036","comment":"#3e3b35","function":"#004c49","string":"#6f3500"},"notes":{"listSelection":"accent 12% over bgPanel","textSelection":"accent 14% over bg","passTint":"pass 12% over bg","failTint":"fail 12% over bg","warnTint":"warn 12% over bg","neutralTint":"neutral 12% over bg"},"contrast":[{"kind":"ui","fg":"text","bg":"bg","fgHex":"#13191f","bgHex":"#fdfaf3","ratio":16.98,"ok":true},{"kind":"ui","fg":"textMid","bg":"bg","fgHex":"#353f4a","bgHex":"#fdfaf3","ratio":10.27,"ok":true},{"kind":"ui","fg":"textFaint","bg":"bg","fgHex":"#3a424b","bgHex":"#fdfaf3","ratio":9.78,"ok":true},{"kind":"ui","fg":"accent","bg":"bg","fgHex":"#003c88","bgHex":"#fdfaf3","ratio":10.06,"ok":true},{"kind":"ui","fg":"pass","bg":"bg","fgHex":"#001e4b","bgHex":"#fdfaf3","ratio":15.65,"ok":true},{"kind":"ui","fg":"fail","bg":"bg","fgHex":"#6f3500","bgHex":"#fdfaf3","ratio":9.22,"ok":true},{"kind":"ui","fg":"warn","bg":"bg","fgHex":"#352300","bgHex":"#fdfaf3","ratio":14.47,"ok":true},{"kind":"ui","fg":"neutral","bg":"bg","fgHex":"#353f4a","bgHex":"#fdfaf3","ratio":10.27,"ok":true},{"kind":"syntax","fg":"keyword","bg":"bg","fgHex":"#001e4b","bgHex":"#fdfaf3","ratio":15.65,"ok":true},{"kind":"syntax","fg":"string","bg":"bg","fgHex":"#6f3500","bgHex":"#fdfaf3","ratio":9.22,"ok":true},{"kind":"syntax","fg":"comment","bg":"bg","fgHex":"#3e3b35","bgHex":"#fdfaf3","ratio":10.71,"ok":true},{"kind":"syntax","fg":"type","bg":"bg","fgHex":"#570036","bgHex":"#fdfaf3","ratio":13.81,"ok":true},{"kind":"syntax","fg":"function","bg":"bg","fgHex":"#004c49","bgHex":"#fdfaf3","ratio":9.46,"ok":true},{"kind":"ui","fg":"text","bg":"bgPanel","fgHex":"#13191f","bgHex":"#f9f5ed","ratio":16.28,"ok":true},{"kind":"ui","fg":"textMid","bg":"bgPanel","fgHex":"#353f4a","bgHex":"#f9f5ed","ratio":9.85,"ok":true},{"kind":"ui","fg":"textFaint","bg":"bgPanel","fgHex":"#3a424b","bgHex":"#f9f5ed","ratio":9.37,"ok":true},{"kind":"ui","fg":"accent","bg":"bgPanel","fgHex":"#003c88","bgHex":"#f9f5ed","ratio":9.65,"ok":true},{"kind":"ui","fg":"pass","bg":"bgPanel","fgHex":"#001e4b","bgHex":"#f9f5ed","ratio":15,"ok":true},{"kind":"ui","fg":"fail","bg":"bgPanel","fgHex":"#6f3500","bgHex":"#f9f5ed","ratio":8.84,"ok":true},{"kind":"ui","fg":"warn","bg":"bgPanel","fgHex":"#352300","bgHex":"#f9f5ed","ratio":13.88,"ok":true},{"kind":"ui","fg":"neutral","bg":"bgPanel","fgHex":"#353f4a","bgHex":"#f9f5ed","ratio":9.85,"ok":true},{"kind":"syntax","fg":"keyword","bg":"bgPanel","fgHex":"#001e4b","bgHex":"#f9f5ed","ratio":15,"ok":true},{"kind":"syntax","fg":"string","bg":"bgPanel","fgHex":"#6f3500","bgHex":"#f9f5ed","ratio":8.84,"ok":true},{"kind":"syntax","fg":"comment","bg":"bgPanel","fgHex":"#3e3b35","bgHex":"#f9f5ed","ratio":10.26,"ok":true},{"kind":"syntax","fg":"type","bg":"bgPanel","fgHex":"#570036","bgHex":"#f9f5ed","ratio":13.24,"ok":true},{"kind":"syntax","fg":"function","bg":"bgPanel","fgHex":"#004c49","bgHex":"#f9f5ed","ratio":9.07,"ok":true},{"kind":"ui","fg":"text","bg":"bgHover","fgHex":"#13191f","bgHex":"#f4efe5","ratio":15.44,"ok":true},{"kind":"ui","fg":"textMid","bg":"bgHover","fgHex":"#353f4a","bgHex":"#f4efe5","ratio":9.34,"ok":true},{"kind":"ui","fg":"textFaint","bg":"bgHover","fgHex":"#3a424b","bgHex":"#f4efe5","ratio":8.89,"ok":true},{"kind":"ui","fg":"accent","bg":"bgHover","fgHex":"#003c88","bgHex":"#f4efe5","ratio":9.15,"ok":true},{"kind":"ui","fg":"pass","bg":"bgHover","fgHex":"#001e4b","bgHex":"#f4efe5","ratio":14.23,"ok":true},{"kind":"ui","fg":"fail","bg":"bgHover","fgHex":"#6f3500","bgHex":"#f4efe5","ratio":8.39,"ok":true},{"kind":"ui","fg":"warn","bg":"bgHover","fgHex":"#352300","bgHex":"#f4efe5","ratio":13.17,"ok":true},{"kind":"ui","fg":"neutral","bg":"bgHover","fgHex":"#353f4a","bgHex":"#f4efe5","ratio":9.34,"ok":true},{"kind":"syntax","fg":"keyword","bg":"bgHover","fgHex":"#001e4b","bgHex":"#f4efe5","ratio":14.23,"ok":true},{"kind":"syntax","fg":"string","bg":"bgHover","fgHex":"#6f3500","bgHex":"#f4efe5","ratio":8.39,"ok":true},{"kind":"syntax","fg":"comment","bg":"bgHover","fgHex":"#3e3b35","bgHex":"#f4efe5","ratio":9.74,"ok":true},{"kind":"syntax","fg":"type","bg":"bgHover","fgHex":"#570036","bgHex":"#f4efe5","ratio":12.56,"ok":true},{"kind":"syntax","fg":"function","bg":"bgHover","fgHex":"#004c49","bgHex":"#f4efe5","ratio":8.6,"ok":true},{"kind":"ui","fg":"text","bg":"listSelection","fgHex":"#13191f","bgHex":"#dbdfe1","ratio":13.19,"ok":true},{"kind":"ui","fg":"textMid","bg":"listSelection","fgHex":"#353f4a","bgHex":"#dbdfe1","ratio":7.98,"ok":true},{"kind":"ui","fg":"textFaint","bg":"listSelection","fgHex":"#3a424b","bgHex":"#dbdfe1","ratio":7.6,"ok":true},{"kind":"ui","fg":"accent","bg":"listSelection","fgHex":"#003c88","bgHex":"#dbdfe1","ratio":7.82,"ok":true},{"kind":"ui","fg":"pass","bg":"listSelection","fgHex":"#001e4b","bgHex":"#dbdfe1","ratio":12.16,"ok":true},{"kind":"ui","fg":"fail","bg":"listSelection","fgHex":"#6f3500","bgHex":"#dbdfe1","ratio":7.16,"ok":true},{"kind":"ui","fg":"warn","bg":"listSelection","fgHex":"#352300","bgHex":"#dbdfe1","ratio":11.25,"ok":true},{"kind":"ui","fg":"neutral","bg":"listSelection","fgHex":"#353f4a","bgHex":"#dbdfe1","ratio":7.98,"ok":true},{"kind":"syntax","fg":"keyword","bg":"listSelection","fgHex":"#001e4b","bgHex":"#dbdfe1","ratio":12.16,"ok":true},{"kind":"syntax","fg":"string","bg":"listSelection","fgHex":"#6f3500","bgHex":"#dbdfe1","ratio":7.16,"ok":true},{"kind":"syntax","fg":"comment","bg":"listSelection","fgHex":"#3e3b35","bgHex":"#dbdfe1","ratio":8.32,"ok":true},{"kind":"syntax","fg":"type","bg":"listSelection","fgHex":"#570036","bgHex":"#dbdfe1","ratio":10.73,"ok":true},{"kind":"syntax","fg":"function","bg":"listSelection","fgHex":"#004c49","bgHex":"#dbdfe1","ratio":7.35,"ok":true},{"kind":"ui","fg":"text","bg":"textSelection","fgHex":"#13191f","bgHex":"#d9dfe4","ratio":13.17,"ok":true},{"kind":"ui","fg":"textMid","bg":"textSelection","fgHex":"#353f4a","bgHex":"#d9dfe4","ratio":7.97,"ok":true},{"kind":"ui","fg":"textFaint","bg":"textSelection","fgHex":"#3a424b","bgHex":"#d9dfe4","ratio":7.58,"ok":true},{"kind":"ui","fg":"accent","bg":"textSelection","fgHex":"#003c88","bgHex":"#d9dfe4","ratio":7.81,"ok":true},{"kind":"ui","fg":"pass","bg":"textSelection","fgHex":"#001e4b","bgHex":"#d9dfe4","ratio":12.14,"ok":true},{"kind":"ui","fg":"fail","bg":"textSelection","fgHex":"#6f3500","bgHex":"#d9dfe4","ratio":7.15,"ok":true},{"kind":"ui","fg":"warn","bg":"textSelection","fgHex":"#352300","bgHex":"#d9dfe4","ratio":11.23,"ok":true},{"kind":"ui","fg":"neutral","bg":"textSelection","fgHex":"#353f4a","bgHex":"#d9dfe4","ratio":7.97,"ok":true},{"kind":"syntax","fg":"keyword","bg":"textSelection","fgHex":"#001e4b","bgHex":"#d9dfe4","ratio":12.14,"ok":true},{"kind":"syntax","fg":"string","bg":"textSelection","fgHex":"#6f3500","bgHex":"#d9dfe4","ratio":7.15,"ok":true},{"kind":"syntax","fg":"comment","bg":"textSelection","fgHex":"#3e3b35","bgHex":"#d9dfe4","ratio":8.3,"ok":true},{"kind":"syntax","fg":"type","bg":"textSelection","fgHex":"#570036","bgHex":"#d9dfe4","ratio":10.71,"ok":true},{"kind":"syntax","fg":"function","bg":"textSelection","fgHex":"#004c49","bgHex":"#d9dfe4","ratio":7.34,"ok":true},{"kind":"ui","fg":"text","bg":"passTint","fgHex":"#13191f","bgHex":"#dedfdf","ratio":13.25,"ok":true},{"kind":"ui","fg":"textMid","bg":"passTint","fgHex":"#353f4a","bgHex":"#dedfdf","ratio":8.02,"ok":true},{"kind":"ui","fg":"textFaint","bg":"passTint","fgHex":"#3a424b","bgHex":"#dedfdf","ratio":7.63,"ok":true},{"kind":"ui","fg":"accent","bg":"passTint","fgHex":"#003c88","bgHex":"#dedfdf","ratio":7.86,"ok":true},{"kind":"ui","fg":"pass","bg":"passTint","fgHex":"#001e4b","bgHex":"#dedfdf","ratio":12.22,"ok":true},{"kind":"ui","fg":"fail","bg":"passTint","fgHex":"#6f3500","bgHex":"#dedfdf","ratio":7.2,"ok":true},{"kind":"ui","fg":"warn","bg":"passTint","fgHex":"#352300","bgHex":"#dedfdf","ratio":11.3,"ok":true},{"kind":"ui","fg":"neutral","bg":"passTint","fgHex":"#353f4a","bgHex":"#dedfdf","ratio":8.02,"ok":true},{"kind":"syntax","fg":"keyword","bg":"passTint","fgHex":"#001e4b","bgHex":"#dedfdf","ratio":12.22,"ok":true},{"kind":"syntax","fg":"string","bg":"passTint","fgHex":"#6f3500","bgHex":"#dedfdf","ratio":7.2,"ok":true},{"kind":"syntax","fg":"comment","bg":"passTint","fgHex":"#3e3b35","bgHex":"#dedfdf","ratio":8.36,"ok":true},{"kind":"syntax","fg":"type","bg":"passTint","fgHex":"#570036","bgHex":"#dedfdf","ratio":10.78,"ok":true},{"kind":"syntax","fg":"function","bg":"passTint","fgHex":"#004c49","bgHex":"#dedfdf","ratio":7.38,"ok":true},{"kind":"ui","fg":"text","bg":"failTint","fgHex":"#13191f","bgHex":"#ece2d6","ratio":13.84,"ok":true},{"kind":"ui","fg":"textMid","bg":"failTint","fgHex":"#353f4a","bgHex":"#ece2d6","ratio":8.37,"ok":true},{"kind":"ui","fg":"textFaint","bg":"failTint","fgHex":"#3a424b","bgHex":"#ece2d6","ratio":7.97,"ok":true},{"kind":"ui","fg":"accent","bg":"failTint","fgHex":"#003c88","bgHex":"#ece2d6","ratio":8.2,"ok":true},{"kind":"ui","fg":"pass","bg":"failTint","fgHex":"#001e4b","bgHex":"#ece2d6","ratio":12.75,"ok":true},{"kind":"ui","fg":"fail","bg":"failTint","fgHex":"#6f3500","bgHex":"#ece2d6","ratio":7.51,"ok":true},{"kind":"ui","fg":"warn","bg":"failTint","fgHex":"#352300","bgHex":"#ece2d6","ratio":11.79,"ok":true},{"kind":"ui","fg":"neutral","bg":"failTint","fgHex":"#353f4a","bgHex":"#ece2d6","ratio":8.37,"ok":true},{"kind":"syntax","fg":"keyword","bg":"failTint","fgHex":"#001e4b","bgHex":"#ece2d6","ratio":12.75,"ok":true},{"kind":"syntax","fg":"string","bg":"failTint","fgHex":"#6f3500","bgHex":"#ece2d6","ratio":7.51,"ok":true},{"kind":"syntax","fg":"comment","bg":"failTint","fgHex":"#3e3b35","bgHex":"#ece2d6","ratio":8.72,"ok":true},{"kind":"syntax","fg":"type","bg":"failTint","fgHex":"#570036","bgHex":"#ece2d6","ratio":11.26,"ok":true},{"kind":"syntax","fg":"function","bg":"failTint","fgHex":"#004c49","bgHex":"#ece2d6","ratio":7.71,"ok":true},{"kind":"ui","fg":"text","bg":"warnTint","fgHex":"#13191f","bgHex":"#e5e0d6","ratio":13.46,"ok":true},{"kind":"ui","fg":"textMid","bg":"warnTint","fgHex":"#353f4a","bgHex":"#e5e0d6","ratio":8.14,"ok":true},{"kind":"ui","fg":"textFaint","bg":"warnTint","fgHex":"#3a424b","bgHex":"#e5e0d6","ratio":7.75,"ok":true},{"kind":"ui","fg":"accent","bg":"warnTint","fgHex":"#003c88","bgHex":"#e5e0d6","ratio":7.98,"ok":true},{"kind":"ui","fg":"pass","bg":"warnTint","fgHex":"#001e4b","bgHex":"#e5e0d6","ratio":12.4,"ok":true},{"kind":"ui","fg":"fail","bg":"warnTint","fgHex":"#6f3500","bgHex":"#e5e0d6","ratio":7.31,"ok":true},{"kind":"ui","fg":"warn","bg":"warnTint","fgHex":"#352300","bgHex":"#e5e0d6","ratio":11.47,"ok":true},{"kind":"ui","fg":"neutral","bg":"warnTint","fgHex":"#353f4a","bgHex":"#e5e0d6","ratio":8.14,"ok":true},{"kind":"syntax","fg":"keyword","bg":"warnTint","fgHex":"#001e4b","bgHex":"#e5e0d6","ratio":12.4,"ok":true},{"kind":"syntax","fg":"string","bg":"warnTint","fgHex":"#6f3500","bgHex":"#e5e0d6","ratio":7.31,"ok":true},{"kind":"syntax","fg":"comment","bg":"warnTint","fgHex":"#3e3b35","bgHex":"#e5e0d6","ratio":8.48,"ok":true},{"kind":"syntax","fg":"type","bg":"warnTint","fgHex":"#570036","bgHex":"#e5e0d6","ratio":10.95,"ok":true},{"kind":"syntax","fg":"function","bg":"warnTint","fgHex":"#004c49","bgHex":"#e5e0d6","ratio":7.5,"ok":true},{"kind":"ui","fg":"text","bg":"neutralTint","fgHex":"#13191f","bgHex":"#e5e3df","ratio":13.81,"ok":true},{"kind":"ui","fg":"textMid","bg":"neutralTint","fgHex":"#353f4a","bgHex":"#e5e3df","ratio":8.35,"ok":true},{"kind":"ui","fg":"textFaint","bg":"neutralTint","fgHex":"#3a424b","bgHex":"#e5e3df","ratio":7.95,"ok":true},{"kind":"ui","fg":"accent","bg":"neutralTint","fgHex":"#003c88","bgHex":"#e5e3df","ratio":8.18,"ok":true},{"kind":"ui","fg":"pass","bg":"neutralTint","fgHex":"#001e4b","bgHex":"#e5e3df","ratio":12.73,"ok":true},{"kind":"ui","fg":"fail","bg":"neutralTint","fgHex":"#6f3500","bgHex":"#e5e3df","ratio":7.5,"ok":true},{"kind":"ui","fg":"warn","bg":"neutralTint","fgHex":"#352300","bgHex":"#e5e3df","ratio":11.77,"ok":true},{"kind":"ui","fg":"neutral","bg":"neutralTint","fgHex":"#353f4a","bgHex":"#e5e3df","ratio":8.35,"ok":true},{"kind":"syntax","fg":"keyword","bg":"neutralTint","fgHex":"#001e4b","bgHex":"#e5e3df","ratio":12.73,"ok":true},{"kind":"syntax","fg":"string","bg":"neutralTint","fgHex":"#6f3500","bgHex":"#e5e3df","ratio":7.5,"ok":true},{"kind":"syntax","fg":"comment","bg":"neutralTint","fgHex":"#3e3b35","bgHex":"#e5e3df","ratio":8.71,"ok":true},{"kind":"syntax","fg":"type","bg":"neutralTint","fgHex":"#570036","bgHex":"#e5e3df","ratio":11.23,"ok":true},{"kind":"syntax","fg":"function","bg":"neutralTint","fgHex":"#004c49","bgHex":"#e5e3df","ratio":7.69,"ok":true},{"kind":"inverted","fg":"bg","bg":"accent","fgHex":"#fdfaf3","bgHex":"#003c88","ratio":10.06,"ok":true},{"kind":"inverted","fg":"bg","bg":"warn","fgHex":"#fdfaf3","bgHex":"#352300","ratio":14.47,"ok":true},{"kind":"inverted","fg":"bg","bg":"fail","fgHex":"#fdfaf3","bgHex":"#6f3500","ratio":9.22,"ok":true}],"cvd":[{"a":"ui.pass","b":"ui.fail","min":9,"d":40.8,"under":"normal","ok":true},{"a":"ui.fail","b":"ui.warn","min":9,"d":9.3,"under":"protanopia","ok":true},{"a":"ui.accent","b":"ui.pass","min":9,"d":10.79,"under":"deuteranopia","ok":true},{"a":"ui.accent","b":"ui.fail","min":9,"d":43.62,"under":"normal","ok":true},{"a":"ui.accent","b":"ui.warn","min":9,"d":38.57,"under":"tritanopia","ok":true},{"a":"syntax.type","b":"syntax.function","min":8,"d":9.23,"under":"deuteranopia","ok":true},{"a":"syntax.type","b":"syntax.string","min":8,"d":9.41,"under":"tritanopia","ok":true},{"a":"syntax.function","b":"syntax.string","min":8,"d":23.72,"under":"protanopia","ok":true},{"a":"syntax.keyword","b":"syntax.type","min":4.5,"d":5,"under":"protanopia","ok":true},{"a":"syntax.keyword","b":"syntax.function","min":4.5,"d":13.23,"under":"deuteranopia","ok":true},{"a":"syntax.comment","b":"syntax.type","min":4.5,"d":20.94,"under":"deuteranopia","ok":true},{"a":"syntax.comment","b":"syntax.function","min":4.5,"d":8.16,"under":"protanopia","ok":true}],"ansi":{"colors":["#13191f","#6f3500","#004c46","#3e2a00","#001e4b","#59002b","#003c88","#a39f96","#020409","#492100","#002f2b","#201300","#000921","#300014","#002558","#858178"],"contrast":[{"index":0,"bg":"bg","fgHex":"#13191f","bgHex":"#fdfaf3","ratio":16.98,"ok":true},{"index":0,"bg":"terminalSelection","fgHex":"#13191f","bgHex":"#dee3e6","ratio":13.68,"ok":true},{"index":1,"bg":"bg","fgHex":"#6f3500","bgHex":"#fdfaf3","ratio":9.22,"ok":true},{"index":1,"bg":"terminalSelection","fgHex":"#6f3500","bgHex":"#dee3e6","ratio":7.43,"ok":true},{"index":2,"bg":"bg","fgHex":"#004c46","bgHex":"#fdfaf3","ratio":9.49,"ok":true},{"index":2,"bg":"terminalSelection","fgHex":"#004c46","bgHex":"#dee3e6","ratio":7.65,"ok":true},{"index":3,"bg":"bg","fgHex":"#3e2a00","bgHex":"#fdfaf3","ratio":13.12,"ok":true},{"index":3,"bg":"terminalSelection","fgHex":"#3e2a00","bgHex":"#dee3e6","ratio":10.57,"ok":true},{"index":4,"bg":"bg","fgHex":"#001e4b","bgHex":"#fdfaf3","ratio":15.65,"ok":true},{"index":4,"bg":"terminalSelection","fgHex":"#001e4b","bgHex":"#dee3e6","ratio":12.61,"ok":true},{"index":5,"bg":"bg","fgHex":"#59002b","bgHex":"#fdfaf3","ratio":13.8,"ok":true},{"index":5,"bg":"terminalSelection","fgHex":"#59002b","bgHex":"#dee3e6","ratio":11.12,"ok":true},{"index":6,"bg":"bg","fgHex":"#003c88","bgHex":"#fdfaf3","ratio":10.06,"ok":true},{"index":6,"bg":"terminalSelection","fgHex":"#003c88","bgHex":"#dee3e6","ratio":8.11,"ok":true},{"index":8,"bg":"bg","fgHex":"#020409","bgHex":"#fdfaf3","ratio":19.67,"ok":true},{"index":8,"bg":"terminalSelection","fgHex":"#020409","bgHex":"#dee3e6","ratio":15.86,"ok":true},{"index":9,"bg":"bg","fgHex":"#492100","bgHex":"#fdfaf3","ratio":13.42,"ok":true},{"index":9,"bg":"terminalSelection","fgHex":"#492100","bgHex":"#dee3e6","ratio":10.82,"ok":true},{"index":10,"bg":"bg","fgHex":"#002f2b","bgHex":"#fdfaf3","ratio":13.98,"ok":true},{"index":10,"bg":"terminalSelection","fgHex":"#002f2b","bgHex":"#dee3e6","ratio":11.26,"ok":true},{"index":11,"bg":"bg","fgHex":"#201300","bgHex":"#fdfaf3","ratio":17.45,"ok":true},{"index":11,"bg":"terminalSelection","fgHex":"#201300","bgHex":"#dee3e6","ratio":14.06,"ok":true},{"index":12,"bg":"bg","fgHex":"#000921","bgHex":"#fdfaf3","ratio":18.99,"ok":true},{"index":12,"bg":"terminalSelection","fgHex":"#000921","bgHex":"#dee3e6","ratio":15.3,"ok":true},{"index":13,"bg":"bg","fgHex":"#300014","bgHex":"#fdfaf3","ratio":17.74,"ok":true},{"index":13,"bg":"terminalSelection","fgHex":"#300014","bgHex":"#dee3e6","ratio":14.3,"ok":true},{"index":14,"bg":"bg","fgHex":"#002558","bgHex":"#fdfaf3","ratio":14.33,"ok":true},{"index":14,"bg":"terminalSelection","fgHex":"#002558","bgHex":"#dee3e6","ratio":11.55,"ok":true}],"cvd":[{"set":"normal","i":1,"j":2,"d":21.63,"min":5,"ok":true},{"set":"normal","i":1,"j":3,"d":6.21,"min":5,"ok":true},{"set":"normal","i":1,"j":4,"d":40.8,"min":5,"ok":true},{"set":"normal","i":1,"j":5,"d":8.58,"min":5,"ok":true},{"set":"normal","i":1,"j":6,"d":43.62,"min":5,"ok":true},{"set":"normal","i":2,"j":3,"d":19.9,"min":5,"ok":true},{"set":"normal","i":2,"j":4,"d":14.3,"min":5,"ok":true},{"set":"normal","i":2,"j":5,"d":8.74,"min":5,"ok":true},{"set":"normal","i":2,"j":6,"d":6.86,"min":5,"ok":true},{"set":"normal","i":3,"j":4,"d":36.2,"min":5,"ok":true},{"set":"normal","i":3,"j":5,"d":10.25,"min":5,"ok":true},{"set":"normal","i":3,"j":6,"d":38.81,"min":5,"ok":true},{"set":"normal","i":4,"j":5,"d":6.85,"min":5,"ok":true},{"set":"normal","i":4,"j":6,"d":10.79,"min":5,"ok":true},{"set":"normal","i":5,"j":6,"d":18.49,"min":5,"ok":true},{"set":"bright","i":1,"j":2,"d":15.53,"min":5,"ok":true},{"set":"bright","i":1,"j":3,"d":8.53,"min":5,"ok":true},{"set":"bright","i":1,"j":4,"d":28.21,"min":5,"ok":true},{"set":"bright","i":1,"j":5,"d":9.2,"min":5,"ok":true},{"set":"bright","i":1,"j":6,"d":35.47,"min":5,"ok":true},{"set":"bright","i":2,"j":3,"d":11.15,"min":5,"ok":true},{"set":"bright","i":2,"j":4,"d":8.8,"min":5,"ok":true},{"set":"bright","i":2,"j":5,"d":6.62,"min":5,"ok":true},{"set":"bright","i":2,"j":6,"d":5.28,"min":5,"ok":true},{"set":"bright","i":3,"j":4,"d":20.2,"min":5,"ok":true},{"set":"bright","i":3,"j":5,"d":9.9,"min":5,"ok":true},{"set":"bright","i":3,"j":6,"d":29.19,"min":5,"ok":true},{"set":"bright","i":4,"j":5,"d":5.95,"min":5,"ok":true},{"set":"bright","i":4,"j":6,"d":11.63,"min":5,"ok":true},{"set":"bright","i":5,"j":6,"d":16.91,"min":5,"ok":true}]}}},"sims":{"deuteranopia":{"#fbf8f2":"#faf9f2","#f5f2eb":"#f5f3eb","#eeeae2":"#edebe2","#24292f":"#26282f","#57606a":"#5a5e6a","#5c646d":"#5f626d","#005ccc":"#2148ca","#002c85":"#082483","#a75000":"#826501","#583500":"#4e3c01","#742651":"#393e4f","#5e5a55":"#5d5b55","#007570":"#4b5472","#e7e9e9":"#e8e8e9","#e4eaef":"#e7e9ef","#e6e8ea":"#e7e8ea","#f4ebde":"#f1edde","#eee9dd":"#eeeadd","#f1efea":"#f1efea","#00756b":"#4c546d","#6d3a00":"#5a4601","#782445":"#3b3d43","#11161d":"#13151d","#844000":"#685001","#005a52":"#3b4053","#442e00":"#413201","#001f4d":"#09184c","#610030":"#191d2d","#00489f":"#1a389d","#d4d0c6":"#d4d1c6","#e9edf0":"#ebecf0","#161410":"#161410","#191612":"#181712","#1c1a14":"#1c1a14","#d1d7df":"#d3d6df","#99a3ae":"#9da1ae","#979fa9":"#9a9da9","#79afff":"#89a4fd","#bad6ff":"#c2d0fe","#ea8d4a":"#bea44b","#f0c680":"#e5ce82","#ffa3cf":"#bbbfcd","#b8b4ae":"#b7b5ae","#55c2bc":"#9ba3bd","#2c3541":"#2f3341","#2a3340":"#2d3140","#303337":"#313237","#382719":"#302b19","#393122":"#373322","#303130":"#313130","#727b86":"#757986","#e08440":"#b59b41","#33a397":"#7d8399","#dca331":"#d2ae34","#498beb":"#5d7de9","#cd718f":"#8c8c8d","#74acff":"#85a0fd","#ffffff":"#ffffff","#96a0ab":"#9a9eab","#ffaf7a":"#d8c37b","#5fc9bc":"#a5abbe","#ffcb70":"#f3d572","#7fb3ff":"#8fa8fd","#f696b4":"#b2b2b2","#b5d3ff":"#becdfe","#202429":"#212329","#fdfaf3":"#fdfbf3","#f9f5ed":"#f8f6ed","#f4efe5":"#f3f0e5","#13191f":"#15181f","#353f4a":"#393d4a","#3a424b":"#3d404b","#003c88":"#152f86","#001e4b":"#09184a","#6f3500":"#564301","#352300":"#322601","#570036":"#141b33","#3e3b35":"#3d3c35","#004c49":"#31374a","#dbdfe1":"#dddee1","#d9dfe4":"#dcdee4","#dedfdf":"#dfdfdf","#ece2d6":"#e8e4d6","#e5e0d6":"#e4e1d6","#e5e3df":"#e5e3df","#004c46":"#313647","#3e2a00":"#3b2e01","#59002b":"#171b29","#a39f96":"#a3a096","#020409":"#020409","#492100":"#372b01","#002f2b":"#1f222c","#201300":"#1c1600","#000921":"#000820","#300014":"#0d0e13","#002558":"#0c1d57","#858178":"#858278","#dee3e6":"#e0e2e6"},"protanopia":{"#fbf8f2":"#faf8f2","#f5f2eb":"#f4f2eb","#eeeae2":"#eceae2","#24292f":"#27292f","#57606a":"#5d606b","#5c646d":"#61646d","#005ccc":"#375dd2","#002c85":"#13308a","#a75000":"#6e5200","#583500":"#453400","#742651":"#293353","#5e5a55":"#5c5a55","#007570":"#646770","#e7e9e9":"#e9e9e9","#e4eaef":"#e8eaef","#e6e8ea":"#e7e8ea","#f4ebde":"#efebdd","#eee9dd":"#ece8dc","#f1efea":"#f0efea","#00756b":"#65676b","#6d3a00":"#4e3a00","#782445":"#2a3146","#11161d":"#14161d","#844000":"#574100","#005a52":"#4e4f52","#442e00":"#3b2c00","#001f4d":"#112050","#610030":"#051032","#00489f":"#2b48a4","#d4d0c6":"#d3cfc5","#e9edf0":"#ecedf0","#161410":"#151410","#191612":"#171612","#1c1a14":"#1c1a14","#d1d7df":"#d4d7df","#99a3ae":"#9fa3af","#979fa9":"#9c9faa","#79afff":"#96b1ff","#bad6ff":"#c9d7ff","#ea8d4a":"#a99146","#f0c680":"#dbc47c","#ffa3cf":"#a8b2d1","#b8b4ae":"#b6b4ae","#55c2bc":"#b3b5bc","#2c3541":"#313542","#2a3340":"#2f3341","#303337":"#323337","#382719":"#2c2818","#393122":"#353021","#303130":"#313130","#727b86":"#777b87","#e08440":"#a0883c","#33a397":"#949597","#dca331":"#c39e2b","#498beb":"#6d8df0","#cd718f":"#797f90","#74acff":"#92aeff","#ffffff":"#ffffff","#96a0ab":"#9ca0ac","#ffaf7a":"#c6b377","#5fc9bc":"#bcbcbc","#ffcb70":"#e6c86b","#7fb3ff":"#9cb5ff","#f696b4":"#9ea4b5","#b5d3ff":"#c5d4ff","#202429":"#222429","#fdfaf3":"#fcfaf3","#f9f5ed":"#f7f5ed","#f4efe5":"#f2efe4","#13191f":"#17191f","#353f4a":"#3b3f4b","#3a424b":"#3f424b","#003c88":"#233d8c","#001e4b":"#101f4d","#6f3500":"#493600","#352300":"#2d2200","#570036":"#020f38","#3e3b35":"#3d3b35","#004c49":"#414349","#dbdfe1":"#dedfe1","#d9dfe4":"#dddfe4","#dedfdf":"#dfdfdf","#ece2d6":"#e6e2d5","#e5e0d6":"#e3e0d5","#e5e3df":"#e4e3df","#004c46":"#424346","#3e2a00":"#362800","#59002b":"#050e2d","#a39f96":"#a19f96","#020409":"#030409","#492100":"#2e2200","#002f2b":"#29292b","#201300":"#191300","#000921":"#030a22","#300014":"#030715","#002558":"#15265b","#858178":"#838178","#dee3e6":"#e2e3e6"},"tritanopia":{"#fbf8f2":"#fdf7f6","#f5f2eb":"#f7f1f0","#eeeae2":"#f0e9e8","#24292f":"#222a2b","#57606a":"#536263","#5c646d":"#586667","#005ccc":"#00747e","#002c85":"#003d47","#a75000":"#cc3d38","#583500":"#6a2a25","#742651":"#802633","#5e5a55":"#605958","#007570":"#007d73","#e7e9e9":"#e6e9e9","#e4eaef":"#e2ebeb","#e6e8ea":"#e5e8e9","#f4ebde":"#f9e8e7","#eee9dd":"#f1e7e5","#f1efea":"#f2eeed","#00756b":"#007d71","#6d3a00":"#842d29","#782445":"#88222e","#11161d":"#0e1718","#844000":"#a1312d","#005a52":"#006057","#442e00":"#522520","#001f4d":"#00282d","#610030":"#71000f","#00489f":"#005a62","#d4d0c6":"#d7cecd","#e9edf0":"#e7eeee","#161410":"#171313","#191612":"#1a1515","#1c1a14":"#1e1918","#d1d7df":"#ced9d9","#99a3ae":"#94a5a6","#979fa9":"#93a1a2","#79afff":"#5dbfc7","#bad6ff":"#acdee2","#ea8d4a":"#ff7c79","#f0c680":"#ffb8b1","#ffa3cf":"#ffa2b1","#b8b4ae":"#bab3b2","#55c2bc":"#3acac0","#2c3541":"#283739","#2a3340":"#253637","#303337":"#2f3434","#382719":"#3f2423","#393122":"#3e2e2c","#303130":"#303131","#727b86":"#6e7d7e","#e08440":"#ff7370","#33a397":"#19aa9f","#dca331":"#ff8e81","#498beb":"#279ea8","#cd718f":"#df6e7b","#74acff":"#57bdc5","#ffffff":"#ffffff","#96a0ab":"#91a2a3","#ffaf7a":"#ffa19f","#5fc9bc":"#46cfc5","#ffcb70":"#ffb9b0","#7fb3ff":"#64c2ca","#f696b4":"#ff93a0","#b5d3ff":"#a5dce0","#202429":"#1e2526","#fdfaf3":"#fff9f8","#f9f5ed":"#fbf4f3","#f4efe5":"#f7edec","#13191f":"#101a1b","#353f4a":"#304142","#3a424b":"#364445","#003c88":"#004c53","#001e4b":"#00272c","#6f3500":"#872925","#352300":"#401c18","#570036":"#640111","#3e3b35":"#403a39","#004c49":"#00524b","#dbdfe1":"#dae0e0","#d9dfe4":"#d7e0e0","#dedfdf":"#dedfdf","#ece2d6":"#f1dfde","#e5e0d6":"#e8dedd","#e5e3df":"#e6e2e2","#004c46":"#00514a","#3e2a00":"#4b221d","#59002b":"#68000d","#a39f96":"#a69d9c","#020409":"#010506","#492100":"#591917","#002f2b":"#00322e","#201300":"#270f0d","#000921":"#000d10","#300014":"#390006","#002558":"#002f34","#858178":"#887f7e","#dee3e6":"#dce4e4"}}};
+
+const MODES = { light: 'Light', dark: 'Dark', hc: 'High Contrast' };
+const STYLE = { keyword: 'bold', comment: 'italic' };
+const ANSI_NAMES = ['black', 'red', 'green', 'yellow', 'blue', 'magenta', 'cyan', 'white'];
+const VISIONS = { normal: 'Normal', deuteranopia: 'Deuter.', protanopia: 'Protan.', tritanopia: 'Tritan.' };
+
+const state = { mode: 'light', vision: 'normal', onlyTight: false };
+const $ = (id) => document.getElementById(id);
+
+function initialState() {
+  const params = new URLSearchParams(location.hash.slice(1));
+  const mode = params.get('variant');
+  const vision = params.get('vision');
+  if (mode in DATA.modes) state.mode = mode;
+  else if (matchMedia('(prefers-color-scheme: dark)').matches) state.mode = 'dark';
+  if (vision in VISIONS) state.vision = vision;
+}
+
+function saveState() {
+  const params = new URLSearchParams({ variant: state.mode });
+  if (state.vision !== 'normal') params.set('vision', state.vision);
+  history.replaceState(null, '', '#' + params);
+}
+
+// A color as seen with the selected vision
+function see(hex, vision = state.vision) {
+  return vision === 'normal' ? hex : (DATA.sims[vision][hex] || hex);
+}
+
+function el(tag, attrs = {}, ...children) {
+  const node = document.createElement(tag);
+  for (const [key, value] of Object.entries(attrs)) {
+    if (key === 'style') Object.assign(node.style, value);
+    else if (key === 'class') node.className = value;
+    else node.setAttribute(key, value);
+  }
+  for (const child of children.flat()) {
+    if (child != null) node.append(child);
+  }
+  return node;
+}
+
+function grade(ratio) {
+  if (ratio >= 7) return 'AAA';
+  if (ratio >= 4.5) return 'AA';
+  if (ratio >= 3) return 'AA large';
+  return 'Fail';
+}
+
+function applyChrome(v) {
+  const vars = {
+    bg: v.ui.bg, panel: v.ui.bgPanel, hover: v.ui.bgHover, text: v.ui.text, mid: v.ui.textMid,
+    faint: v.ui.textFaint, accent: v.ui.accent, pass: v.ui.pass, fail: v.ui.fail, warn: v.ui.warn,
+  };
+  for (const [key, hex] of Object.entries(vars)) {
+    document.documentElement.style.setProperty('--' + key, see(hex));
+  }
+  document.documentElement.dataset.mode = state.mode === 'dark' ? 'dark' : 'light';
+}
+
+function renderControls() {
+  const group = $('variants');
+  group.replaceChildren(...Object.entries(MODES).map(([mode, label]) => {
+    const button = el('button', { type: 'button', 'aria-pressed': String(mode === state.mode) }, label);
+    button.addEventListener('click', () => { state.mode = mode; render(); });
+    return button;
+  }));
+  $('vision').value = state.vision;
+}
+
+function renderStats(v) {
+  const count = (list) => [list.filter(r => r.ok).length, list.length];
+  const ansiAll = [...v.ansi.contrast, ...v.ansi.cvd];
+  const rows = [
+    ['Contrast pairs at ' + v.label, count(v.contrast)],
+    ['Color pairs apart under CVD', count(v.cvd)],
+    ['ANSI checks', count(ansiAll)],
+  ];
+  const lowest = Math.min(...v.contrast.map(r => r.ratio));
+  $('stats').replaceChildren(
+    ...rows.map(([label, [ok, total]]) => el('div', { class: 'stat ' + (ok === total ? 'ok' : 'bad') },
+      el('b', {}, `${ok}/${total}`), el('span', {}, label))),
+    el('div', { class: 'stat' }, el('b', {}, lowest.toFixed(2) + ':1'), el('span', {}, `Lowest ratio, target ${v.target}:1`)),
+  );
+
+  const tight = tightest(v);
+  $('tightest').textContent = 'Closest to the target: ' +
+    tight.map(r => `${r.fg} on ${r.bg} (${r.ratio.toFixed(2)})`).join(', ') + '.';
+}
+
+function tightest(v, n = 5) {
+  return [...v.contrast].filter(r => r.kind !== 'inverted').sort((a, b) => a.ratio - b.ratio).slice(0, n);
+}
+
+function cell(r, v, tightSet) {
+  const fg = see(r.fgHex);
+  const bg = see(r.bgHex);
+  const headroom = r.ratio - v.target;
+  const classes = ['cell'];
+  if (!r.ok) classes.push('fail');
+  if (tightSet.has(r)) classes.push('tight');
+  if (state.onlyTight && headroom >= 1) classes.push('dim');
+  const label = `${r.fg} ${r.fgHex} on ${r.bg} ${r.bgHex}: ${r.ratio.toFixed(2)} to 1, ${grade(r.ratio)}, ${r.ok ? 'passes' : 'fails'} target ${v.target}`;
+  return el('td', {
+    class: classes.join(' '), tabindex: '0', title: label, 'aria-label': label,
+    style: { background: bg, color: fg },
+  },
+    el('span', { class: 'sample', style: { fontWeight: STYLE[r.fg] === 'bold' ? '700' : '', fontStyle: STYLE[r.fg] === 'italic' ? 'italic' : '' } }, 'Aa'),
+    el('span', { class: 'ratio' }, r.ratio.toFixed(2) + ' ', el('span', { class: 'grade' }, r.ok ? grade(r.ratio) : 'Fail')),
+  );
+}
+
+function renderGrid(v) {
+  const main = v.contrast.filter(r => r.kind !== 'inverted');
+  const bgs = [...new Set(main.map(r => r.bg))];
+  const tightSet = new Set(tightest(v));
+  const byPair = new Map(main.map(r => [r.fg + '|' + r.bg, r]));
+  const hexOf = (key) => main.find(r => r.bg === key).bgHex;
+
+  const head = el('thead', {}, el('tr', {},
+    el('th', { scope: 'col' }, 'Text ↓ / surface →'),
+    bgs.map(key => el('th', { scope: 'col' },
+      el('span', { class: 'swatch', style: { background: see(hexOf(key)) } }),
+      key, el('small', {}, v.notes[key] || hexOf(key))))));
+
+  const body = el('tbody');
+  for (const [kind, title] of [['ui', 'Interface'], ['syntax', 'Syntax']]) {
+    body.append(el('tr', { class: 'group' }, el('th', { scope: 'rowgroup', colspan: String(bgs.length + 1) }, title)));
+    const fgs = [...new Set(main.filter(r => r.kind === kind).map(r => r.fg))];
+    for (const fg of fgs) {
+      const hex = (kind === 'ui' ? v.ui : v.syntax)[fg];
+      body.append(el('tr', {},
+        el('th', { scope: 'row' }, fg, el('small', {}, hex)),
+        bgs.map(bg => byPair.has(fg + '|' + bg) ? cell(byPair.get(fg + '|' + bg), v, tightSet) : el('td', { class: 'empty' }))));
+    }
+  }
+  $('grid').replaceChildren(head, body);
+}
+
+function renderInverted(v) {
+  const inv = v.contrast.filter(r => r.kind === 'inverted');
+  const none = new Set();
+  $('inverted').replaceChildren(
+    el('thead', {}, el('tr', {}, el('th', { scope: 'col' }, 'Text ↓ / fill →'),
+      inv.map(r => el('th', { scope: 'col' },
+        el('span', { class: 'swatch', style: { background: see(r.bgHex) } }), r.bg, el('small', {}, r.bgHex))))),
+    el('tbody', {}, el('tr', {}, el('th', { scope: 'row' }, 'bg', el('small', {}, v.ui.bg)),
+      inv.map(r => cell(r, v, none)))),
+  );
+}
+
+// Editor preview: [token, text] pairs; null is plain text
+const CODE = [
+  { tokens: [['comment', '// Every pair is checked at build time']] },
+  { tokens: [['keyword', 'export'], [null, ' '], ['keyword', 'function'], [null, ' '], ['function', 'contrast'], [null, '(fg: '], ['type', 'Color'], [null, ', bg: '], ['type', 'Color'], [null, '): '], ['type', 'number'], [null, ' {']] },
+  { bg: 'textSelection', tokens: [[null, '  '], ['keyword', 'const'], [null, ' ratio = '], ['function', 'wcag'], [null, '(fg, bg);']] },
+  { bg: 'failTint', tag: '-', tokens: [[null, '  '], ['keyword', 'return'], [null, ' ratio > '], ['string', '"3"'], [null, ';']] },
+  { bg: 'passTint', tag: '+', tokens: [[null, '  '], ['keyword', 'return'], [null, ' ratio >= '], ['match', 'target'], [null, ' ? ratio : '], ['function', 'fail'], [null, '('], ['string', '"too low"'], [null, ');']] },
+  { bg: 'warnTint', tag: '!', tokens: [[null, '  '], ['comment', '// TODO: handle alpha']] },
+  { tokens: [[null, '}']] },
+];
+
+function renderCode(v) {
+  const surface = (key) => see(v.contrast.find(r => r.bg === key).bgHex);
+  const tagColor = { '-': v.ui.fail, '+': v.ui.pass, '!': v.ui.warn };
+  $('code').replaceChildren(...CODE.map((line, i) => {
+    const bg = line.bg ? surface(line.bg) : see(v.ui.bg);
+    const src = el('span', { class: 'src' }, line.tokens.map(([token, text]) => {
+      if (token === 'match') {
+        return el('span', { class: 'match', style: { background: see(v.ui.warn), color: see(v.ui.bg) } }, text);
+      }
+      const color = token ? v.syntax[token] : v.ui.text;
+      return el('span', { class: STYLE[token] || '', style: { color: see(color) } }, text);
+    }));
+    return el('div', { class: 'line', style: { background: bg } },
+      el('span', { class: 'gutter', style: { color: see(v.ui.textFaint), background: line.bg ? 'transparent' : see(v.ui.bgPanel) } }, String(i + 1)),
+      el('span', { class: 'tag', style: { color: see(tagColor[line.tag] || v.ui.text), fontWeight: '700' } }, line.tag || ' '),
+      src);
+  }));
+}
+
+function renderPairs(v) {
+  const hexOf = (path) => { const [group, key] = path.split('.'); return v[group][key]; };
+  $('pairs').replaceChildren(...v.cvd.map(p => {
+    const [a, b] = [hexOf(p.a), hexOf(p.b)];
+    const scale = Math.max(p.min * 3, p.d);
+    return el('div', { class: 'pair' },
+      el('header', {}, el('b', {}, `${p.a.split('.')[1]} / ${p.b.split('.')[1]}`),
+        el('span', {}, `ΔE ${p.d.toFixed(1)} `, el('span', { class: 'muted' }, `min ${p.min}`))),
+      el('div', { class: 'visions' }, Object.entries(VISIONS).map(([vision, label]) =>
+        el('div', { class: 'vision' + (vision === p.under ? ' worst' : '') },
+          el('div', { class: 'chips' },
+            el('div', { style: { background: see(a, vision) } }),
+            el('div', { style: { background: see(b, vision) } })),
+          label))),
+      el('div', { class: 'bar' + (p.ok ? '' : ' fail'), role: 'img', 'aria-label': `Distance ${p.d.toFixed(1)}, minimum ${p.min}, closest under ${p.under}` },
+        el('div', { style: { width: Math.min(100, p.d / scale * 100) + '%' } })),
+    );
+  }));
+}
+
+function renderAnsi(v) {
+  const byIndex = new Map();
+  for (const r of v.ansi.contrast) {
+    if (!byIndex.has(r.index)) byIndex.set(r.index, {});
+    byIndex.get(r.index)[r.bg] = r;
+  }
+  $('ansi').replaceChildren(...v.ansi.colors.map((hex, i) => {
+    const name = (i >= 8 ? 'bright ' : '') + ANSI_NAMES[i % 8];
+    const r = byIndex.get(i);
+    if (!r) {
+      return el('div', { class: 'slot skip', style: { background: see(v.ui.bg) } },
+        el('div', { style: { background: see(hex), color: see(v.ui.text) } }, el('b', {}, String(i)), name),
+        el('div', { class: 'muted' }, 'Background slot'));
+    }
+    const line = (res, label) => el('div', { style: { background: see(res.bgHex), color: see(hex) } },
+      res.ratio.toFixed(2) + ' ' + label + (res.ok ? '' : ' \u2717'));
+    return el('div', { class: 'slot' },
+      el('div', { style: { background: see(r.bg.bgHex), color: see(hex) } }, el('b', {}, String(i)), name),
+      line(r.bg, 'bg'),
+      line(r.terminalSelection, 'selection'));
+  }));
+  const ok = v.ansi.cvd.filter(r => r.ok).length;
+  const worst = [...v.ansi.cvd].sort((a, b) => a.d - b.d)[0];
+  $('ansi-cvd').textContent = `${ok}/${v.ansi.cvd.length} chromatic pairs (red to cyan, normal and bright) stay at least ΔE ${worst.min} apart under CVD. Closest: ` +
+    `${ANSI_NAMES[worst.i]} / ${ANSI_NAMES[worst.j]} (${worst.set}), ΔE ${worst.d.toFixed(1)}.`;
+}
+
+function render() {
+  const v = DATA.modes[state.mode];
+  applyChrome(v);
+  renderControls();
+  renderStats(v);
+  renderGrid(v);
+  renderInverted(v);
+  renderCode(v);
+  renderPairs(v);
+  renderAnsi(v);
+  saveState();
+}
+
+$('vision').addEventListener('change', (e) => { state.vision = e.target.value; render(); });
+$('only-tight').addEventListener('change', (e) => { state.onlyTight = e.target.checked; render(); });
+initialState();
+render();
+</script>
+</body>
+</html>

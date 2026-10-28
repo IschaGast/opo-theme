@@ -31,6 +31,7 @@ import { generateSlack } from './src/generators/slack.js';
 import { generateBear } from './src/generators/bear.js';
 import { generateTypora } from './src/generators/typora.js';
 import { generateTemplateJson, generatePresetsJson } from './src/generators/ia-presenter.js';
+import { generateContrastPage } from './src/generators/contrast.js';
 import {
   generateSlidevPackageJson,
   generateSlidevStylesIndex,
@@ -220,9 +221,15 @@ cpSync('src/slidev-default', slidevDir, { recursive: true });
 console.log(`  ${slidevDir}/ (default theme layouts and styles)`);
 fileCount += 9;
 
+// Contrast grid
+console.log('\n  Contrast grid:');
+write(join(dir('contrast'), 'index.html'), generateContrastPage(variants, ansiSets));
+fileCount++;
+
 // ── Summary ──
 console.log(`\n✨ Build complete! ${fileCount} files generated in dist/`);
 console.log('   Variants: Opo Light, Opo Dark, Opo High Contrast');
 console.log('   Formats: VS Code, Ghostty, Alacritty, iTerm2, Windows Terminal,');
 console.log('            Warp, Zed, JetBrains, Neovim, Slack, CSS, Bear, Typora,');
-console.log('            iA Presenter, Slidev\n');
+console.log('            iA Presenter, Slidev');
+console.log('   Contrast grid: dist/contrast/index.html\n');

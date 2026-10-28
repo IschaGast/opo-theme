@@ -216,6 +216,7 @@ The build script:
 1. Derives Dark and HC variants from the Light OKLCH palette
 2. Validates contrast and CVD distance for every variant, tint and ANSI color (fails if any check is below target)
 3. Generates all 31 theme files in `dist/`
+4. Writes a contrast grid to `dist/contrast/index.html`: every pair from step 2 drawn in its real colors, per variant, with a color vision deficiency preview. It uses the same data as the build check, so it shows exactly what is enforced
 
 `npm run audit` then checks the generated files themselves: the foreground/background pairs each tool actually uses, tints composited the way the tool draws them, and accessibility-relevant keys that would otherwise fall back to a tool default.
 

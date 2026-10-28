@@ -22,15 +22,14 @@ const BG_KEYS = [
 const INVERTED_KEYS = ['accent', 'warn', 'fail'];
 
 /**
- * Validate contrast ratios for a variant.
- * Returns { passed, failed, report }.
+ * Compute every foreground/background pair checked for a variant: text and
+ * syntax colors on all backgrounds and tints, plus inverted fills.
+ * Returns { target, label, results }.
  */
-export function validateVariant(variant, mode) {
+export function contrastPairs(variant, mode) {
   const target = mode === 'hc' ? 7.0 : 4.5;
   const label = mode === 'hc' ? 'AAA (7:1)' : 'AA (4.5:1)';
   const results = [];
-  let passed = 0;
-  let failed = 0;
 
   // Check all text/semantic colors against all backgrounds
   // Tinted backgrounds, composited as the tools draw them (see tintAlpha)
@@ -57,9 +56,7 @@ export function validateVariant(variant, mode) {
       if (!fgColor) continue;
       const fgHex = formatHex(fgColor);
       const ratio = wcagContrast(fgHex, bgHex);
-      const ok = ratio >= target;
-      if (ok) passed++; else failed++;
-      results.push({ fg: fgKey, bg: bgKey, fgHex, bgHex, ratio, ok });
+      results.push({ kind: 'ui', fg: fgKey, bg: bgKey, fgHex, bgHex, ratio, ok: ratio >= target });
     }
 
     // Check syntax colors
@@ -68,9 +65,7 @@ export function validateVariant(variant, mode) {
       if (!synColor) continue;
       const synHex = formatHex(synColor);
       const ratio = wcagContrast(synHex, bgHex);
-      const ok = ratio >= target;
-      if (ok) passed++; else failed++;
-      results.push({ fg: synKey, bg: bgKey, fgHex: synHex, bgHex, ratio, ok });
+      results.push({ kind: 'syntax', fg: synKey, bg: bgKey, fgHex: synHex, bgHex, ratio, ok: ratio >= target });
     }
   }
 
@@ -81,9 +76,20 @@ export function validateVariant(variant, mode) {
     const bgHex = formatHex(bg);
     const ratio = wcagContrast(bgHex, fillHex);
     const ok = ratio >= target && wcagContrast(fillHex, bgHex) >= 3;
-    if (ok) passed++; else failed++;
-    results.push({ fg: 'bg', bg: key, fgHex: bgHex, bgHex: fillHex, ratio, ok });
+    results.push({ kind: 'inverted', fg: 'bg', bg: key, fgHex: bgHex, bgHex: fillHex, ratio, ok });
   }
+
+  return { target, label, results };
+}
+
+/**
+ * Validate contrast ratios for a variant.
+ * Returns { passed, failed, report }.
+ */
+export function validateVariant(variant, mode) {
+  const { label, results } = contrastPairs(variant, mode);
+  const passed = results.filter(r => r.ok).length;
+  const failed = results.length - passed;
 
   // Build report
   const lines = [`\n${mode.toUpperCase()} variant — Target: ${label}`];
@@ -121,25 +127,28 @@ export function validateVariant(variant, mode) {
 }
 
 /**
- * Validate the 16 ANSI colors against the terminal background and the
- * terminal selection tint. The slot that matches the background by
- * convention (black on dark, white and bright white on light) is skipped.
+ * Compute the 16 ANSI colors against the terminal background and the
+ * terminal selection tint, and the CVD distance between the six chromatic
+ * colors. The slot that matches the background by convention (black on
+ * dark, white and bright white on light) is skipped.
+ * Returns { target, contrast, cvd }.
  */
-export function validateAnsi(variant, ansi, mode) {
+export function ansiPairs(variant, ansi, mode) {
   const target = mode === 'hc' ? 7.0 : 4.5;
   const skip = mode === 'dark' ? [0] : [7, 15];
   const { bg, accent } = variant.ui;
   const alpha = Math.round(tintAlpha[mode].terminalSelection * 255) / 255;
   const backgrounds = { bg, terminalSelection: interpolate([bg, accent])(alpha) };
-  const failures = [];
-  let passed = 0;
+  const contrast = [];
+  const cvd = [];
 
   [...ansi.normal, ...ansi.bright].forEach((color, i) => {
     if (skip.includes(i)) return;
     for (const [bgKey, bgColor] of Object.entries(backgrounds)) {
-      const ratio = wcagContrast(formatHex(color), formatHex(bgColor));
-      if (ratio >= target) passed++;
-      else failures.push(`ANSI ${i} on ${bgKey}: ${formatHex(color)} ${ratio.toFixed(2)}:1`);
+      const fgHex = formatHex(color);
+      const bgHex = formatHex(bgColor);
+      const ratio = wcagContrast(fgHex, bgHex);
+      contrast.push({ index: i, bg: bgKey, fgHex, bgHex, ratio, ok: ratio >= target });
     }
   });
 
@@ -149,11 +158,24 @@ export function validateAnsi(variant, ansi, mode) {
     for (let i = 1; i <= 6; i++) {
       for (let j = i + 1; j <= 6; j++) {
         const d = Math.min(...Object.values(CVD_SIMULATIONS).map(sim => deltaE(sim(ansi[set][i]), sim(ansi[set][j]))));
-        if (d >= ANSI_CVD_MIN) passed++;
-        else failures.push(`ANSI ${set} ${i} / ${j}: CIEDE2000 ${d.toFixed(1)} under CVD (min ${ANSI_CVD_MIN})`);
+        cvd.push({ set, i, j, d, min: ANSI_CVD_MIN, ok: d >= ANSI_CVD_MIN });
       }
     }
   }
+
+  return { target, contrast, cvd };
+}
+
+/**
+ * Validate the ANSI colors (see ansiPairs).
+ */
+export function validateAnsi(variant, ansi, mode) {
+  const { contrast, cvd } = ansiPairs(variant, ansi, mode);
+  const failures = [
+    ...contrast.filter(r => !r.ok).map(r => `ANSI ${r.index} on ${r.bg}: ${r.fgHex} ${r.ratio.toFixed(2)}:1`),
+    ...cvd.filter(r => !r.ok).map(r => `ANSI ${r.set} ${r.i} / ${r.j}: CIEDE2000 ${r.d.toFixed(1)} under CVD (min ${r.min})`),
+  ];
+  const passed = contrast.length + cvd.length - failures.length;
 
   const lines = [`ANSI (${mode}): Passed: ${passed}  Failed: ${failures.length}`, ...failures.map(f => `  FAIL ${f}`)];
   return { passed, failed: failures.length, report: lines.join('\n') };
@@ -163,7 +185,7 @@ export function validateAnsi(variant, ansi, mode) {
 // Minimum CIEDE2000 distance, taken over normal vision and full-strength
 // deuteranopia, protanopia and tritanopia simulation. Pairs where bold or
 // italic also differs (keyword, comment) may be closer than color-only pairs.
-const CVD_SIMULATIONS = {
+export const CVD_SIMULATIONS = {
   normal: (c) => c,
   deuteranopia: filterDeficiencyDeuter(1),
   protanopia: filterDeficiencyProt(1),
@@ -183,24 +205,32 @@ const CVD_PAIRS = [
 ];
 
 /**
- * Validate that semantic and syntax color pairs stay distinguishable under
- * simulated color vision deficiency.
+ * Compute the CVD distance for each pair in CVD_PAIRS: the smallest
+ * CIEDE2000 over normal vision and the three simulations.
  */
-export function validateCvd(variant, mode) {
+export function cvdPairs(variant) {
   const deltaE = differenceCiede2000();
   const pick = (path) => { const [group, key] = path.split('.'); return variant[group][key]; };
-  const failures = [];
-  let passed = 0;
 
-  for (const [a, b, min] of CVD_PAIRS) {
+  return CVD_PAIRS.map(([a, b, min]) => {
     let worst = { d: Infinity };
     for (const [name, simulate] of Object.entries(CVD_SIMULATIONS)) {
       const d = deltaE(simulate(pick(a)), simulate(pick(b)));
       if (d < worst.d) worst = { d, name };
     }
-    if (worst.d >= min) passed++;
-    else failures.push(`${a} / ${b}: ${worst.d.toFixed(1)} under ${worst.name} (min ${min})`);
-  }
+    return { a, b, min, d: worst.d, under: worst.name, ok: worst.d >= min };
+  });
+}
+
+/**
+ * Validate that semantic and syntax color pairs stay distinguishable under
+ * simulated color vision deficiency.
+ */
+export function validateCvd(variant, mode) {
+  const pairs = cvdPairs(variant);
+  const failures = pairs.filter(p => !p.ok)
+    .map(p => `${p.a} / ${p.b}: ${p.d.toFixed(1)} under ${p.under} (min ${p.min})`);
+  const passed = pairs.length - failures.length;
 
   const lines = [`CVD (${mode}): Passed: ${passed}  Failed: ${failures.length}`, ...failures.map(f => `  FAIL ${f}`)];
   return { passed, failed: failures.length, report: lines.join('\n') };
