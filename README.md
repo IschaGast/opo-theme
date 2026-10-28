@@ -198,6 +198,18 @@ a {
 }
 ```
 
+For issues and findings there is a severity scale: `--opo-severity-critical`, `-major`, `-minor` and `-resolved`, each with a `-bg` tint. They are aliases of fail, warn, accent and pass, so they meet the same contrast targets and stay apart under color vision deficiency. Critical and major differ mostly in lightness, so pair them with a label or icon.
+
+To use the CSS in another project that has a build step, install the package from GitHub and import a file:
+
+```bash
+npm install github:IschaGast/opo-theme#v1.1.0
+```
+
+```css
+@import "opo-theme/dist/css/opo-light.css";
+```
+
 ### Slidev
 
 `dist/slidev/` is a local [Slidev](https://sli.dev) theme: Slidev's default theme with Opo colors (light and dark), Atkinson Hyperlegible Next, and an iA Presenter-style layer on top. Every layout is top left, so text does not jump between slides; only `layout: center` centers vertically. Heading sizes, weights and line heights follow iA Presenter, with balanced line wrapping. Code blocks use the VS Code theme for highlighting.

@@ -32,4 +32,12 @@
   --opo-warn-bg: color-mix(in srgb, #352300 12%, transparent);
   --opo-neutral-bg: color-mix(in srgb, #353f4a 12%, transparent);
   --opo-border-light: color-mix(in srgb, #353f4a 35%, transparent);
+  --opo-severity-critical: #6f3500;
+  --opo-severity-critical-bg: color-mix(in srgb, #6f3500 12%, transparent);
+  --opo-severity-major: #352300;
+  --opo-severity-major-bg: color-mix(in srgb, #352300 12%, transparent);
+  --opo-severity-minor: #003c88;
+  --opo-severity-minor-bg: color-mix(in srgb, #003c88 14%, transparent);
+  --opo-severity-resolved: #001e4b;
+  --opo-severity-resolved-bg: color-mix(in srgb, #001e4b 12%, transparent);
 }

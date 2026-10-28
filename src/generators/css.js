@@ -4,7 +4,7 @@
  */
 
 import { formatHex } from 'culori';
-import { tintAlpha } from '../palette.js';
+import { severity, tintAlpha } from '../palette.js';
 
 // Tint and selection variables. Tints use the validated alphas from
 // palette.js, so any palette text color stays at AA (AAA for hc) on them.
@@ -25,6 +25,12 @@ function alphaVars(variant, mode) {
     `--opo-warn-bg: ${mix('warn', tint.highlight)};`,
     `--opo-neutral-bg: ${mix('neutral', tint.listSelection)};`,
     `--opo-border-light: ${mix('neutral', 0.35)};`,
+    // Severity scale (see palette.js). Minor uses the text selection tint,
+    // the others the highlight tint, so text stays at AA (AAA for hc) on them.
+    ...Object.entries(severity).flatMap(([name, key]) => [
+      `--opo-severity-${name}: ${hex(key)};`,
+      `--opo-severity-${name}-bg: ${mix(key, key === 'accent' ? tint.textSelection : tint.highlight)};`,
+    ]),
   ];
 }
 

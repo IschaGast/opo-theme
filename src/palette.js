@@ -74,3 +74,15 @@ export const tintAlpha = {
   dark:  { listSelection: 0.20, textSelection: 0.20, highlight: 0.16, terminalSelection: 0.10 },
   hc:    { listSelection: 0.12, textSelection: 0.14, highlight: 0.12, terminalSelection: 0.12 },
 };
+
+// Severity scale for issues and findings (audit tools, linters), as aliases
+// of the semantic colors, so each one is already validated as text on every
+// background and tint. All pairs stay apart under CVD (see CVD_PAIRS in
+// validate.js); critical and major differ mostly in lightness, so pair them
+// with a label or icon (WCAG 1.4.1).
+export const severity = {
+  critical: 'fail',   // orange
+  major:    'warn',   // amber
+  minor:    'accent', // blue
+  resolved: 'pass',   // dark blue
+};

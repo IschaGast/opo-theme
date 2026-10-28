@@ -32,6 +32,14 @@
   --opo-warn-bg: color-mix(in srgb, #583500 8%, transparent);
   --opo-neutral-bg: color-mix(in srgb, #57606a 6%, transparent);
   --opo-border-light: color-mix(in srgb, #57606a 35%, transparent);
+  --opo-severity-critical: #a75000;
+  --opo-severity-critical-bg: color-mix(in srgb, #a75000 8%, transparent);
+  --opo-severity-major: #583500;
+  --opo-severity-major-bg: color-mix(in srgb, #583500 8%, transparent);
+  --opo-severity-minor: #005ccc;
+  --opo-severity-minor-bg: color-mix(in srgb, #005ccc 9%, transparent);
+  --opo-severity-resolved: #002c85;
+  --opo-severity-resolved-bg: color-mix(in srgb, #002c85 8%, transparent);
 }
 
 @media (prefers-color-scheme: dark) {
@@ -64,5 +72,13 @@
     --opo-warn-bg: color-mix(in srgb, #f0c680 16%, transparent);
     --opo-neutral-bg: color-mix(in srgb, #99a3ae 20%, transparent);
     --opo-border-light: color-mix(in srgb, #99a3ae 35%, transparent);
+    --opo-severity-critical: #ea8d4a;
+    --opo-severity-critical-bg: color-mix(in srgb, #ea8d4a 16%, transparent);
+    --opo-severity-major: #f0c680;
+    --opo-severity-major-bg: color-mix(in srgb, #f0c680 16%, transparent);
+    --opo-severity-minor: #79afff;
+    --opo-severity-minor-bg: color-mix(in srgb, #79afff 20%, transparent);
+    --opo-severity-resolved: #bad6ff;
+    --opo-severity-resolved-bg: color-mix(in srgb, #bad6ff 16%, transparent);
   }
 }
