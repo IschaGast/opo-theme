@@ -127,6 +127,32 @@ cp dist/warp/opo-light.yaml ~/.warp/themes/
 
 Open a theme file from `dist/slack/` and copy the comma-separated color string. Then go to Slack > Preferences > Themes > Custom Theme and paste it.
 
+### Bear
+
+Bear 2 only lists the themes it ships with, so an Opo theme replaces one of them. Back up a bundled theme you don't use, then copy an Opo file over it under that name:
+
+```bash
+cd /Applications/Bear.app/Contents/Frameworks/BearCore.framework/Versions/A/Resources/
+cp "Solarized Light.theme" ~/Desktop/
+cp "/path/to/opo-theme/dist/bear/Opo Light.theme" "Solarized Light.theme"
+```
+
+Restart Bear and pick that theme name. A Bear update restores the original file, so repeat this after updating.
+
+### Typora
+
+Copy the CSS files to Typora's theme folder (Preferences > Appearance > Open Theme Folder):
+
+```bash
+cp dist/typora/opo-*.css ~/Library/Application\ Support/abnerworks.Typora/themes/
+```
+
+Restart Typora and choose Opo Light, Opo Dark or Opo Hc from the Themes menu.
+
+### iA Presenter
+
+In iA Presenter, open Settings > Themes and create a new theme. Open the folder the app creates for it, replace its `template.json` and `presets.json` with the files from `dist/ia-presenter/`, and keep the `.css` file the app made. The theme has light and dark presets.
+
 ### cmux
 
 cmux reads its terminal colors from the Ghostty config, so it uses the Ghostty theme files. Copy them as described under [Ghostty](#ghostty), then set a theme per appearance in `~/.config/ghostty/config`:
