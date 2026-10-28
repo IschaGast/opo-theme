@@ -139,8 +139,10 @@ export function deriveAnsi(normalAnsi, brightAnsi, mode) {
   if (mode === 'dark') {
     // For dark mode, use bright colors as normal (they have higher L)
     // and create even brighter variants for the bright set
+    // Black is a surface by convention, so it maps to the dark bgHover the
+    // same way white maps to bgHover on light
     return {
-      normal: brightAnsi.map(c => clampChroma({
+      normal: brightAnsi.map((c, i) => i === 0 ? darkRemap(normalAnsi[7], 'bg') : clampChroma({
         mode: 'oklch', l: c.l, c: c.c, h: c.h || 0,
       }, 'oklch')),
       bright: brightAnsi.map(c => clampChroma({
@@ -153,10 +155,13 @@ export function deriveAnsi(normalAnsi, brightAnsi, mode) {
   }
 
   if (mode === 'hc') {
-    // HC bright: darken normal colors further for maximum contrast on light bg
+    // HC bright: darken normal colors further for maximum contrast on light bg.
+    // White and bright white are surfaces by convention, so they stay light
+    // (white = HC bgHover, bright white a step darker, as in light).
     return {
-      normal: normalAnsi.map(c => highContrast(c, 'fg')),
-      bright: normalAnsi.map(c => {
+      normal: normalAnsi.map((c, i) => highContrast(c, i === 7 ? 'bg' : 'fg')),
+      bright: normalAnsi.map((c, i) => {
+        if (i === 7) return highContrast({ ...c, l: c.l - 0.08 }, 'bg');
         const darkened = {
           mode: 'oklch',
           l: Math.max(0, c.l * 0.75 - 0.10),

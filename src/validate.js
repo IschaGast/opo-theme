@@ -126,29 +126,39 @@ export function validateVariant(variant, mode) {
   };
 }
 
+// Slots that are surfaces by convention (white on light, black on dark).
+// Instead of against the background, they are checked with the opposite
+// text slots drawn on them, as in reverse video and status bars.
+const ANSI_SURFACES = {
+  light: { surfaces: [7, 15], text: [0, 8] },
+  dark: { surfaces: [0], text: [7, 15] },
+};
+
 /**
  * Compute the 16 ANSI colors against the terminal background and the
- * terminal selection tint, and the CVD distance between the six chromatic
- * colors. The slot that matches the background by convention (black on
- * dark, white and bright white on light) is skipped.
+ * terminal selection tint, the surface slots (see ANSI_SURFACES) with text
+ * drawn on them, and the CVD distance between the six chromatic colors.
  * Returns { target, contrast, cvd }.
  */
 export function ansiPairs(variant, ansi, mode) {
   const target = mode === 'hc' ? 7.0 : 4.5;
-  const skip = mode === 'dark' ? [0] : [7, 15];
+  const { surfaces, text } = ANSI_SURFACES[mode === 'dark' ? 'dark' : 'light'];
   const { bg, accent } = variant.ui;
   const alpha = Math.round(tintAlpha[mode].terminalSelection * 255) / 255;
   const backgrounds = { bg, terminalSelection: interpolate([bg, accent])(alpha) };
+  const colors = [...ansi.normal, ...ansi.bright].map(c => formatHex(c));
   const contrast = [];
   const cvd = [];
+  const push = (index, bgKey, fgHex, bgHex) => {
+    const ratio = wcagContrast(fgHex, bgHex);
+    contrast.push({ index, bg: bgKey, fgHex, bgHex, ratio, ok: ratio >= target });
+  };
 
-  [...ansi.normal, ...ansi.bright].forEach((color, i) => {
-    if (skip.includes(i)) return;
-    for (const [bgKey, bgColor] of Object.entries(backgrounds)) {
-      const fgHex = formatHex(color);
-      const bgHex = formatHex(bgColor);
-      const ratio = wcagContrast(fgHex, bgHex);
-      contrast.push({ index: i, bg: bgKey, fgHex, bgHex, ratio, ok: ratio >= target });
+  colors.forEach((hex, i) => {
+    if (surfaces.includes(i)) {
+      for (const t of text) push(i, `ansi${t}`, colors[t], hex);
+    } else {
+      for (const [bgKey, bgColor] of Object.entries(backgrounds)) push(i, bgKey, hex, formatHex(bgColor));
     }
   });
 
@@ -172,7 +182,7 @@ export function ansiPairs(variant, ansi, mode) {
 export function validateAnsi(variant, ansi, mode) {
   const { contrast, cvd } = ansiPairs(variant, ansi, mode);
   const failures = [
-    ...contrast.filter(r => !r.ok).map(r => `ANSI ${r.index} on ${r.bg}: ${r.fgHex} ${r.ratio.toFixed(2)}:1`),
+    ...contrast.filter(r => !r.ok).map(r => `ANSI ${r.index} with ${r.bg}: ${r.fgHex} on ${r.bgHex} ${r.ratio.toFixed(2)}:1`),
     ...cvd.filter(r => !r.ok).map(r => `ANSI ${r.set} ${r.i} / ${r.j}: CIEDE2000 ${r.d.toFixed(1)} under CVD (min ${r.min})`),
   ];
   const passed = contrast.length + cvd.length - failures.length;

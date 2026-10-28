@@ -131,7 +131,6 @@
   .ansi .slot { border-radius: 8px; overflow: hidden; border: 1px solid var(--hover); font-size: 0.85rem; }
   .ansi .slot > div { padding: 8px 10px; }
   .ansi .slot b { display: block; font-family: var(--mono); font-size: 0.95rem; }
-  .ansi .slot.skip { opacity: 0.55; }
 
   footer { margin-top: 64px; color: var(--mid); font-size: 0.9rem; max-width: 72ch; }
   footer p + p { margin-top: 8px; }
@@ -200,7 +199,7 @@
 
   <section aria-labelledby="ansi-title">
     <h2 id="ansi-title">Terminal colors</h2>
-    <p>The 16 ANSI colors on the terminal background and on the selection tint. The slot that matches the background by convention is not checked.</p>
+    <p>The 16 ANSI colors on the terminal background and on the selection tint. White on light and black on dark are surfaces by convention, so they are checked with the opposite text colors drawn on them, as in reverse video and status bars.</p>
     <div class="ansi" id="ansi"></div>
     <p class="tightest" id="ansi-cvd"></p>
   </section>
@@ -422,18 +421,21 @@ function renderAnsi(v) {
     if (!byIndex.has(r.index)) byIndex.set(r.index, {});
     byIndex.get(r.index)[r.bg] = r;
   }
+  const ansiName = (i) => (i >= 8 ? 'bright ' : '') + ANSI_NAMES[i % 8];
   $('ansi').replaceChildren(...v.ansi.colors.map((hex, i) => {
-    const name = (i >= 8 ? 'bright ' : '') + ANSI_NAMES[i % 8];
     const r = byIndex.get(i);
-    if (!r) {
-      return el('div', { class: 'slot skip', style: { background: see(v.ui.bg) } },
-        el('div', { style: { background: see(hex), color: see(v.ui.text) } }, el('b', {}, String(i)), name),
-        el('div', { class: 'muted' }, 'Background slot'));
+    const mark = (res) => res.ok ? '' : ' \u2717';
+    // Surface slots: the slot is the background, text slots are drawn on it
+    if (!r.bg) {
+      return el('div', { class: 'slot' },
+        el('div', { style: { background: see(hex), color: see(v.ui.text) } }, el('b', {}, String(i)), ansiName(i) + ' (surface)'),
+        Object.values(r).map(res => el('div', { style: { background: see(hex), color: see(res.fgHex) } },
+          `${res.ratio.toFixed(2)} ${ansiName(+res.bg.slice(4))} on it${mark(res)}`)));
     }
     const line = (res, label) => el('div', { style: { background: see(res.bgHex), color: see(hex) } },
-      res.ratio.toFixed(2) + ' ' + label + (res.ok ? '' : ' \u2717'));
+      res.ratio.toFixed(2) + ' ' + label + mark(res));
     return el('div', { class: 'slot' },
-      el('div', { style: { background: see(r.bg.bgHex), color: see(hex) } }, el('b', {}, String(i)), name),
+      el('div', { style: { background: see(r.bg.bgHex), color: see(hex) } }, el('b', {}, String(i)), ansiName(i)),
       line(r.bg, 'bg'),
       line(r.terminalSelection, 'selection'));
   }));

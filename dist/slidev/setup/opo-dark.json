@@ -228,7 +228,7 @@
     "notifications.foreground": "#d1d7df",
     "terminal.background": "#161410",
     "terminal.foreground": "#d1d7df",
-    "terminal.ansiBlack": "#727b86",
+    "terminal.ansiBlack": "#1c1a14",
     "terminal.ansiRed": "#e08440",
     "terminal.ansiGreen": "#33a397",
     "terminal.ansiYellow": "#dca331",

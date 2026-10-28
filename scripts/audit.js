@@ -45,16 +45,16 @@ const note = (tool, mode, what, fg, bg) => info.push(`[${tool} ${mode}] ${what}:
 const read = p => fs.readFileSync(path.join(root, p), 'utf8');
 const ls = d => fs.readdirSync(path.join(root, d)).filter(f => !f.startsWith('.'));
 
-// --- Terminals: ANSI vs background (white in light / black in dark are bg-ish by design) ---
+// --- Terminals: ANSI vs background. White in light / black in dark are surfaces
+// by design, checked with the opposite text slots on them (see validate.js) ---
 function term(tool, file, bg, fg, ansi, selBg, selFg, cursor) {
   const mode = modeOf(file);
+  const [surfaces, text] = mode === 'dark' ? [[0], [7, 15]] : [[7, 15], [0, 8]];
   check(tool, file, 'foreground', fg, bg);
   ansi.forEach((c, i) => {
     if (!c) return;
-    const isBgSlot = mode === 'dark' ? (i === 0 || i === 8 && false) : (i === 7 || i === 15);
-    if (mode === 'dark' && i === 0) return;
-    if (isBgSlot) return;
-    check(tool, file, `ansi ${i}`, c, bg);
+    if (surfaces.includes(i)) text.forEach(t => check(tool, file, `ansi ${t} on ansi ${i}`, ansi[t], c));
+    else check(tool, file, `ansi ${i}`, c, bg);
   });
   if (selBg) {
     if (selFg) check(tool, file, 'selection visible vs bg', selBg, bg, 'ui'); else note(tool, mode, 'selection tint vs bg', selBg, bg);

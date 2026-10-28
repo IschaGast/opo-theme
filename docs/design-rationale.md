@@ -46,6 +46,8 @@ Traditional ANSI terminal colors (red, green, yellow, magenta) are remapped to c
 | 5 (magenta)| Magenta    | Raspberry  | Purple collapses into blue under deuteranopia |
 | 6 (cyan)  | Cyan        | Blue-teal  | Distinct from teal and blue         |
 
+White and bright white on light, and black on dark, are surfaces by convention: programs draw them as backgrounds for reverse video and status bars. They stay close to the background (white is `bgHover` on light and high contrast, black is `bgHover` on dark) and are checked with the opposite text colors on them instead of against the background, at the same target as all other text.
+
 ## Syntax Highlighting: Lightness Staircase
 
 Opo's 5 syntax token colors are placed at unique OKLCH lightness levels with widened gaps for CVD safety:
