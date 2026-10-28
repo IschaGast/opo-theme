@@ -177,13 +177,13 @@ code, tt {
 .cm-s-inner .cm-atom       { color: #001e4b; }
 .cm-s-inner .cm-def        { color: #004c49; }
 .cm-s-inner .cm-variable   { color: #13191f; }
-.cm-s-inner .cm-variable-2 { color: #570036; }
-.cm-s-inner .cm-variable-3 { color: #570036; }
+.cm-s-inner .cm-variable-2 { color: #570034; }
+.cm-s-inner .cm-variable-3 { color: #570034; }
 .cm-s-inner .cm-property   { color: #004c49; }
 .cm-s-inner .cm-operator   { color: #353f4a; }
 .cm-s-inner .cm-builtin    { color: #004c49; }
 .cm-s-inner .cm-tag        { color: #001e4b; }
-.cm-s-inner .cm-attribute  { color: #570036; }
+.cm-s-inner .cm-attribute  { color: #570034; }
 .cm-s-inner .cm-header     { color: #001e4b; font-weight: bold; }
 .cm-s-inner .cm-quote      { color: #3e3b35; }
 .cm-s-inner .cm-hr         { color: #f4efe5; }

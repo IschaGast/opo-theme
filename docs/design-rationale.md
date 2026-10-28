@@ -55,7 +55,7 @@ Opo's 5 syntax token colors are placed at unique OKLCH lightness levels with wid
 | Token    | L     | Hex       | Color  | Style  |
 |----------|-------|-----------|--------|--------|
 | Keyword  | 0.33  | `#002c85` | Blue   | bold   |
-| Type     | 0.40  | `#742651` | Plum   |        |
+| Type     | 0.40  | `#75254e` | Plum   |        |
 | Comment  | 0.47  | `#5e5a55` | Gray   | italic |
 | Function | 0.50  | `#007570` | Teal   |        |
 | String   | 0.53  | `#a75000` | Orange |        |
@@ -66,7 +66,7 @@ Lightness gaps: 0.07, 0.07, 0.03, 0.03.
 
 - **CVD users can distinguish tokens by brightness alone** — even if two colors look identical due to a color vision deficiency, they remain distinguishable because they have different lightness
 - **Every syntax pair is checked at build time** under simulated deuteranopia, protanopia, and tritanopia using [culori](https://culorijs.org/) CVD simulation (Brettel-Vienot-Mollon model at severity 1.0): CIEDE2000 of at least 8 for pairs that differ only in color (type, function, string), and at least 4.5 for pairs where bold (keyword) or italic (comment) also differs, per WCAG 1.4.1
-- **Type and function hues are tuned for this** — type is plum (h350) rather than purple, because purple collapses into blue under deuteranopia, especially in the high contrast variant
+- **Type and function hues are tuned for this** — type is plum (h352) rather than purple, because purple collapses into blue under deuteranopia, especially in the high contrast variant; h352 also keeps plum apart from navy under protanopia in high contrast
 - **Hue selection** uses maximally spread axes from the Okabe-Ito palette to maximize chromatic distance even for partial CVD
 
 ### Font Style Differentiators (WCAG 1.4.1)

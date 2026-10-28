@@ -2,6 +2,15 @@
 /* https://github.com/IschaGast/opo-theme */
 
 :root {
+  /* Hues (primitive palette) */
+  --opo-blue: #003c88;
+  --opo-navy: #001e4b;
+  --opo-orange: #6f3500;
+  --opo-amber: #352300;
+  --opo-teal: #004c49;
+  --opo-plum: #570034;
+
+  /* Surfaces, text and semantic base colors */
   --opo-bg: #fdfaf3;
   --opo-bg-panel: #f9f5ed;
   --opo-bg-hover: #f4efe5;
@@ -16,26 +25,51 @@
 
   /* Syntax */
   --opo-syntax-keyword: #001e4b;
-  --opo-syntax-type: #570036;
+  --opo-syntax-type: #570034;
   --opo-syntax-comment: #3e3b35;
   --opo-syntax-function: #004c49;
   --opo-syntax-string: #6f3500;
 
-  /* Tints and selection (validated alphas, see palette.js) */
+  /* Roles: error, warning, success and info, each with a tint */
+  --opo-error: #6f3500;
+  --opo-error-bg: color-mix(in srgb, #6f3500 12%, transparent);
+  --opo-warning: #352300;
+  --opo-warning-bg: color-mix(in srgb, #352300 12%, transparent);
+  --opo-success: #001e4b;
+  --opo-success-bg: color-mix(in srgb, #001e4b 12%, transparent);
+  --opo-info: #003c88;
+  --opo-info-bg: color-mix(in srgb, #003c88 14%, transparent);
+  --opo-neutral-bg: color-mix(in srgb, #353f4a 12%, transparent);
+  --opo-text-on-fill: #fdfaf3;
+
+  /* Interface */
+  --opo-border: #353f4a;
+  --opo-border-muted: color-mix(in srgb, #353f4a 35%, transparent);
+  --opo-focus: #003c88;
+  --opo-link: #003c88;
+  --opo-code-bg: #f9f5ed;
+  --opo-shadow: color-mix(in srgb, #000 12%, transparent);
+  --opo-shadow-strong: color-mix(in srgb, #000 18%, transparent);
+  --opo-backdrop: color-mix(in srgb, #000 40%, transparent);
+
+  /* Selection: solid with bg-colored text, or tints where text keeps its color */
   --opo-selection: #003c88;
   --opo-selection-text: #fdfaf3;
   --opo-accent-selection: color-mix(in srgb, #003c88 14%, transparent);
   --opo-accent-bg: color-mix(in srgb, #003c88 12%, transparent);
   --opo-accent-border: #003c88;
-  --opo-pass-bg: color-mix(in srgb, #001e4b 12%, transparent);
-  --opo-fail-bg: color-mix(in srgb, #6f3500 12%, transparent);
-  --opo-warn-bg: color-mix(in srgb, #352300 12%, transparent);
-  --opo-neutral-bg: color-mix(in srgb, #353f4a 12%, transparent);
-  --opo-border-light: color-mix(in srgb, #353f4a 35%, transparent);
+
+  /* Severity scale for issues and findings (critical and major differ mostly in lightness: add a label or icon) */
   --opo-severity-critical: #6f3500;
   --opo-severity-critical-bg: color-mix(in srgb, #6f3500 12%, transparent);
   --opo-severity-major: #352300;
   --opo-severity-major-bg: color-mix(in srgb, #352300 12%, transparent);
   --opo-severity-minor: #003c88;
   --opo-severity-minor-bg: color-mix(in srgb, #003c88 14%, transparent);
+
+  /* Earlier names, kept so existing code keeps working (prefer the roles above) */
+  --opo-pass-bg: color-mix(in srgb, #001e4b 12%, transparent);
+  --opo-fail-bg: color-mix(in srgb, #6f3500 12%, transparent);
+  --opo-warn-bg: color-mix(in srgb, #352300 12%, transparent);
+  --opo-border-light: color-mix(in srgb, #353f4a 35%, transparent);
 }

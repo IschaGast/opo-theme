@@ -42,12 +42,12 @@ const FONT = 'Atkinson Hyperlegible Next';
 // uses an Opo hue at a mid lightness that keeps it at 3.4:1+ on both the
 // light and the dark background (WCAG 1.4.11 for charts, and slide text is
 // large text). Teal and gray differ in lightness so they stay apart under
-// protanopia; min CIEDE2000 between all accents under CVD simulation is 6.3.
+// protanopia; min CIEDE2000 between all accents under CVD simulation is 6.2.
 const ACCENT_KEYS = [
   ['Accent2', (ui) => ui.pass, 0.575],           // blue
   ['Accent3', (ui) => ui.fail, 0.585],           // orange
   ['Accent4', (ui, syn) => syn.function, 0.52],  // teal
-  ['Accent5', (ui, syn) => syn.type, 0.585],     // purple
+  ['Accent5', (ui, syn) => syn.type, 0.585],     // plum
   ['Accent6', (ui) => ui.neutral, 0.62],         // gray
 ];
 

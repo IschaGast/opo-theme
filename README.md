@@ -15,8 +15,8 @@ Named after the Sranantongo word **opo** (to rise, to open), from the Surinamese
 - All colors defined in [OKLCH](https://oklch.com/) for perceptual consistency
 - **Blue + orange** instead of green + red for colorblind safety ([Okabe-Ito, 2008](https://jfly.uni-koeln.de/color/))
 - Every foreground/background pairing validated against WCAG contrast targets
-- 360 contrast checks enforced at build time (120 per variant), including selection, find and diff tints
-- Color pairs (UI, syntax and ANSI) checked for CVD distance at build time under simulated deuteranopia, protanopia, and tritanopia
+- 363 contrast checks enforced at build time (121 per variant), including selection, find and diff tints
+- Color pairs (roles, named hues, syntax and ANSI) checked for CVD distance at build time under simulated deuteranopia, protanopia, and tritanopia
 - Selections are solid accent with background-colored text wherever a tool allows it, so they are clearly visible and readable
 - 5 syntax token colors with lightness staircase + font style differentiators
 
@@ -37,7 +37,7 @@ Named after the Sranantongo word **opo** (to rise, to open), from the Surinamese
 | Token | Hex | L | Style | Color |
 |-------|-----|---|-------|-------|
 | Keyword | `#002c85` | 0.33 | bold | Blue |
-| Type | `#742651` | 0.40 | | Plum |
+| Type | `#75254e` | 0.40 | | Plum |
 | Comment | `#5e5a55` | 0.47 | italic | Gray |
 | Function | `#007570` | 0.50 | | Teal |
 | String | `#a75000` | 0.53 | | Orange |
@@ -186,26 +186,36 @@ Include a CSS file in your web project:
 
 Or use `opo.css` for automatic light/dark switching via `prefers-color-scheme`.
 
-All custom properties are prefixed with `--opo-`:
+All custom properties are prefixed with `--opo-`, in two layers as in most current themes (Catppuccin, GitHub Primer): named hues, and roles built on them. Use the roles in UI code, so the meaning stays the same when the variant changes:
 
 ```css
 body {
   background: var(--opo-bg);
   color: var(--opo-text);
 }
-a {
-  color: var(--opo-accent);
-}
+a { color: var(--opo-link); }
+.error { color: var(--opo-error); background: var(--opo-error-bg); }
+:focus-visible { outline: 3px solid var(--opo-focus); }
 ```
 
-For issues and findings there is a severity scale: `--opo-severity-critical`, `-major` and `-minor`, each with a `-bg` tint. They are aliases of fail, warn and accent, so they meet the same contrast targets and stay apart under color vision deficiency. Critical and major differ mostly in lightness, so pair them with a label or icon. A resolved finding is a status, not a severity: use `--opo-pass`.
+| Layer | Variables |
+|-------|-----------|
+| Hues | `--opo-blue`, `-navy`, `-orange`, `-amber`, `-teal`, `-plum` |
+| Surfaces and text | `--opo-bg`, `-bg-panel`, `-bg-hover`, `--opo-text`, `-text-mid`, `-text-faint`, `--opo-accent` |
+| Roles | `--opo-error`, `-warning`, `-success`, `-info`, `-neutral`, each with a `-bg` tint; `--opo-text-on-fill` for text on a solid role or accent fill |
+| Interface | `--opo-border` (3:1 or more), `-border-muted` (decorative), `-focus`, `-link`, `-code-bg`, `-shadow`, `-shadow-strong`, `-backdrop` |
+| Selection | `--opo-selection` with `-selection-text` (solid), or `--opo-accent-selection` where text keeps its color |
+| Syntax | `--opo-syntax-keyword`, `-type`, `-comment`, `-function`, `-string` |
+| Severity | `--opo-severity-critical`, `-major`, `-minor`, each with a `-bg` tint |
+
+Every text, role, hue and syntax color is validated on every surface and tint, so any foreground may be used on any background. Roles stay apart under color vision deficiency (CIEDE2000 of at least 9); the hues are held to the lower ANSI minimum (5), so give categories in a chart a label as well. Critical and major differ mostly in lightness, so pair them with a label or icon. A resolved finding is a status, not a severity: use `--opo-success`. The earlier names `--opo-pass`, `-fail`, `-warn`, their `-bg` tints and `--opo-border-light` still work.
 
 ### Use in another project
 
 Install the package from GitHub. With a `semver:` range, `npm update opo-theme` picks up every new 1.x release tag:
 
 ```bash
-npm install "github:IschaGast/opo-theme#semver:^1.2.0"
+npm install "github:IschaGast/opo-theme#semver:^1.3.0"
 ```
 
 Import a CSS file (with a bundler such as Vite):
@@ -214,7 +224,7 @@ Import a CSS file (with a bundler such as Vite):
 @import "opo-theme/dist/css/opo-light.css";
 ```
 
-For places that cannot read CSS custom properties, such as a web app manifest or a `theme-color` meta tag, `dist/json/opo.json` has every color per variant as hex (`ui`, `syntax`, `severity` and the 16 `ansi` colors).
+For places that cannot read CSS custom properties, such as a web app manifest or a `theme-color` meta tag, `dist/json/opo.json` has every color per variant as hex (`hues`, `ui`, `roles`, `syntax`, `severity` and the 16 `ansi` colors).
 
 A new release is a version bump in `package.json` plus a matching tag (`v1.3.0`), pushed to GitHub.
 
@@ -284,7 +294,7 @@ npm run build
 The build script:
 1. Derives Dark and HC variants from the Light OKLCH palette
 2. Validates contrast and CVD distance for every variant, tint and ANSI color (fails if any check is below target)
-3. Generates all 31 theme files in `dist/`
+3. Generates every theme file in `dist/`
 4. Writes the project site to `dist/site/` with a contrast grid at `dist/site/contrast/`: every pair from step 2 drawn in its real colors, per variant, with a color vision deficiency preview. It uses the same data as the build check, so it shows exactly what is enforced
 
 `npm run audit` then checks the generated files themselves: the foreground/background pairs each tool actually uses, tints composited the way the tool draws them, and accessibility-relevant keys that would otherwise fall back to a tool default.

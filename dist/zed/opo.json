@@ -73,7 +73,7 @@
         ],
         "accents": [
           "#005cccff",
-          "#742651ff",
+          "#75254eff",
           "#007570ff",
           "#583500ff",
           "#57606aff",
@@ -177,7 +177,7 @@
             "color": "#007570ff"
           },
           "type": {
-            "color": "#742651ff"
+            "color": "#75254eff"
           },
           "number": {
             "color": "#a75000ff"
@@ -264,7 +264,7 @@
         ],
         "accents": [
           "#79afffff",
-          "#ffa3cfff",
+          "#ffa4ccff",
           "#55c2bcff",
           "#f0c680ff",
           "#99a3aeff",
@@ -368,7 +368,7 @@
             "color": "#55c2bcff"
           },
           "type": {
-            "color": "#ffa3cfff"
+            "color": "#ffa4ccff"
           },
           "number": {
             "color": "#ea8d4aff"
@@ -455,7 +455,7 @@
         ],
         "accents": [
           "#003c88ff",
-          "#570036ff",
+          "#570034ff",
           "#004c49ff",
           "#352300ff",
           "#353f4aff",
@@ -559,7 +559,7 @@
             "color": "#004c49ff"
           },
           "type": {
-            "color": "#570036ff"
+            "color": "#570034ff"
           },
           "number": {
             "color": "#6f3500ff"

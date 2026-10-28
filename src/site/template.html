@@ -209,7 +209,7 @@
 
   <section id="palette" class="wrap" aria-labelledby="palette-title">
     <h2 id="palette-title">The values</h2>
-    <p class="intro">Every color with its role, hex and OKLCH value per variant, and its contrast against that variant's background. The selected variant is highlighted.</p>
+    <p class="intro">Two layers, as in most current themes: named hues, and the roles built on them (error, warning, success, info and the surfaces and text). Each color has its hex and OKLCH value per variant and its contrast against that variant's background. The selected variant is highlighted.</p>
     <div class="scroll"><table id="palette-table"></table></div>
     <h3 style="margin-top: 40px">Terminal colors</h3>
     <p class="intro" style="margin-bottom: 0">Red, green and magenta are remapped to orange, teal and raspberry, which stay apart under every type of color vision deficiency. Shown for the selected variant.</p>
@@ -240,8 +240,12 @@ const STYLE = { keyword: 'bold', comment: 'italic' };
 const UI_ROLES = [
   ['bg', 'Background', 'Editor and page'], ['bgPanel', 'Panel', 'Sidebars, inputs'], ['bgHover', 'Hover', 'Hover, inactive tabs'],
   ['text', 'Text', 'Body text'], ['textMid', 'Text mid', 'Secondary text'], ['textFaint', 'Text faint', 'Line numbers, hints'],
-  ['accent', 'Accent', 'Links, focus, selection'], ['pass', 'Pass', 'Success, added'], ['fail', 'Fail', 'Errors, removed'],
-  ['warn', 'Warning', 'Warnings'], ['neutral', 'Neutral', 'Borders, muted UI'],
+  ['accent', 'Accent / info', 'Links, focus, selection'], ['pass', 'Success', 'Passed, added (pass)'], ['fail', 'Error', 'Errors, removed (fail)'],
+  ['warn', 'Warning', 'Warnings (warn)'], ['neutral', 'Neutral', 'Borders, muted UI'],
+];
+const HUE_ROLES = [
+  ['blue', 'Blue', 'Accent, info'], ['navy', 'Navy', 'Success, keywords'], ['orange', 'Orange', 'Error, strings'],
+  ['amber', 'Amber', 'Warning'], ['teal', 'Teal', 'Functions'], ['plum', 'Plum', 'Types'],
 ];
 const SYNTAX_ROLES = [
   ['keyword', 'Keyword', 'Bold'], ['type', 'Type', 'Plum'], ['comment', 'Comment', 'Italic'],
@@ -440,7 +444,7 @@ function renderPalette() {
   const head = el('thead', {}, el('tr', {}, el('th', { scope: 'col' }, 'Role'),
     Object.entries(DATA.modes).map(([mode, m]) => el('th', { scope: 'col', class: mode === state.mode ? 'current' : '' }, m.name))));
   const body = el('tbody');
-  for (const [group, title, roles] of [['ui', 'Interface', UI_ROLES], ['syntax', 'Syntax', SYNTAX_ROLES]]) {
+  for (const [group, title, roles] of [['hues', 'Hues', HUE_ROLES], ['ui', 'Interface roles', UI_ROLES], ['syntax', 'Syntax', SYNTAX_ROLES]]) {
     body.append(el('tr', { class: 'group' }, el('th', { colspan: '4', scope: 'rowgroup' }, title)));
     for (const [key, name, note] of roles) {
       body.append(el('tr', {}, el('th', { scope: 'row' }, name, el('small', {}, note)),

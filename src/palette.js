@@ -47,13 +47,13 @@ export const light = {
 // Gaps of 0.07/0.07/0.03/0.03 — widened for CVD distinguishability
 // CVD users can distinguish tokens by brightness + font style (bold/italic)
 // Hues from maximally spread Okabe-Ito axes: blue, plum, gray, teal, orange
-// Type (plum, h350) and function (teal, h190) hues are tuned so every pair
+// Type (plum, h352) and function (teal, h190) hues are tuned so every pair
 // stays apart under deuteranopia, protanopia and tritanopia in all variants:
-// min CIEDE2000 9.0 for pairs without a font style, 5.0 for pairs where
-// bold/italic also differs (validated in validate.js)
+// CIEDE2000 of at least 8 for pairs without a font style, 4.5 for pairs where
+// bold/italic also differs, and 5 between the named hues (see validate.js)
 export const syntax = {
   keyword:  { mode: 'oklch', l: 0.3300, c: 0.1600, h: 258.00 },  // #003172 — blue (= pass, + bold)
-  type:     { mode: 'oklch', l: 0.4000, c: 0.1200, h: 350.00 },  // #742651 — plum
+  type:     { mode: 'oklch', l: 0.4000, c: 0.1200, h: 352.00 },  // #75254e — plum
   comment:  { mode: 'oklch', l: 0.4700, c: 0.0100, h: 80.00 },   // #5e5a55 — warm gray (+ italic)
   function: { mode: 'oklch', l: 0.5000, c: 0.1000, h: 190.00 },  // #007570 — teal
   string:   { mode: 'oklch', l: 0.5300, c: 0.1400, h: 54.00 },   // #a55200 — orange (= fail)
@@ -73,6 +73,39 @@ export const tintAlpha = {
   light: { listSelection: 0.06, textSelection: 0.09, highlight: 0.08, terminalSelection: 0.07 },
   dark:  { listSelection: 0.20, textSelection: 0.20, highlight: 0.16, terminalSelection: 0.10 },
   hc:    { listSelection: 0.12, textSelection: 0.14, highlight: 0.12, terminalSelection: 0.12 },
+};
+
+// Named hues: the primitive layer, as in current themes (Catppuccin, Primer).
+// Each is one of the role or syntax colors above, so it is validated as text
+// on every background and tint. The six stay apart under CVD at the same
+// minimum as the chromatic ANSI colors (see validate.js). For meaning, use
+// the roles below, whose pairs are held to a higher minimum.
+export const hues = {
+  blue:   'ui.accent',
+  navy:   'ui.pass',
+  orange: 'ui.fail',
+  amber:  'ui.warn',
+  teal:   'syntax.function',
+  plum:   'syntax.type',
+};
+
+// Semantic roles with the names most themes and editors use (error, warning,
+// success, info), as aliases of the UI colors. Every pair stays apart under
+// CVD at the semantic minimum (see CVD_PAIRS in validate.js).
+export const roles = {
+  error:   'fail',
+  warning: 'warn',
+  success: 'pass',
+  info:    'accent',
+};
+
+// Shadows and the modal backdrop: black at these alphas per variant. They
+// are decorative (no text is drawn on them), so they are not contrast
+// checked; dark needs a stronger black to stay visible.
+export const elevation = {
+  light: { shadow: 0.12, shadowStrong: 0.18, backdrop: 0.40 },
+  dark:  { shadow: 0.40, shadowStrong: 0.60, backdrop: 0.60 },
+  hc:    { shadow: 0.12, shadowStrong: 0.18, backdrop: 0.40 },
 };
 
 // Severity scale for issues and findings (audit tools, linters), as aliases

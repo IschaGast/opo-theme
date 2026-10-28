@@ -10,7 +10,7 @@ import {
   differenceCiede2000, filterDeficiencyDeuter, filterDeficiencyProt,
   filterDeficiencyTrit, formatHex, interpolate, wcagContrast,
 } from 'culori';
-import { tintAlpha } from './palette.js';
+import { hues, tintAlpha } from './palette.js';
 
 const TEXT_KEYS = ['text', 'textMid', 'textFaint', 'accent', 'pass', 'fail', 'warn', 'neutral'];
 const SYNTAX_KEYS = ['keyword', 'string', 'comment', 'type', 'function'];
@@ -18,8 +18,9 @@ const BG_KEYS = [
   'bg', 'bgPanel', 'bgHover',
   'listSelection', 'textSelection', 'passTint', 'failTint', 'warnTint', 'neutralTint',
 ];
-// Solid backgrounds drawn with bg-colored text (inverted selection, search)
-const INVERTED_KEYS = ['accent', 'warn', 'fail'];
+// Solid backgrounds drawn with bg-colored text (inverted selection, search,
+// --opo-text-on-fill on the info, warning, error and success fills)
+const INVERTED_KEYS = ['accent', 'warn', 'fail', 'pass'];
 
 /**
  * Compute every foreground/background pair checked for a variant: text and
@@ -203,11 +204,10 @@ export const CVD_SIMULATIONS = {
 };
 const ANSI_CVD_MIN = 5;
 const CVD_PAIRS = [
-  // UI semantics: pass/fail, error/warning, modified/created
+  // Roles: every pair of error (fail), warning (warn), success (pass) and
+  // info (accent), which also covers the severity scale
   ['ui.pass', 'ui.fail', 9], ['ui.fail', 'ui.warn', 9], ['ui.accent', 'ui.pass', 9],
-  ['ui.accent', 'ui.fail', 9], ['ui.accent', 'ui.warn', 9],
-  // Warnings next to passing or resolved items (e.g. major severity / resolved)
-  ['ui.warn', 'ui.pass', 9],
+  ['ui.accent', 'ui.fail', 9], ['ui.accent', 'ui.warn', 9], ['ui.warn', 'ui.pass', 9],
   // Syntax pairs without a font-style difference
   ['syntax.type', 'syntax.function', 8], ['syntax.type', 'syntax.string', 8],
   ['syntax.function', 'syntax.string', 8],
@@ -215,6 +215,13 @@ const CVD_PAIRS = [
   ['syntax.keyword', 'syntax.type', 4.5], ['syntax.keyword', 'syntax.function', 4.5],
   ['syntax.comment', 'syntax.type', 4.5], ['syntax.comment', 'syntax.function', 4.5],
 ];
+// Named hues (see palette.js) are used without a font style, so every pair
+// not listed above is held to the chromatic ANSI minimum
+const huePaths = Object.values(hues);
+huePaths.forEach((a, i) => huePaths.slice(i + 1).forEach((b) => {
+  const listed = CVD_PAIRS.some(([x, y]) => (x === a && y === b) || (x === b && y === a));
+  if (!listed) CVD_PAIRS.push([a, b, ANSI_CVD_MIN]);
+}));
 
 /**
  * Compute the CVD distance for each pair in CVD_PAIRS: the smallest

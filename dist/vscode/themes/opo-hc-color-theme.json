@@ -28,7 +28,7 @@
     "editorUnnecessaryCode.border": "#3a424b",
     "editorHint.foreground": "#353f4a",
     "editorBracketHighlight.foreground1": "#003c88",
-    "editorBracketHighlight.foreground2": "#570036",
+    "editorBracketHighlight.foreground2": "#570034",
     "editorBracketHighlight.foreground3": "#004c49",
     "editorBracketHighlight.foreground4": "#352300",
     "editorBracketHighlight.foreground5": "#353f4a",
@@ -271,7 +271,7 @@
     "charts.yellow": "#352300",
     "charts.green": "#001e4b",
     "charts.blue": "#003c88",
-    "charts.purple": "#570036",
+    "charts.purple": "#570034",
     "contrastBorder": "#353f4a",
     "contrastActiveBorder": "#003c88"
   },
@@ -357,7 +357,7 @@
         "support.type.property-name.css"
       ],
       "settings": {
-        "foreground": "#570036"
+        "foreground": "#570034"
       }
     },
     {
@@ -438,12 +438,12 @@
     "function": "#004c49",
     "function.declaration": "#004c49",
     "method": "#004c49",
-    "type": "#570036",
-    "class": "#570036",
-    "interface": "#570036",
-    "enum": "#570036",
-    "namespace": "#570036",
-    "typeParameter": "#570036",
+    "type": "#570034",
+    "class": "#570034",
+    "interface": "#570034",
+    "enum": "#570034",
+    "namespace": "#570034",
+    "typeParameter": "#570034",
     "variable": "#13191f",
     "parameter": "#13191f",
     "property": "#13191f",

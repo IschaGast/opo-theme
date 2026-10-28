@@ -14,6 +14,7 @@
 
 import { readFileSync } from 'node:fs';
 import { formatHex, wcagContrast } from 'culori';
+import { hues } from '../palette.js';
 import { ansiPairs, contrastPairs, cvdPairs } from '../validate.js';
 import { simulations } from './contrast.js';
 import { generateRaycastLink, generateRaycastTheme } from './raycast.js';
@@ -64,10 +65,18 @@ function oklch(color) {
 }
 
 function variantData(variant, ansi, mode) {
-  const hexes = (group) => Object.fromEntries(Object.entries(variant[group]).map(([k, c]) => [k, formatHex(c)]));
-  const oklchs = (group) => Object.fromEntries(Object.entries(variant[group]).map(([k, c]) => [k, oklch(c)]));
+  // Named hues resolve to their role or syntax color, as a third group
+  const groups = {
+    ...variant,
+    hues: Object.fromEntries(Object.entries(hues).map(([name, path]) => {
+      const [group, key] = path.split('.');
+      return [name, variant[group][key]];
+    })),
+  };
+  const hexes = (group) => Object.fromEntries(Object.entries(groups[group]).map(([k, c]) => [k, formatHex(c)]));
+  const oklchs = (group) => Object.fromEntries(Object.entries(groups[group]).map(([k, c]) => [k, oklch(c)]));
   const bg = formatHex(variant.ui.bg);
-  const ratios = (group) => Object.fromEntries(Object.entries(variant[group]).map(([k, c]) =>
+  const ratios = (group) => Object.fromEntries(Object.entries(groups[group]).map(([k, c]) =>
     [k, Math.round(wcagContrast(formatHex(c), bg) * 100) / 100]));
   const count = (list) => [list.filter(r => r.ok).length, list.length];
   const { target, label, results } = contrastPairs(variant, mode);
@@ -79,8 +88,9 @@ function variantData(variant, ansi, mode) {
     label,
     ui: hexes('ui'),
     syntax: hexes('syntax'),
-    oklch: { ui: oklchs('ui'), syntax: oklchs('syntax') },
-    ratio: { ui: ratios('ui'), syntax: ratios('syntax') },
+    hues: hexes('hues'),
+    oklch: { hues: oklchs('hues'), ui: oklchs('ui'), syntax: oklchs('syntax') },
+    ratio: { hues: ratios('hues'), ui: ratios('ui'), syntax: ratios('syntax') },
     ansi: [...ansi.normal, ...ansi.bright].map(c => formatHex(c)),
     // Editor selection tint, composited as validated
     selection: results.find(r => r.bg === 'textSelection').bgHex,

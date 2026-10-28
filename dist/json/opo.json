@@ -1,5 +1,13 @@
 {
   "light": {
+    "hues": {
+      "blue": "#005ccc",
+      "navy": "#002c85",
+      "orange": "#a75000",
+      "amber": "#583500",
+      "teal": "#007570",
+      "plum": "#75254e"
+    },
     "ui": {
       "bg": "#fbf8f2",
       "bgPanel": "#f5f2eb",
@@ -13,9 +21,15 @@
       "warn": "#583500",
       "neutral": "#57606a"
     },
+    "roles": {
+      "error": "#a75000",
+      "warning": "#583500",
+      "success": "#002c85",
+      "info": "#005ccc"
+    },
     "syntax": {
       "keyword": "#002c85",
-      "type": "#742651",
+      "type": "#75254e",
       "comment": "#5e5a55",
       "function": "#007570",
       "string": "#a75000"
@@ -45,6 +59,14 @@
     ]
   },
   "dark": {
+    "hues": {
+      "blue": "#79afff",
+      "navy": "#bad6ff",
+      "orange": "#ea8d4a",
+      "amber": "#f0c680",
+      "teal": "#55c2bc",
+      "plum": "#ffa4cc"
+    },
     "ui": {
       "bg": "#161410",
       "bgPanel": "#191612",
@@ -58,9 +80,15 @@
       "warn": "#f0c680",
       "neutral": "#99a3ae"
     },
+    "roles": {
+      "error": "#ea8d4a",
+      "warning": "#f0c680",
+      "success": "#bad6ff",
+      "info": "#79afff"
+    },
     "syntax": {
       "keyword": "#bad6ff",
-      "type": "#ffa3cf",
+      "type": "#ffa4cc",
       "comment": "#b8b4ae",
       "function": "#55c2bc",
       "string": "#ea8d4a"
@@ -90,6 +118,14 @@
     ]
   },
   "hc": {
+    "hues": {
+      "blue": "#003c88",
+      "navy": "#001e4b",
+      "orange": "#6f3500",
+      "amber": "#352300",
+      "teal": "#004c49",
+      "plum": "#570034"
+    },
     "ui": {
       "bg": "#fdfaf3",
       "bgPanel": "#f9f5ed",
@@ -103,9 +139,15 @@
       "warn": "#352300",
       "neutral": "#353f4a"
     },
+    "roles": {
+      "error": "#6f3500",
+      "warning": "#352300",
+      "success": "#001e4b",
+      "info": "#003c88"
+    },
     "syntax": {
       "keyword": "#001e4b",
-      "type": "#570036",
+      "type": "#570034",
       "comment": "#3e3b35",
       "function": "#004c49",
       "string": "#6f3500"
