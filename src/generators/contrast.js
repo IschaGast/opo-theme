@@ -57,8 +57,8 @@ function variantData(variant, ansi, mode) {
   };
 }
 
-// Simulated hex for every color on the page, per CVD type
-function simulations(data) {
+// Simulated hex for every color in the data, per CVD type
+export function simulations(data) {
   const all = new Set();
   JSON.stringify(data, (key, value) => {
     if (typeof value === 'string' && /^#[0-9a-f]{6}$/.test(value)) all.add(value);

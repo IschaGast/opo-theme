@@ -1,0 +1,510 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Opo Color Theme</title>
+<meta name="description" content="Opo is a colorblind-safe, OKLCH-based accessible color theme for editors, terminals and the web, with every color pair checked at build time.">
+<style>
+  /* Page colors are set from the selected variant (see applyChrome) */
+  :root {
+    --bg: #fbf8f2; --panel: #f5f2eb; --hover: #eeeae2;
+    --text: #24292f; --mid: #57606a; --faint: #5c646d;
+    --accent: #005ccc; --pass: #003172; --fail: #a55200; --warn: #583500;
+    --sans: 'Atkinson Hyperlegible Next', 'Atkinson Hyperlegible', system-ui, -apple-system, 'Segoe UI', sans-serif;
+    --mono: 'Atkinson Hyperlegible Mono', ui-monospace, 'SF Mono', Menlo, Consolas, monospace;
+    color-scheme: light;
+  }
+  :root[data-mode="dark"] { color-scheme: dark; }
+
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--text);
+    font: 17px/1.55 var(--sans);
+    -webkit-font-smoothing: antialiased;
+  }
+  ::selection { background: var(--accent); color: var(--bg); }
+  .wrap { max-width: 1160px; margin-left: auto; margin-right: auto; padding: 0 16px; }
+  h1, h2, h3 { line-height: 1.15; margin: 0; }
+  h2 { font-size: 1.9rem; letter-spacing: -0.01em; }
+  h3 { font-size: 1.1rem; }
+  p { margin: 0; }
+  a { color: var(--accent); text-underline-offset: 0.15em; }
+  a:focus-visible, button:focus-visible, select:focus-visible {
+    outline: 3px solid var(--accent); outline-offset: 2px; border-radius: 4px;
+  }
+  .mono { font-family: var(--mono); }
+  .muted { color: var(--mid); }
+  section { margin-top: 88px; }
+  .intro { color: var(--mid); max-width: 64ch; margin: 10px 0 28px; }
+
+  /* Navigation */
+  nav { border-bottom: 1px solid var(--hover); }
+  nav .wrap { display: flex; align-items: center; gap: 24px; height: 60px; }
+  nav .brand { font-weight: 700; font-size: 1.15rem; color: var(--text); text-decoration: none; margin-right: auto; }
+  nav a:not(.brand) { color: var(--mid); text-decoration: none; font-size: 0.95rem; }
+  nav a:not(.brand):hover { color: var(--text); }
+
+  /* Hero */
+  .hero { margin-top: 64px; }
+  .hero h1 { font-size: clamp(4rem, 12vw, 8rem); letter-spacing: -0.04em; line-height: 0.95; }
+  .hero .tagline { font-size: clamp(1.25rem, 2.5vw, 1.6rem); max-width: 30ch; margin-top: 16px; }
+  .hero .meaning { color: var(--mid); margin-top: 12px; max-width: 60ch; }
+  .actions { display: flex; flex-wrap: wrap; gap: 12px; margin-top: 28px; }
+  .button {
+    display: inline-flex; align-items: center; gap: 8px; padding: 10px 18px; border-radius: 8px;
+    font-weight: 700; text-decoration: none; border: 1px solid var(--accent);
+  }
+  .button.primary { background: var(--accent); color: var(--bg); }
+  .button.secondary { color: var(--accent); }
+  .button.small { padding: 6px 12px; font-size: 0.9rem; }
+
+  .controls { display: flex; flex-wrap: wrap; gap: 16px 24px; align-items: end; margin-top: 40px; }
+  .field { display: flex; flex-direction: column; gap: 6px; }
+  .field > span { font-size: 0.78rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.06em; color: var(--mid); }
+  .segmented { display: inline-flex; border: 1px solid var(--faint); border-radius: 8px; overflow: hidden; }
+  .segmented button {
+    font: inherit; font-size: 0.95rem; padding: 8px 14px; border: 0; cursor: pointer;
+    background: var(--bg); color: var(--text);
+  }
+  .segmented button + button { border-left: 1px solid var(--faint); }
+  .segmented button[aria-pressed="true"] { background: var(--accent); color: var(--bg); font-weight: 700; }
+  select {
+    font: inherit; font-size: 0.95rem; padding: 8px 12px; border-radius: 8px;
+    border: 1px solid var(--faint); background: var(--bg); color: var(--text);
+  }
+
+  /* Previews */
+  .previews { display: grid; grid-template-columns: 1.35fr 1fr; gap: 20px; margin-top: 24px; }
+  .window { border-radius: 12px; overflow: hidden; border: 1px solid var(--hover); min-width: 0; }
+  .window .bar { display: flex; align-items: center; gap: 8px; padding: 0 12px; height: 38px; font-size: 0.85rem; }
+  .window .dots { display: flex; gap: 6px; margin-right: 8px; }
+  .window .dots i { width: 11px; height: 11px; border-radius: 50%; display: block; }
+  .tabs { display: flex; gap: 2px; align-self: stretch; align-items: end; }
+  .tabs button {
+    font: inherit; font-size: 0.85rem; border: 0; padding: 7px 14px; cursor: pointer;
+    border-radius: 6px 6px 0 0; background: transparent;
+  }
+  .editor { display: grid; grid-template-columns: 150px 1fr; min-height: 330px; }
+  .tree { padding: 10px 0; font-size: 0.85rem; }
+  .tree div { padding: 3px 14px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .code { font: 14px/1.7 var(--mono); padding: 12px 0; overflow-x: auto; }
+  .code .line { display: flex; white-space: pre; }
+  .code .gutter { width: 3em; flex: none; text-align: right; padding-right: 1.2em; user-select: none; }
+  .code .src { padding-right: 16px; }
+  .status { display: flex; gap: 16px; padding: 4px 12px; font-size: 0.78rem; }
+  .status span:first-child { margin-right: auto; }
+  .terminal { font: 14px/1.7 var(--mono); padding: 14px 16px; white-space: pre; overflow-x: auto; min-height: 330px; }
+
+  /* Principles */
+  .principles { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px, 1fr)); gap: 16px; }
+  .card { background: var(--panel); border-radius: 12px; padding: 20px; }
+  .card h3 { margin-bottom: 8px; }
+  .card p { color: var(--mid); font-size: 0.98rem; }
+  .card .big { font-size: 2.2rem; font-weight: 700; font-variant-numeric: tabular-nums; line-height: 1; margin-bottom: 8px; color: var(--text); }
+  .card a { display: inline-block; margin-top: 10px; font-weight: 700; }
+
+  /* Palette */
+  .scroll { overflow-x: auto; border: 1px solid var(--hover); border-radius: 12px; }
+  table { border-collapse: collapse; width: 100%; font-variant-numeric: tabular-nums; }
+  th, td { text-align: left; padding: 10px 14px; vertical-align: middle; }
+  thead th { font-size: 0.85rem; background: var(--panel); white-space: nowrap; }
+  thead th.current { box-shadow: inset 0 -3px 0 var(--accent); }
+  tbody tr + tr td, tbody tr + tr th { border-top: 1px solid var(--hover); }
+  tbody th { font-weight: 700; white-space: nowrap; }
+  tbody th small { display: block; font-weight: 400; color: var(--mid); font-size: 0.82rem; }
+  tr.group th { background: var(--bg); color: var(--mid); font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.06em; padding-top: 18px; }
+  .swatch-cell { display: flex; gap: 10px; align-items: center; min-width: 190px; }
+  .swatch { width: 36px; height: 36px; border-radius: 8px; flex: none; border: 1px solid var(--hover); display: grid; place-items: center; font-weight: 700; font-size: 0.85rem; }
+  .swatch-cell .mono { font-size: 0.85rem; }
+  .swatch-cell small { display: block; color: var(--mid); font-size: 0.75rem; font-family: var(--mono); }
+  td.current { background: var(--panel); }
+
+  .ansi { display: grid; grid-template-columns: repeat(8, 1fr); gap: 8px; margin-top: 16px; }
+  .ansi div { border-radius: 8px; padding: 10px; font-size: 0.78rem; border: 1px solid var(--hover); min-width: 0; }
+  .ansi b { display: block; font-family: var(--mono); font-size: 0.9rem; }
+  .ansi span { display: block; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+
+  /* Apps */
+  .group-title { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--mid); margin: 32px 0 12px; }
+  .apps { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 12px; }
+  .app { background: var(--panel); border-radius: 12px; padding: 16px 18px; display: flex; flex-direction: column; gap: 6px; }
+  .app p { color: var(--mid); font-size: 0.93rem; flex: 1; }
+  .app .links { display: flex; flex-wrap: wrap; gap: 6px 16px; margin-top: 6px; font-size: 0.93rem; }
+  .app .links a { font-weight: 700; }
+  .app .raycast { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
+
+  footer { margin-top: 96px; border-top: 1px solid var(--hover); padding: 28px 0 48px; color: var(--mid); font-size: 0.92rem; }
+  footer .wrap { display: flex; flex-wrap: wrap; gap: 8px 24px; justify-content: space-between; }
+
+  @media (max-width: 900px) {
+    .previews { grid-template-columns: 1fr; }
+    .ansi { grid-template-columns: repeat(4, 1fr); }
+  }
+  @media (max-width: 640px) {
+    nav a:not(.brand):not(.keep) { display: none; }
+    .editor { grid-template-columns: 1fr; }
+    .tree { display: none; }
+    section { margin-top: 64px; }
+    h2 { font-size: 1.6rem; }
+  }
+</style>
+</head>
+<body>
+<nav>
+  <div class="wrap">
+    <a class="brand" href="#top">Opo</a>
+    <a href="#preview">Preview</a>
+    <a href="#palette">Palette</a>
+    <a href="#apps" class="keep">Apps</a>
+    <a href="contrast/" id="nav-contrast">Contrast grid</a>
+    <a href="#" id="nav-github" class="keep">GitHub</a>
+  </div>
+</nav>
+
+<main id="top">
+  <header class="hero wrap">
+    <h1>Opo</h1>
+    <p class="tagline">A colorblind-safe, accessible color theme for editors, terminals and the web.</p>
+    <p class="meaning"><i>Opo</i> is Sranantongo for <i>to rise, to open</i>, from the Surinamese national anthem.</p>
+    <div class="actions">
+      <a class="button primary" href="#apps">Get the theme</a>
+      <a class="button secondary" href="contrast/" id="hero-contrast">See every contrast check</a>
+    </div>
+
+    <div class="controls">
+      <div class="field">
+        <span id="variant-label">Variant</span>
+        <div class="segmented" role="group" aria-labelledby="variant-label" id="variants"></div>
+      </div>
+      <label class="field">
+        <span>See it as</span>
+        <select id="vision">
+          <option value="normal">Normal vision</option>
+          <option value="deuteranopia">Deuteranopia (no green cones)</option>
+          <option value="protanopia">Protanopia (no red cones)</option>
+          <option value="tritanopia">Tritanopia (no blue cones)</option>
+        </select>
+      </label>
+    </div>
+  </header>
+
+  <section id="preview" class="wrap" aria-labelledby="preview-title">
+    <h2 id="preview-title">In your editor and terminal</h2>
+    <p class="intro">Live previews in the real colors of the selected variant. Switch the variant or the vision above; nothing here is a screenshot.</p>
+    <div class="previews">
+      <div class="window" id="editor"></div>
+      <div class="window" id="terminal"></div>
+    </div>
+  </section>
+
+  <section id="principles" class="wrap" aria-labelledby="principles-title">
+    <h2 id="principles-title">How it is built</h2>
+    <p class="intro">Opo starts from a single light palette in OKLCH. Dark and High Contrast are derived from it, and every variant has to pass the same checks before any theme file is written.</p>
+    <div class="principles" id="principle-cards"></div>
+  </section>
+
+  <section id="palette" class="wrap" aria-labelledby="palette-title">
+    <h2 id="palette-title">The values</h2>
+    <p class="intro">Every color with its role, hex and OKLCH value per variant, and its contrast against that variant's background. The selected variant is highlighted.</p>
+    <div class="scroll"><table id="palette-table"></table></div>
+    <h3 style="margin-top: 40px">Terminal colors</h3>
+    <p class="intro" style="margin-bottom: 0">Red, green and magenta are remapped to orange, teal and raspberry, which stay apart under every type of color vision deficiency. Shown for the selected variant.</p>
+    <div class="ansi" id="ansi"></div>
+  </section>
+
+  <section id="apps" class="wrap" aria-labelledby="apps-title">
+    <h2 id="apps-title">Get Opo</h2>
+    <p class="intro">Every app gets Light, Dark and High Contrast, generated from the same palette. <a href="#" id="download">Download everything as a zip</a>, or pick an app below.</p>
+    <div id="app-groups"></div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>Opo by Ischa Gast &middot; MIT License</span>
+    <span>Site layout after <a href="https://ethanschoonover.com/solarized/">Solarized</a>; contrast grid after <a href="https://thishueshallpass.clearleft.com/">This Hue Shall Pass</a>.</span>
+  </div>
+</footer>
+
+<noscript><p style="text-align:center">This page needs JavaScript to draw the previews and palette.</p></noscript>
+
+<script>
+const DATA = __OPO_DATA__;
+
+const MODES = { light: 'Light', dark: 'Dark', hc: 'High Contrast' };
+const STYLE = { keyword: 'bold', comment: 'italic' };
+const UI_ROLES = [
+  ['bg', 'Background', 'Editor and page'], ['bgPanel', 'Panel', 'Sidebars, inputs'], ['bgHover', 'Hover', 'Hover, inactive tabs'],
+  ['text', 'Text', 'Body text'], ['textMid', 'Text mid', 'Secondary text'], ['textFaint', 'Text faint', 'Line numbers, hints'],
+  ['accent', 'Accent', 'Links, focus, selection'], ['pass', 'Pass', 'Success, added'], ['fail', 'Fail', 'Errors, removed'],
+  ['warn', 'Warning', 'Warnings'], ['neutral', 'Neutral', 'Borders, muted UI'],
+];
+const SYNTAX_ROLES = [
+  ['keyword', 'Keyword', 'Bold'], ['type', 'Type', 'Plum'], ['comment', 'Comment', 'Italic'],
+  ['function', 'Function', 'Teal'], ['string', 'String', 'Orange'],
+];
+const ANSI_NAMES = ['black', 'red', 'green', 'yellow', 'blue', 'magenta', 'cyan', 'white'];
+const ANSI_AS = ['', 'orange', 'teal', 'amber', 'blue', 'raspberry', 'accent blue', ''];
+const BG_KEYS = ['bg', 'bgPanel', 'bgHover'];
+
+const state = { mode: 'light', vision: 'normal', file: 0 };
+const $ = (id) => document.getElementById(id);
+
+function initialState() {
+  let saved = null;
+  try { saved = localStorage.getItem('opo-variant'); } catch (e) { /* storage blocked */ }
+  if (saved in DATA.modes) state.mode = saved;
+  else if (matchMedia('(prefers-color-scheme: dark)').matches) state.mode = 'dark';
+}
+
+function saveState() {
+  try { localStorage.setItem('opo-variant', state.mode); } catch (e) { /* storage blocked */ }
+  for (const id of ['nav-contrast', 'hero-contrast']) $(id).href = `contrast/#variant=${state.mode}` + (state.vision === 'normal' ? '' : `&vision=${state.vision}`);
+}
+
+// A color as seen with the selected vision
+function see(hex) {
+  return state.vision === 'normal' ? hex : (DATA.sims[state.vision][hex] || hex);
+}
+
+function el(tag, attrs = {}, ...children) {
+  const node = document.createElement(tag);
+  for (const [key, value] of Object.entries(attrs)) {
+    if (key === 'style') Object.assign(node.style, value);
+    else if (key === 'class') node.className = value;
+    else node.setAttribute(key, value);
+  }
+  for (const child of children.flat(Infinity)) {
+    if (child != null) node.append(child);
+  }
+  return node;
+}
+
+function applyChrome(v) {
+  const vars = {
+    bg: v.ui.bg, panel: v.ui.bgPanel, hover: v.ui.bgHover, text: v.ui.text, mid: v.ui.textMid,
+    faint: v.ui.textFaint, accent: v.ui.accent, pass: v.ui.pass, fail: v.ui.fail, warn: v.ui.warn,
+  };
+  for (const [key, hex] of Object.entries(vars)) {
+    document.documentElement.style.setProperty('--' + key, see(hex));
+  }
+  document.documentElement.dataset.mode = state.mode === 'dark' ? 'dark' : 'light';
+}
+
+function renderControls() {
+  $('variants').replaceChildren(...Object.entries(MODES).map(([mode, label]) => {
+    const button = el('button', { type: 'button', 'aria-pressed': String(mode === state.mode) }, label);
+    button.addEventListener('click', () => { state.mode = mode; render(); });
+    return button;
+  }));
+  $('vision').value = state.vision;
+}
+
+// Code samples: {x:text} is a token, x = k(eyword) t(ype) c(omment) f(unction) s(tring)
+const TOKENS = { k: 'keyword', t: 'type', c: 'comment', f: 'function', s: 'string' };
+const FILES = [
+  { name: 'contrast.ts', selected: 5, lines: [
+    '{c:// Every pair is checked at build time}',
+    '{k:import} { wcagContrast } {k:from} {s:"culori"};',
+    '',
+    '{k:interface} {t:Pair} {',
+    '  fg: {t:string};',
+    '  bg: {t:string};',
+    '}',
+    '',
+    '{k:export} {k:function} {f:passes}({ fg, bg }: {t:Pair}, target = {s:4.5}): {t:boolean} {',
+    '  {k:return} {f:wcagContrast}(fg, bg) >= target;',
+    '}',
+  ] },
+  { name: 'staircase.py', selected: 7, lines: [
+    '{c:# One lightness step per syntax token}',
+    '{k:from} dataclasses {k:import} dataclass',
+    '',
+    '@{f:dataclass}',
+    '{k:class} {t:Token}:',
+    '    name: {t:str}',
+    '    lightness: {t:float}',
+    '',
+    '{k:def} {f:is_staircase}(tokens: {t:list}[{t:Token}]) -> {t:bool}:',
+    '    steps = [t.lightness {k:for} t {k:in} tokens]',
+    '    {k:return} steps == {f:sorted}(steps)',
+  ] },
+];
+
+function tokenLine(line, v) {
+  const parts = [];
+  const re = /\{([ktcfs]):([^}]*)\}/g;
+  let last = 0;
+  for (const m of line.matchAll(re)) {
+    if (m.index > last) parts.push(el('span', { style: { color: see(v.ui.text) } }, line.slice(last, m.index)));
+    const token = TOKENS[m[1]];
+    parts.push(el('span', { style: {
+      color: see(v.syntax[token]), fontWeight: STYLE[token] === 'bold' ? '700' : '', fontStyle: STYLE[token] === 'italic' ? 'italic' : '',
+    } }, m[2]));
+    last = m.index + m[0].length;
+  }
+  if (last < line.length) parts.push(el('span', { style: { color: see(v.ui.text) } }, line.slice(last)));
+  return parts;
+}
+
+function renderEditor(v) {
+  const file = FILES[state.file];
+  const c = (key) => see(v.ui[key]);
+  const tabs = el('div', { class: 'tabs', role: 'tablist' }, FILES.map((f, i) => {
+    const active = i === state.file;
+    const tab = el('button', {
+      type: 'button', role: 'tab', 'aria-selected': String(active),
+      style: { background: active ? c('bg') : 'transparent', color: active ? c('text') : c('textMid') },
+    }, f.name);
+    tab.addEventListener('click', () => { state.file = i; renderEditor(v); });
+    return tab;
+  }));
+  const tree = ['src/', '  generators/', ...FILES.map(f => '  ' + f.name), '  palette.js', 'README.md'];
+  const code = el('div', { class: 'code', style: { background: c('bg') } }, file.lines.map((line, i) => {
+    const selected = i + 1 === file.selected;
+    return el('div', { class: 'line', style: { background: selected ? see(v.selection) : 'transparent' } },
+      el('span', { class: 'gutter', style: { color: selected ? c('text') : c('textFaint') } }, String(i + 1)),
+      el('span', { class: 'src' }, tokenLine(line, v)));
+  }));
+  $('editor').replaceChildren(
+    el('div', { class: 'bar', style: { background: c('bgHover'), color: c('textMid') } },
+      el('div', { class: 'dots', 'aria-hidden': 'true' }, ['fail', 'warn', 'pass'].map(k => el('i', { style: { background: c(k) } }))),
+      tabs),
+    el('div', { class: 'editor' },
+      el('div', { class: 'tree', style: { background: c('bgPanel'), color: c('text') } }, tree.map(name => {
+        const active = name.trim() === file.name;
+        return el('div', { style: active ? { background: c('accent'), color: c('bg') } : {} }, name);
+      })),
+      code),
+    el('div', { class: 'status', style: { background: c('bgPanel'), color: c('textMid') } },
+      el('span', {}, 'main'),
+      el('span', { style: { color: c('fail') } }, '0 errors'),
+      el('span', { style: { color: c('warn') } }, '0 warnings'),
+      el('span', {}, 'UTF-8')),
+  );
+}
+
+function renderTerminal(v) {
+  const a = (i) => see(v.ansi[i]);
+  const total = Object.values(DATA.modes).reduce((n, m) => n + m.stats.contrast[1], 0);
+  const prompt = () => [
+    el('span', { style: { color: a(4), fontWeight: '700' } }, '~/opo-theme '),
+    el('span', { style: { color: a(5) } }, 'main '),
+    el('span', { style: { color: a(2) } }, '\u276f '),
+  ];
+  const line = (...parts) => el('div', {}, parts.length ? parts : '\u00a0');
+  const t = (text, i, bold) => el('span', { style: { color: i == null ? see(v.ui.text) : a(i), fontWeight: bold ? '700' : '' } }, text);
+  $('terminal').replaceChildren(
+    el('div', { class: 'bar', style: { background: see(v.ui.bgHover), color: see(v.ui.textMid) } },
+      el('div', { class: 'dots', 'aria-hidden': 'true' }, ['fail', 'warn', 'pass'].map(k => el('i', { style: { background: see(v.ui[k]) } }))),
+      'zsh'),
+    el('div', { class: 'terminal', style: { background: see(v.ui.bg), color: see(v.ui.text) } },
+      line(prompt(), t('npm run build')),
+      line(t('Validating contrast ratios...', 8)),
+      line(t('\u2713 ', 2), t(`${total} contrast checks pass`)),
+      line(t('\u2713 ', 2), t('CVD distance for every pair')),
+      line(t('! ', 3, true), t('dist/ is out of date', 3)),
+      line(),
+      line(prompt(), t('git status --short')),
+      line(t(' M', 1), t(' src/palette.js')),
+      line(t('A ', 2), t(' src/generators/site.js')),
+      line(t('??', 1), t(' notes.md')),
+      line(),
+      line(prompt(), t('ls')),
+      line(t('build.js  '), t('dist/  docs/  src/', 4, true)),
+      line(prompt(), el('span', { style: { background: see(v.ui.text), color: see(v.ui.bg) } }, ' ')),
+    ),
+  );
+}
+
+function renderPrinciples(v) {
+  const sum = (key) => Object.values(DATA.modes).reduce((n, m) => n + m.stats[key][1], 0);
+  const checks = sum('contrast') + sum('cvd') + sum('ansi');
+  const cards = [
+    { title: 'Colorblind-safe', text: 'Blue and orange instead of green and red, after Okabe and Ito. Pairs that carry meaning stay apart under deuteranopia, protanopia and tritanopia.' },
+    { title: 'Perceptual by design', text: 'Every color is defined in OKLCH. Dark and High Contrast are derived by remapping lightness, so the relationships between colors hold in every variant.' },
+    { big: String(checks), title: 'checks at build time', text: `Contrast, color vision distance and terminal colors for all three variants. ${v.name} targets ${v.label}; the build fails if any pair drops below.`, link: ['Open the contrast grid', 'contrast/#variant=' + state.mode] },
+    { title: 'More than color', text: 'Five syntax colors on a lightness staircase, with bold keywords and italic comments, so tokens stay apart without relying on color (WCAG 1.4.1).' },
+  ];
+  $('principle-cards').replaceChildren(...cards.map(c => el('div', { class: 'card' },
+    c.big ? el('div', { class: 'big' }, c.big) : null,
+    el('h3', {}, c.title), el('p', {}, c.text),
+    c.link ? el('a', { href: c.link[1] }, c.link[0] + ' \u2192') : null)));
+}
+
+function renderPalette() {
+  const head = el('thead', {}, el('tr', {}, el('th', { scope: 'col' }, 'Role'),
+    Object.entries(DATA.modes).map(([mode, m]) => el('th', { scope: 'col', class: mode === state.mode ? 'current' : '' }, m.name))));
+  const body = el('tbody');
+  for (const [group, title, roles] of [['ui', 'Interface', UI_ROLES], ['syntax', 'Syntax', SYNTAX_ROLES]]) {
+    body.append(el('tr', { class: 'group' }, el('th', { colspan: '4', scope: 'rowgroup' }, title)));
+    for (const [key, name, note] of roles) {
+      body.append(el('tr', {}, el('th', { scope: 'row' }, name, el('small', {}, note)),
+        Object.entries(DATA.modes).map(([mode, m]) => {
+          const hex = m[group][key];
+          const [l, c, h] = m.oklch[group][key];
+          const isBg = BG_KEYS.includes(key);
+          const ratio = m.ratio[group][key];
+          return el('td', { class: mode === state.mode ? 'current' : '' }, el('div', { class: 'swatch-cell' },
+            el('span', { class: 'swatch', style: { background: see(hex), color: see(m.ui.bg) }, 'aria-hidden': 'true' }),
+            el('span', {}, el('span', { class: 'mono' }, hex),
+              el('small', {}, `oklch(${l} ${c} ${h})`),
+              el('small', {}, isBg ? 'background' : `${ratio.toFixed(2)}:1 on bg`))));
+        })));
+    }
+  }
+  $('palette-table').replaceChildren(head, body);
+}
+
+function renderAnsi(v) {
+  $('ansi').replaceChildren(...v.ansi.map((hex, i) => {
+    const slot = i % 8;
+    const name = (i >= 8 ? 'bright ' : '') + ANSI_NAMES[slot];
+    return el('div', { style: { background: see(v.ui.bg), color: see(v.ui.textMid) } },
+      el('span', { class: 'swatch', style: { background: see(hex), width: '100%', height: '28px', marginBottom: '8px' }, 'aria-hidden': 'true' }),
+      el('b', { style: { color: see(v.ui.text) } }, String(i)),
+      el('span', {}, name),
+      el('span', { class: 'mono' }, hex),
+      ANSI_AS[slot] ? el('span', {}, '\u2192 ' + ANSI_AS[slot]) : null);
+  }));
+}
+
+function renderApps() {
+  $('download').href = DATA.repo + '/archive/refs/heads/main.zip';
+  $('nav-github').href = DATA.repo;
+  $('app-groups').replaceChildren(...DATA.apps.flatMap(([group, apps]) => [
+    el('h3', { class: 'group-title' }, group),
+    el('div', { class: 'apps' }, apps.map(app => el('div', { class: 'app' },
+      el('h3', {}, app.name),
+      el('p', {}, app.how),
+      app.raycast ? el('div', { class: 'raycast' }, Object.entries(DATA.modes).map(([mode, m]) =>
+        el('a', { class: 'button small ' + (mode === state.mode ? 'primary' : 'secondary'), href: m.raycast }, 'Add ' + MODES[mode]))) : null,
+      el('div', { class: 'links' },
+        el('a', { href: app.files }, 'Files'),
+        app.readme ? el('a', { href: app.readme }, 'Install guide') : null)))),
+  ]));
+}
+
+function render() {
+  const v = DATA.modes[state.mode];
+  applyChrome(v);
+  renderControls();
+  renderEditor(v);
+  renderTerminal(v);
+  renderPrinciples(v);
+  renderPalette();
+  renderAnsi(v);
+  renderApps();
+  saveState();
+}
+
+$('vision').addEventListener('change', (e) => { state.vision = e.target.value; render(); });
+initialState();
+render();
+</script>
+</body>
+</html>

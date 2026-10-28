@@ -34,6 +34,7 @@ import { generateTemplateJson, generatePresetsJson } from './src/generators/ia-p
 import { generateRaycastTheme, generateRaycastLink } from './src/generators/raycast.js';
 import { generateFirefox } from './src/generators/firefox.js';
 import { generateContrastPage } from './src/generators/contrast.js';
+import { generateSite } from './src/generators/site.js';
 import {
   generateSlidevPackageJson,
   generateSlidevStylesIndex,
@@ -242,10 +243,11 @@ for (const [relPath, content] of Object.entries(generateFirefox(variants))) {
   fileCount++;
 }
 
-// Contrast grid
-console.log('\n  Contrast grid:');
-write(join(dir('contrast'), 'index.html'), generateContrastPage(variants, ansiSets));
-fileCount++;
+// Site, with the contrast grid at contrast/
+console.log('\n  Site:');
+write(join(dir('site'), 'index.html'), generateSite(variants, ansiSets));
+write(join(dir('site', 'contrast'), 'index.html'), generateContrastPage(variants, ansiSets));
+fileCount += 2;
 
 // ── Summary ──
 console.log(`\n✨ Build complete! ${fileCount} files generated in dist/`);
@@ -253,4 +255,4 @@ console.log('   Variants: Opo Light, Opo Dark, Opo High Contrast');
 console.log('   Formats: VS Code, Ghostty, Alacritty, iTerm2, Windows Terminal,');
 console.log('            Warp, Zed, JetBrains, Neovim, Slack, CSS, Bear, Typora,');
 console.log('            iA Presenter, Slidev, Raycast, Firefox');
-console.log('   Contrast grid: dist/contrast/index.html\n');
+console.log('   Site: dist/site/index.html, contrast grid at dist/site/contrast/\n');
