@@ -81,6 +81,11 @@ function apps(variants, ansiSets) {
       { name: 'Typora', files: 'dist/typora', readme: 'Typora', how: 'Run the install command, restart Typora and pick Opo from the Themes menu.',
         copy: [{ label: 'install command', value: fetchVariants('~/Library/"Application Support"/abnerworks.Typora/themes', 'dist/typora/opo-$v.css') }] },
     ]],
+    ['Design', [
+      { name: 'macOS colors', files: 'dist/macos', readme: 'macOS color picker', how: 'Download a palette into ~/Library/Colors, then pick it in the color picker of any Mac app.', download: downloads('macos', 'clr') },
+      { name: 'Adobe', files: 'dist/adobe', readme: 'Adobe (Illustrator, Photoshop, InDesign)', how: 'Download swatches, then open them from the Swatches panel menu.', download: downloads('adobe', 'ase') },
+      { name: 'Figma', files: 'dist/figma', readme: 'Figma', how: 'Download the tokens, then import them as variables, one file per mode.', download: downloads('figma', 'tokens.json') },
+    ]],
     ['Slides and web', [
       { name: 'iA Presenter', files: 'dist/ia-presenter', readme: 'iA Presenter', how: 'A custom theme folder with light and dark presets.' },
       { name: 'Slidev', files: 'dist/slidev', readme: 'Slidev', how: 'A local Slidev theme: theme: ./path/to/dist/slidev.' },

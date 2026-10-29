@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>$archiver</key>
+	<string>NSKeyedArchiver</string>
+	<key>$objects</key>
+	<array>
+		<string>$null</string>
+		<dict><key>$class</key><dict><key>CF$UID</key><integer>14</integer></dict><key>NS.objects</key><array><dict><key>CF$UID</key><integer>2</integer></dict><dict><key>CF$UID</key><integer>3</integer></dict><dict><key>CF$UID</key><integer>4</integer></dict><dict><key>CF$UID</key><integer>5</integer></dict><dict><key>CF$UID</key><integer>6</integer></dict><dict><key>CF$UID</key><integer>7</integer></dict><dict><key>CF$UID</key><integer>8</integer></dict><dict><key>CF$UID</key><integer>9</integer></dict><dict><key>CF$UID</key><integer>10</integer></dict><dict><key>CF$UID</key><integer>11</integer></dict><dict><key>CF$UID</key><integer>12</integer></dict><dict><key>CF$UID</key><integer>13</integer></dict></array></dict>
+		<string>bg</string>
+		<string>bg-panel</string>
+		<string>bg-hover</string>
+		<string>text</string>
+		<string>text-mid</string>
+		<string>text-faint</string>
+		<string>blue</string>
+		<string>navy</string>
+		<string>orange</string>
+		<string>amber</string>
+		<string>teal</string>
+		<string>plum</string>
+		<dict><key>$classes</key><array><string>NSMutableArray</string><string>NSArray</string><string>NSObject</string></array><key>$classname</key><string>NSMutableArray</string></dict>
+		<dict><key>$class</key><dict><key>CF$UID</key><integer>14</integer></dict><key>NS.objects</key><array><dict><key>CF$UID</key><integer>16</integer></dict><dict><key>CF$UID</key><integer>17</integer></dict><dict><key>CF$UID</key><integer>18</integer></dict><dict><key>CF$UID</key><integer>19</integer></dict><dict><key>CF$UID</key><integer>20</integer></dict><dict><key>CF$UID</key><integer>21</integer></dict><dict><key>CF$UID</key><integer>22</integer></dict><dict><key>CF$UID</key><integer>23</integer></dict><dict><key>CF$UID</key><integer>24</integer></dict><dict><key>CF$UID</key><integer>25</integer></dict><dict><key>CF$UID</key><integer>26</integer></dict><dict><key>CF$UID</key><integer>27</integer></dict></array></dict>
+		<dict><key>$class</key><dict><key>CF$UID</key><integer>30</integer></dict><key>NSColorSpace</key><integer>1</integer><key>NSComponents</key><data>MC45ODQzMTQgMC45NzI1NDkgMC45NDkwMiAx</data><key>NSCustomColorSpace</key><dict><key>CF$UID</key><integer>28</integer></dict><key>NSRGB</key><data>MC45ODQzMTQgMC45NzI1NDkgMC45NDkwMgA=</data></dict>
+		<dict><key>$class</key><dict><key>CF$UID</key><integer>30</integer></dict><key>NSColorSpace</key><integer>1</integer><key>NSComponents</key><data>MC45NjA3ODQgMC45NDkwMiAwLjkyMTU2OSAx</data><key>NSCustomColorSpace</key><dict><key>CF$UID</key><integer>28</integer></dict><key>NSRGB</key><data>MC45NjA3ODQgMC45NDkwMiAwLjkyMTU2OQA=</data></dict>
+		<dict><key>$class</key><dict><key>CF$UID</key><integer>30</integer></dict><key>NSColorSpace</key><integer>1</integer><key>NSComponents</key><data>MC45MzMzMzMgMC45MTc2NDcgMC44ODYyNzUgMQ==</data><key>NSCustomColorSpace</key><dict><key>CF$UID</key><integer>28</integer></dict><key>NSRGB</key><data>MC45MzMzMzMgMC45MTc2NDcgMC44ODYyNzUA</data></dict>
+		<dict><key>$class</key><dict><key>CF$UID</key><integer>30</integer></dict><key>NSColorSpace</key><integer>1</integer><key>NSComponents</key><data>MC4xNDExNzYgMC4xNjA3ODQgMC4xODQzMTQgMQ==</data><key>NSCustomColorSpace</key><dict><key>CF$UID</key><integer>28</integer></dict><key>NSRGB</key><data>MC4xNDExNzYgMC4xNjA3ODQgMC4xODQzMTQA</data></dict>
+		<dict><key>$class</key><dict><key>CF$UID</key><integer>30</integer></dict><key>NSColorSpace</key><integer>1</integer><key>NSComponents</key><data>MC4zNDExNzYgMC4zNzY0NzEgMC40MTU2ODYgMQ==</data><key>NSCustomColorSpace</key><dict><key>CF$UID</key><integer>28</integer></dict><key>NSRGB</key><data>MC4zNDExNzYgMC4zNzY0NzEgMC40MTU2ODYA</data></dict>
+		<dict><key>$class</key><dict><key>CF$UID</key><integer>30</integer></dict><key>NSColorSpace</key><integer>1</integer><key>NSComponents</key><data>MC4zNjA3ODQgMC4zOTIxNTcgMC40Mjc0NTEgMQ==</data><key>NSCustomColorSpace</key><dict><key>CF$UID</key><integer>28</integer></dict><key>NSRGB</key><data>MC4zNjA3ODQgMC4zOTIxNTcgMC40Mjc0NTEA</data></dict>
+		<dict><key>$class</key><dict><key>CF$UID</key><integer>30</integer></dict><key>NSColorSpace</key><integer>1</integer><key>NSComponents</key><data>MCAwLjM2MDc4NCAwLjggMQ==</data><key>NSCustomColorSpace</key><dict><key>CF$UID</key><integer>28</integer></dict><key>NSRGB</key><data>MCAwLjM2MDc4NCAwLjgA</data></dict>
+		<dict><key>$class</key><dict><key>CF$UID</key><integer>30</integer></dict><key>NSColorSpace</key><integer>1</integer><key>NSComponents</key><data>MCAwLjE3MjU0OSAwLjUyMTU2OSAx</data><key>NSCustomColorSpace</key><dict><key>CF$UID</key><integer>28</integer></dict><key>NSRGB</key><data>MCAwLjE3MjU0OSAwLjUyMTU2OQA=</data></dict>
+		<dict><key>$class</key><dict><key>CF$UID</key><integer>30</integer></dict><key>NSColorSpace</key><integer>1</integer><key>NSComponents</key><data>MC42NTQ5MDIgMC4zMTM3MjUgMCAx</data><key>NSCustomColorSpace</key><dict><key>CF$UID</key><integer>28</integer></dict><key>NSRGB</key><data>MC42NTQ5MDIgMC4zMTM3MjUgMAA=</data></dict>
+		<dict><key>$class</key><dict><key>CF$UID</key><integer>30</integer></dict><key>NSColorSpace</key><integer>1</integer><key>NSComponents</key><data>MC4zNDUwOTggMC4yMDc4NDMgMCAx</data><key>NSCustomColorSpace</key><dict><key>CF$UID</key><integer>28</integer></dict><key>NSRGB</key><data>MC4zNDUwOTggMC4yMDc4NDMgMAA=</data></dict>
+		<dict><key>$class</key><dict><key>CF$UID</key><integer>30</integer></dict><key>NSColorSpace</key><integer>1</integer><key>NSComponents</key><data>MCAwLjQ1ODgyNCAwLjQzOTIxNiAx</data><key>NSCustomColorSpace</key><dict><key>CF$UID</key><integer>28</integer></dict><key>NSRGB</key><data>MCAwLjQ1ODgyNCAwLjQzOTIxNgA=</data></dict>
+		<dict><key>$class</key><dict><key>CF$UID</key><integer>30</integer></dict><key>NSColorSpace</key><integer>1</integer><key>NSComponents</key><data>MC40NTg4MjQgMC4xNDUwOTggMC4zMDU4ODIgMQ==</data><key>NSCustomColorSpace</key><dict><key>CF$UID</key><integer>28</integer></dict><key>NSRGB</key><data>MC40NTg4MjQgMC4xNDUwOTggMC4zMDU4ODIA</data></dict>
+		<dict><key>$class</key><dict><key>CF$UID</key><integer>29</integer></dict><key>NSID</key><integer>7</integer></dict>
+		<dict><key>$classes</key><array><string>NSColorSpace</string><string>NSObject</string></array><key>$classname</key><string>NSColorSpace</string></dict>
+		<dict><key>$classes</key><array><string>NSColor</string><string>NSObject</string></array><key>$classname</key><string>NSColor</string></dict>
+	</array>
+	<key>$top</key>
+	<dict><key>NSColors</key><dict><key>CF$UID</key><integer>15</integer></dict><key>NSKeys</key><dict><key>CF$UID</key><integer>1</integer></dict></dict>
+	<key>$version</key>
+	<integer>100000</integer>
+</dict>
+</plist>

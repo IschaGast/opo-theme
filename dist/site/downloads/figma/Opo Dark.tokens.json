@@ -1,0 +1,158 @@
+{
+  "bg": {
+    "$type": "color",
+    "$value": {
+      "colorSpace": "srgb",
+      "components": [
+        0.0863,
+        0.0784,
+        0.0627
+      ],
+      "alpha": 1,
+      "hex": "#161410"
+    }
+  },
+  "bg-panel": {
+    "$type": "color",
+    "$value": {
+      "colorSpace": "srgb",
+      "components": [
+        0.098,
+        0.0863,
+        0.0706
+      ],
+      "alpha": 1,
+      "hex": "#191612"
+    }
+  },
+  "bg-hover": {
+    "$type": "color",
+    "$value": {
+      "colorSpace": "srgb",
+      "components": [
+        0.1098,
+        0.102,
+        0.0784
+      ],
+      "alpha": 1,
+      "hex": "#1c1a14"
+    }
+  },
+  "text": {
+    "$type": "color",
+    "$value": {
+      "colorSpace": "srgb",
+      "components": [
+        0.8196,
+        0.8431,
+        0.8745
+      ],
+      "alpha": 1,
+      "hex": "#d1d7df"
+    }
+  },
+  "text-mid": {
+    "$type": "color",
+    "$value": {
+      "colorSpace": "srgb",
+      "components": [
+        0.6,
+        0.6392,
+        0.6824
+      ],
+      "alpha": 1,
+      "hex": "#99a3ae"
+    }
+  },
+  "text-faint": {
+    "$type": "color",
+    "$value": {
+      "colorSpace": "srgb",
+      "components": [
+        0.5922,
+        0.6235,
+        0.6627
+      ],
+      "alpha": 1,
+      "hex": "#979fa9"
+    }
+  },
+  "blue": {
+    "$type": "color",
+    "$value": {
+      "colorSpace": "srgb",
+      "components": [
+        0.4745,
+        0.6863,
+        1
+      ],
+      "alpha": 1,
+      "hex": "#79afff"
+    }
+  },
+  "navy": {
+    "$type": "color",
+    "$value": {
+      "colorSpace": "srgb",
+      "components": [
+        0.7294,
+        0.8392,
+        1
+      ],
+      "alpha": 1,
+      "hex": "#bad6ff"
+    }
+  },
+  "orange": {
+    "$type": "color",
+    "$value": {
+      "colorSpace": "srgb",
+      "components": [
+        0.9176,
+        0.5529,
+        0.2902
+      ],
+      "alpha": 1,
+      "hex": "#ea8d4a"
+    }
+  },
+  "amber": {
+    "$type": "color",
+    "$value": {
+      "colorSpace": "srgb",
+      "components": [
+        0.9412,
+        0.7765,
+        0.502
+      ],
+      "alpha": 1,
+      "hex": "#f0c680"
+    }
+  },
+  "teal": {
+    "$type": "color",
+    "$value": {
+      "colorSpace": "srgb",
+      "components": [
+        0.3333,
+        0.7608,
+        0.7373
+      ],
+      "alpha": 1,
+      "hex": "#55c2bc"
+    }
+  },
+  "plum": {
+    "$type": "color",
+    "$value": {
+      "colorSpace": "srgb",
+      "components": [
+        1,
+        0.6431,
+        0.8
+      ],
+      "alpha": 1,
+      "hex": "#ffa4cc"
+    }
+  }
+}

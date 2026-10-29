@@ -177,6 +177,18 @@ Then pick Opo Light and Opo Dark under Settings > General > Appearance. `dist/ra
 
 `dist/firefox/opo/` is one theme add-on that follows the Firefox light/dark setting; `dist/firefox/opo-hc/` is High Contrast. To try one, open `about:debugging`, choose This Firefox > Load Temporary Add-on and select its `manifest.json`. A temporary add-on is removed when Firefox restarts; a permanent install needs an add-on signed by addons.mozilla.org.
 
+### macOS color picker
+
+Copy a `.clr` file from `dist/macos/` into `~/Library/Colors/`. The palette then shows up under Color Palettes in the color picker of every Mac app (Keynote, Pages, Notes, etc.). Each palette holds the backgrounds, the text colors and the six named hues, named as the `--opo-` custom properties.
+
+### Adobe (Illustrator, Photoshop, InDesign)
+
+`dist/adobe/` has one `.ase` file per variant with the same swatches as the macOS palettes. Open it from the Swatches panel menu: Import Swatches in Photoshop, Open Swatch Library > Other Library in Illustrator, Load Swatches in InDesign.
+
+### Figma
+
+`dist/figma/` has the same swatches as design tokens in the DTCG format, one `.tokens.json` file per variant. Import them as variables into one collection, so each file becomes a mode. Plugins that read DTCG tokens, such as Tokens Studio, accept the same files.
+
 ### CSS
 
 Include a CSS file in your web project:

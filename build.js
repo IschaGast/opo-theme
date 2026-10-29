@@ -34,6 +34,7 @@ import { generateTypora } from './src/generators/typora.js';
 import { generateTemplateJson, generatePresetsJson } from './src/generators/ia-presenter.js';
 import { generateRaycastTheme, generateRaycastLink } from './src/generators/raycast.js';
 import { generateFirefox } from './src/generators/firefox.js';
+import { generateClr, generateAse, generateFigmaTokens } from './src/generators/swatches.js';
 import { generateContrastPage } from './src/generators/contrast.js';
 import { generateSite } from './src/generators/site.js';
 import {
@@ -249,6 +250,16 @@ for (const [relPath, content] of Object.entries(generateFirefox(variants))) {
   fileCount++;
 }
 
+// Design tools: macOS color lists, Adobe swatches, Figma variables
+console.log('\n  Design tools:');
+const swatchNames = { light: 'Opo Light', dark: 'Opo Dark', hc: 'Opo High Contrast' };
+for (const mode of MODES) {
+  write(join(dir('macos'), `${swatchNames[mode]}.clr`), generateClr(variants[mode]));
+  write(join(dir('adobe'), `${swatchNames[mode]}.ase`), generateAse(variants[mode], swatchNames[mode]));
+  write(join(dir('figma'), `${swatchNames[mode]}.tokens.json`), JSON.stringify(generateFigmaTokens(variants[mode]), null, 2));
+  fileCount += 3;
+}
+
 // Site, with the contrast grid at contrast/
 console.log('\n  Site:');
 write(join(dir('site'), 'index.html'), generateSite(variants, ansiSets));
@@ -256,7 +267,7 @@ write(join(dir('site', 'contrast'), 'index.html'), generateContrastPage(variants
 fileCount += 2;
 // Theme files that are imported by opening them, so the site can offer
 // same-origin download buttons (see apps in src/generators/site.js)
-for (const tool of ['iterm', 'jetbrains']) {
+for (const tool of ['iterm', 'jetbrains', 'macos', 'adobe', 'figma']) {
   rmSync(join(DIST, 'site', 'downloads', tool), { recursive: true, force: true });
   cpSync(join(DIST, tool), dir('site', 'downloads', tool), { recursive: true });
   console.log(`  ${join(DIST, 'site', 'downloads', tool)}/`);
@@ -267,5 +278,5 @@ console.log(`\n✨ Build complete! ${fileCount} files generated in dist/`);
 console.log('   Variants: Opo Light, Opo Dark, Opo High Contrast');
 console.log('   Formats: VS Code, Ghostty, Alacritty, iTerm2, Windows Terminal,');
 console.log('            Warp, Zed, JetBrains, Neovim, Slack, CSS, JSON, Bear, Typora,');
-console.log('            iA Presenter, Slidev, Raycast, Firefox');
+console.log('            iA Presenter, Slidev, Raycast, Firefox, macOS colors, Adobe, Figma');
 console.log('   Site: dist/site/index.html, contrast grid at dist/site/contrast/\n');
